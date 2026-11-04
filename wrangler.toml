@@ -1,0 +1,22 @@
+name = "peta-syariah"
+main = "worker/src/index.ts"
+compatibility_date = "2024-12-01"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "peta-syariah"
+# Filled automatically by scripts/ensure-d1.mjs in CI. For local dev any value works.
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "worker/migrations"
+
+[vars]
+PRICE_ARMS = "89000,179000"
+PUBLIC_BASE_URL = ""
+META_PIXEL_ID = ""
+
+# Secrets (set with `wrangler secret put` or the GitHub Actions deploy job):
+# META_CAPI_TOKEN, XENDIT_SECRET_KEY, XENDIT_CALLBACK_TOKEN, ADMIN_TOKEN

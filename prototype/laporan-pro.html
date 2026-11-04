@@ -1,0 +1,513 @@
+<title>Laporan Pro Peta Syariah</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&family=Amiri:wght@700&display=swap">
+<style>
+/* Layout: a personal financial statement in the Peta Syariah identity. Dark profile cover, then numbered sections on paper in one 780px reading column; every figure carries a provenance chip (quiz / your data / assumption). */
+:root{
+  --bg:#F2F4F0; --paper:#FFFFFF; --sunk:#E8ECE5; --ink:#13231C; --muted:#536259; --line:#CFD8CF;
+  --teal:#24693F; --teal-soft:#DCEBD9; --olive:#5E6A0B; --olive-soft:#EEF6C4; --red:#9E3722; --red-soft:#F7E0D9;
+  --lime:#D4EE3A; --on-lime:#13231C; --hero-a:#13241C; --hero-b:#1E3A2C; --hero-ink:#F1F5EC; --hero-muted:#B9C7BD; --focus:#2F6FE0;
+  --display:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace; --arabic:"Amiri","Times New Roman",serif;
+  --shadow:4px 4px 0 var(--ink);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1612; --paper:#15221B; --sunk:#1C2B23; --ink:#E6EEE7; --muted:#9AAA9F; --line:#2B3B31;
+  --teal:#7FCB8E; --teal-soft:#183324; --olive:#D4EE3A; --olive-soft:#2D3410; --red:#F08A70; --red-soft:#3D221B; --focus:#86AEFF; --shadow:4px 4px 0 #000; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1612; --paper:#15221B; --sunk:#1C2B23; --ink:#E6EEE7; --muted:#9AAA9F; --line:#2B3B31;
+  --teal:#7FCB8E; --teal-soft:#183324; --olive:#D4EE3A; --olive-soft:#2D3410; --red:#F08A70; --red-soft:#3D221B; --focus:#86AEFF; --shadow:4px 4px 0 #000; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);font-size:16px;line-height:1.55;margin:0}
+.wrap{max-width:780px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 64px;display:flex;flex-direction:column;gap:20px}
+h1,h2,h3{line-height:1.12;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.35rem,4.6vw,1.75rem);font-weight:800;letter-spacing:-.025em}
+h3{font-size:1.02rem;font-weight:700}
+p{margin:0}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)} .small{font-size:.88rem}
+.k{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+
+/* provenance chips */
+.src{display:inline-block;font-family:var(--mono);font-size:.66rem;letter-spacing:.02em;border-radius:4px;padding:1px 6px;vertical-align:2px;white-space:nowrap;border:1px solid transparent}
+.src.q{background:var(--sunk);color:var(--ink);border-color:var(--line)}
+.src.d{background:var(--teal-soft);color:var(--teal)}
+.src.a{background:var(--olive-soft);color:var(--olive)}
+.banner{border:2px dashed var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:8px;font-size:.88rem}
+.banner .legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+
+/* cover */
+.cover{position:relative;overflow:hidden;border-radius:20px;color:var(--hero-ink);padding:24px 20px;background:linear-gradient(155deg,var(--hero-a),var(--hero-b));isolation:isolate;container-type:inline-size;box-shadow:var(--shadow)}
+.cover::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.13;background-image:var(--girih);background-size:56px 56px}
+.cover .lbl{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);font-weight:700}
+.cover h1{font-size:clamp(1.8rem,7vw,2.6rem);font-weight:800;letter-spacing:-.035em;margin-top:8px}
+.cover h1 span{background:var(--lime);color:var(--on-lime);padding:0 .14em;border-radius:6px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.cover .meta{display:flex;flex-wrap:wrap;gap:4px 18px;font-size:.84rem;color:var(--hero-muted);margin-top:10px}
+.cgrid{display:grid;gap:18px;margin-top:20px;align-items:center}
+@container (min-width:560px){.cgrid{grid-template-columns:minmax(0,1fr) 240px}}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.kpis div{border:1px solid rgba(212,238,58,.35);border-radius:10px;padding:10px 12px;min-width:0}
+.kpis b{display:block;font-size:1.45rem;line-height:1.1;font-weight:700}
+.kpis span{font-size:.74rem;color:var(--hero-muted)}
+.radar{width:100%;max-width:240px;height:auto;display:block;margin:0 auto;overflow:visible}
+.radar text{font-family:var(--display);font-size:10.5px;font-weight:600;fill:rgba(241,245,236,.9)}
+.rlegend{display:flex;gap:14px;justify-content:center;font-size:.72rem;color:var(--hero-muted)}
+.rlegend i{display:inline-block;width:14px;border-top:2px solid #D4EE3A;vertical-align:middle;margin-right:4px}.rlegend i.d{border-top-style:dashed}
+
+/* toc */
+.toc{display:flex;flex-wrap:wrap;gap:6px}
+.toc a{font-size:.82rem;font-weight:700;color:var(--ink);text-decoration:none;border:2px solid var(--ink);border-radius:999px;padding:5px 11px;background:var(--paper)}
+.toc a:hover{background:var(--lime);color:var(--on-lime)}
+
+/* sections */
+.sec{background:var(--paper);border:2px solid var(--ink);border-radius:16px;padding:20px 18px;display:grid;gap:16px;scroll-margin-top:16px}
+.sec-h{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.sec-h .n{font-family:var(--mono);color:var(--muted);font-size:.85rem}
+.lead{color:var(--muted);max-width:62ch}
+.verdict{border-left:4px solid var(--teal);padding:2px 0 2px 12px;max-width:66ch}
+.verdict.warn{border-color:var(--red)}
+.cols{display:grid;gap:12px}
+@media (min-width:620px){.cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.cell{background:var(--sunk);border-radius:12px;padding:14px;display:grid;gap:6px;min-width:0;align-content:start}
+.cell.first{background:var(--lime);color:var(--on-lime)}
+.cell.first .k{color:var(--on-lime);opacity:.75}
+.cell b.big{font-family:var(--mono);font-weight:500;font-size:1.2rem}
+
+/* pillars */
+.pillar{display:grid;gap:6px;padding-block:12px;border-top:1px solid var(--line)}
+.pillar:first-of-type{border-top:0;padding-top:0}
+.pillar .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.pillar .sc{font-family:var(--mono);font-size:.9rem;white-space:nowrap}
+.track{position:relative;height:10px;border-radius:5px;background:var(--sunk);overflow:hidden}
+.track .pot{position:absolute;inset:0 auto 0 0;background:var(--olive-soft);border-right:2px dashed var(--olive)}
+.track .now{position:absolute;inset:0 auto 0 0;background:var(--teal);border-radius:5px}
+.ans{font-size:.88rem}
+.ans b{font-weight:600}
+
+/* cashflow */
+.flow{display:grid;gap:8px}
+.frow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;font-size:.9rem}
+.frow .bar{grid-column:1/-1;height:12px;border-radius:6px;background:var(--sunk);position:relative;overflow:hidden}
+.frow .bar i{position:absolute;top:0;bottom:0;border-radius:6px;background:var(--ink)}
+.frow.out .bar i{background:var(--muted)}
+.frow.keep .bar i{background:var(--teal)}
+.frow.left .bar i{background:var(--lime);box-shadow:inset 0 0 0 2px var(--ink)}
+.opts{display:grid;gap:10px}
+@media (min-width:620px){.opts{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.opt{border:2px solid var(--ink);border-radius:12px;padding:12px;display:grid;gap:4px;align-content:start;min-width:0}
+.opt b{font-family:var(--mono);font-weight:500}
+
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--sunk)}
+td.r,th.r{text-align:right;white-space:nowrap}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.chart{width:100%;height:auto;display:block}
+.chart text{font-family:var(--mono);font-size:12px;fill:var(--muted)}
+.cite{font-size:.78rem;color:var(--muted);border-left:2px solid var(--line);padding-left:10px}
+
+/* plan */
+.phase{display:grid;gap:10px}
+.phase-h{display:flex;justify-content:space-between;gap:10px;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:6px;flex-wrap:wrap}
+.phase-h span{font-family:var(--mono);font-size:.8rem;color:var(--muted)}
+.task{display:grid;grid-template-columns:96px minmax(0,1fr);gap:12px;padding-block:10px;border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:0}
+.task .when{font-family:var(--mono);font-size:.76rem;color:var(--muted);padding-top:3px}
+.task .when b{display:block;color:var(--ink);font-weight:500}
+.task ul{margin:6px 0 0;padding-left:18px;font-size:.88rem;display:grid;gap:3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-size:.7rem;font-weight:700;border-radius:999px;padding:2px 8px;background:var(--sunk);color:var(--muted)}
+.chip.p{background:var(--teal-soft);color:var(--teal)}
+.chip.go{background:var(--lime);color:var(--on-lime)}
+@media (max-width:460px){.task{grid-template-columns:1fr;gap:4px}}
+
+/* checklist */
+.asks{display:grid;gap:14px}
+@media (min-width:620px){.asks{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.askg{border:2px solid var(--ink);border-radius:12px;padding:12px 14px;display:grid;gap:8px;align-content:start;min-width:0}
+.askg ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.askg label{display:grid;grid-template-columns:20px minmax(0,1fr);gap:8px;font-size:.88rem;cursor:pointer}
+.askg input{width:16px;height:16px;margin-top:3px;accent-color:var(--teal)}
+.askg input:checked+span{color:var(--muted);text-decoration:line-through}
+.prog{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+
+/* quiz review */
+.qrev{display:grid;gap:6px;padding-block:12px;border-top:1px solid var(--line)}
+.qrev:first-of-type{border-top:0;padding-top:0}
+.mark{font-family:var(--mono);font-size:.74rem;font-weight:500;border-radius:4px;padding:1px 6px}
+.mark.ok{background:var(--teal-soft);color:var(--teal)}.mark.no{background:var(--red-soft);color:var(--red)}
+.yours{font-size:.86rem}
+.avoid{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.avoid li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px}
+.avoid li::before{content:"✕";color:var(--red);font-weight:800}
+.refs{margin:0;padding-left:20px;display:grid;gap:4px;font-size:.84rem}
+.sharegrid{display:grid;gap:18px;align-items:start}
+@media (min-width:620px){.sharegrid{grid-template-columns:minmax(0,300px) minmax(0,1fr)}}
+.shimg{display:block;width:100%;max-width:300px;margin:0 auto;border-radius:14px;border:2px solid var(--ink);box-shadow:var(--shadow);background:var(--sunk)}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.pills button{font:inherit;font-size:.86rem;font-weight:700;border:2px solid var(--ink);background:var(--paper);color:var(--ink);border-radius:999px;padding:6px 12px;cursor:pointer}
+.pills button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.btn{font:inherit;font-weight:700;font-size:1rem;cursor:pointer;width:100%;border-radius:999px;padding:13px 18px;border:2px solid var(--ink);background:var(--lime);color:var(--on-lime);box-shadow:var(--shadow)}
+.btn.alt{background:var(--paper);color:var(--ink);box-shadow:none}
+.shtog{display:flex;gap:8px;align-items:center;font-size:.9rem}
+.shtog input{width:16px;height:16px;accent-color:var(--teal)}
+.gtotal{background:var(--lime);color:var(--on-lime);border:2px solid var(--ink);border-radius:14px;padding:14px 16px;display:grid;gap:2px;box-shadow:var(--shadow)}
+.gtotal .k{color:var(--on-lime);opacity:.75}.gtotal b{font-size:clamp(1.6rem,6vw,2.2rem)}
+.gain{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:14px}
+.gh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.gh b{font-family:var(--mono);font-weight:500;color:var(--teal)}
+footer{font-size:.8rem;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+</style>
+
+<main class="wrap">
+  <div class="banner">
+    <p><b>Contoh laporan Pro.</b> Profil di bawah fiktif. Bagian 06 berisi kartu Instagram yang bisa disimpan sebagai gambar. Setiap angka diberi label asal datanya, supaya pembeli tahu mana yang dihitung dari jawabannya dan mana yang masih asumsi.</p>
+    <div class="legend"><span><span class="src q">KUIS</span> dari jawaban kuis</span><span><span class="src d">DATA KAMU</span> dari form "Lengkapi data" (6 isian)</span><span><span class="src a">ASUMSI</span> ganti dengan penawaran resmi</span></div>
+  </div>
+
+  <section class="cover" aria-labelledby="t">
+    <span class="lbl">Assalamu'alaikum, Dinda · Laporan Keuangan Syariah Personal</span>
+    <h1 id="t">Dinda, keuanganmu sudah <span>58% syariah</span></h1>
+    <div class="meta"><span>Disusun 4 Nov 2026</span><span>Rencana sampai 2 Feb 2027</span><span>Akses tidak kedaluwarsa</span></div>
+    <div class="cgrid">
+      <div style="display:grid;gap:12px">
+        <p>Level <b>Penggerak</b>, lebih tinggi dari tebakanmu (25–50%). Yang masih tertinggal: tabungan dan deposito di produk konvensional, zakat belum rutin lewat lembaga resmi, dan target uang muka rumah 2 tahun yang belum tertutup sisa gaji.</p>
+        <div class="kpis">
+          <div><b class="num">58%</b><span>Keuangan yang sudah syariah</span></div>
+          <div><b class="num">Rp1,75 jt</b><span>Keuntungan per tahun yang belum diambil</span></div>
+          <div><b class="num">58% → 88%</b><span>Potensi bila rencana dijalankan</span></div>
+          <div><b class="num">12</b><span>Langkah dalam 90 hari</span></div>
+        </div>
+      </div>
+      <div><svg class="radar" id="radar" viewBox="0 0 180 176" role="img"></svg><div class="rlegend"><span><i></i>Sekarang</span><span><i class="d"></i>Potensi 90 hari</span></div></div>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Isi laporan">
+    <a href="#ringkasan">Ringkasan</a><a href="#pilar">Enam pilar</a><a href="#untung">Keuntungan</a><a href="#angka">Angkamu</a><a href="#rencana">Rencana 90 hari</a><a href="#bagikan">Bagikan</a><a href="#tanya">Daftar pertanyaan</a><a href="#hindari">Hindari</a><a href="#metode">Data & rujukan</a>
+  </nav>
+
+  <section class="sec" id="ringkasan" aria-labelledby="s1">
+    <div class="sec-h"><span class="n">01</span><h2 id="s1">Ringkasan</h2></div>
+    <div class="cols">
+      <div class="cell first"><span class="k">Langkah minggu ini</span><h3>Hitung zakat penghasilan dan atur autodebitnya</h3><p class="small">Sekitar Rp375.000 per bulan. Butuh 30 menit, dan langsung menaikkan pilar yang skornya paling rendah.</p></div>
+      <div class="cell"><span class="k">Paling mendesak</span><h3>Dana darurat baru 2,2 bulan</h3><p class="small">Rp20 jt untuk pengeluaran Rp9 jt per bulan. Target awal 3 bulan masih kurang Rp7 jt. <span class="src d">DATA KAMU</span></p></div>
+      <div class="cell"><span class="k">Keputusan terbesar</span><h3>Uang muka rumah meleset sekitar 3 bulan</h3><p class="small">Sisa gajimu menutup uang muka dalam sekitar 27 bulan, bukan 24. Pilihannya ada di bagian 04.</p></div>
+      <div class="cell"><span class="k">Keuntungan yang belum diambil</span><h3>± Rp1,75 jt per tahun</h3><p class="small">Dari zakat lewat lembaga resmi dan memindahkan deposito ke sukuk tabungan. Sekitar 20× harga laporan ini. Rinciannya di bagian 03.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="pilar" aria-labelledby="s2">
+    <div class="sec-h"><span class="n">02</span><h2 id="s2">Enam pilar keuanganmu</h2></div>
+    <p class="lead small">Batang hijau adalah skor sekarang. Garis tegak menandai potensinya bila langkah di rencana dijalankan. Potensi adalah perkiraan, bukan janji. <span class="src q">KUIS</span></p>
+    <div id="pillars"></div>
+  </section>
+
+  <section class="sec" id="untung" aria-labelledby="s10">
+    <div class="sec-h"><span class="n">03</span><h2 id="s10">Keuntungan yang bisa kamu ambil</h2></div>
+    <p class="lead small">Pindah ke syariah juga punya keuntungan yang bisa dihitung. Ini yang berlaku untuk kondisimu, lengkap dengan dasar aturannya.</p>
+    <div class="gtotal"><span class="k">Perkiraan total per tahun</span><b class="num">± Rp1.755.000</b><span class="small">Sekitar 20× harga laporan ini. Dua keuntungan pertama di bawah. <span class="src a">ASUMSI</span></span></div>
+    <div class="gain">
+      <div class="gh"><h3>Zakat lewat lembaga resmi</h3><b class="num">± Rp675.000 / tahun</b></div>
+      <p class="small">Zakat penghasilanmu Rp375.000 × 12 = Rp4,5 jt per tahun. Lewat BAZNAS atau LAZ resmi, dengan bukti setor yang mencantumkan NPWP-mu, angka ini mengurangi penghasilan kena pajak. Dengan tarif PPh 15% (lapisan penghasilan kena pajak Rp60–250 jt), pajakmu turun sekitar Rp675.000. <span class="src d">DATA KAMU</span> <span class="src a">ASUMSI</span></p>
+      <p class="small muted">Karena PPh gajimu dipotong kantor, selisihnya muncul sebagai lebih bayar di SPT Tahunan. Pastikan ke konsultan pajak untuk kondisimu.</p>
+      <p class="cite">UU No. 23 Tahun 2011 Pasal 22; PMK No. 114 Tahun 2025; tarif PPh orang pribadi UU No. 7 Tahun 2021 (HPP).</p>
+    </div>
+    <div class="gain">
+      <div class="gh"><h3>Deposito pindah ke sukuk tabungan</h3><b class="num">± Rp1.080.000 / tahun</b></div>
+      <div class="scroll"><table><thead><tr><th>Untuk Rp50 jt</th><th class="r">Imbal hasil</th><th class="r">Pajak</th><th class="r">Bersih / tahun</th></tr></thead><tbody>
+        <tr><td>Deposito konvensional</td><td class="r num">4,5%</td><td class="r num">20%</td><td class="r num">Rp1.800.000</td></tr>
+        <tr><td>Sukuk tabungan (ST)</td><td class="r num">6,4%</td><td class="r num">10%</td><td class="r num">Rp2.880.000</td></tr>
+      </tbody></table></div>
+      <p class="small">Selisih terbesar datang dari pajak: imbal hasil sukuk negara ritel kena pajak final 10%, bunga deposito 20%. Tenor 2 tahun cocok dengan target uang mukamu. <span class="src a">ASUMSI</span> imbal hasil ditetapkan per seri dan hanya dijual di masa penawaran.</p>
+      <p class="small muted">Rasa bangganya juga nyata: lewat SBSN, negara sudah membiayai 4.246 proyek infrastruktur, termasuk rel ganda di selatan Jawa dan Jembatan Youtefa di Jayapura.</p>
+      <p class="cite">PP No. 91 Tahun 2021 (PPh atas imbal hasil SBN 10%); pajak bunga deposito 20%; data proyek SBSN: Kemenkeu via Fortune Indonesia, 10 Mar 2022.</p>
+    </div>
+    <div class="gain">
+      <div class="gh"><h3>Cicilan rumah yang tidak berubah</h3><b class="num">Rp6,68 jt tetap</b></div>
+      <p class="small">Di murabahah, harga jual disepakati di awal, jadi cicilanmu tetap sampai lunas. Di MMQ dengan asumsi ujrah naik 1 poin tiap 3 tahun, cicilan bisa naik sampai sekitar Rp6,97 jt. Denda keterlambatan di akad syariah disalurkan untuk sosial, bukan jadi pendapatan bank. Tidak dimasukkan ke total karena nilainya berupa kepastian. <span class="src a">ASUMSI</span></p>
+      <p class="cite">Fatwa DSN-MUI No. 04/DSN-MUI/IV/2000; No. 17/DSN-MUI/IX/2000; No. 73/DSN-MUI/XI/2008.</p>
+    </div>
+  </section>
+
+  <section class="sec" id="angka" aria-labelledby="s3">
+    <div class="sec-h"><span class="n">04</span><h2 id="s3">Angkamu, dihitung</h2></div>
+
+    <h3>Arus kas bulanan dan target uang muka</h3>
+    <p class="small muted">Penghasilan bersih Rp15 jt, pengeluaran rutin Rp9 jt, deposito Rp50 jt disiapkan untuk uang muka, target rumah Rp800 jt dengan uang muka 20% dalam 24 bulan. <span class="src d">DATA KAMU</span></p>
+    <div class="flow" id="flow"></div>
+    <p class="verdict warn small">Uang muka yang dibutuhkan Rp160 jt. Setelah deposito Rp50 jt, masih kurang Rp110 jt. Dengan sisa <b class="num">Rp4,125 jt</b> per bulan, butuh sekitar <b>27 bulan</b>. Untuk tepat 24 bulan, setorannya perlu <b class="num">Rp4,58 jt</b>, atau tambah sekitar Rp460 ribu per bulan.</p>
+    <div class="opts">
+      <div class="opt"><span class="k">Pilihan A</span><b>Mundur 3 bulan</b><p class="small muted">Target tetap 20%, beli rumah di bulan ke-27. Cicilan tidak berubah.</p></div>
+      <div class="opt"><span class="k">Pilihan B</span><b>+Rp460 rb/bulan</b><p class="small muted">Tetap 24 bulan. Perlu dipangkas dari pengeluaran rutin atau penghasilan tambahan.</p></div>
+      <div class="opt"><span class="k">Pilihan C</span><b>Uang muka lebih kecil</b><p class="small muted">Pembiayaan lebih besar, jadi cicilan dan total margin atau ujrah ikut naik. Cek angkanya di simulasi bawah.</p></div>
+    </div>
+    <p class="cite">Hitungan tidak memasukkan bagi hasil deposito dan kenaikan gaji, jadi hasilnya konservatif. Pilihan adalah keputusanmu; laporan tidak memilihkan.</p>
+
+    <div class="cols">
+      <div class="cell"><span class="k">Zakat penghasilan</span><b class="big">Rp375.000 / bulan</b><p class="small muted">2,5% × Rp15 jt. Penghasilanmu di atas nisab BAZNAS 2026 Rp7.640.144 per bulan. Ulama berbeda pendapat soal dasar kotor atau bersih; ikuti lembaga tempatmu menyalurkan.</p></div>
+      <div class="cell"><span class="k">Zakat maal</span><b class="big">Belum mencapai nisab</b><p class="small muted">Tabungan Rp20 jt + deposito Rp50 jt + investasi Rp30 jt = Rp100 jt, di bawah nisab Rp214.285.000 (85 g × Rp2.521.000, harga emas 9 Okt 2026). <span class="src d">DATA KAMU</span></p></div>
+      <div class="cell"><span class="k">Dana darurat</span><b class="big">2,2 → 3 bulan</b><p class="small muted">Kurang Rp7 jt. Dengan setoran Rp1,5 jt per bulan, target 3 bulan tercapai sekitar bulan ke-5. Target berikutnya 6 bulan (Rp54 jt).</p></div>
+      <div class="cell"><span class="k">Deposito mudharabah</span><b class="big">± Rp168.750 / bulan</b><p class="small muted">Rp50 jt × nisbah 45% × imbal hasil dana bank 9% = setara 4,05% per tahun, sebelum pajak. Hasil mengikuti kinerja; yang disepakati hanya nisbah. <span class="src a">ASUMSI</span></p></div>
+    </div>
+
+    <h3>Murabahah atau MMQ untuk rumahmu</h3>
+    <p class="small muted">Pembiayaan Rp640 jt, tenor 15 tahun. Margin murabahah setara 9,5% per tahun. Ujrah MMQ awal setara 8%, ditinjau tiap 3 tahun dengan asumsi naik 1 poin. <span class="src a">ASUMSI</span></p>
+    <svg class="chart" id="kpr" viewBox="0 0 640 220" role="img"></svg>
+    <div class="scroll"><table>
+      <thead><tr><th></th><th class="r">Murabahah</th><th class="r">MMQ (asumsi)</th></tr></thead>
+      <tbody id="kpr-t"></tbody></table></div>
+    <p class="small" id="kpr-note"></p>
+    <p class="cite">Fatwa DSN-MUI No. 04/DSN-MUI/IV/2000 tentang Murabahah; No. 23/DSN-MUI/III/2002 tentang Potongan Pelunasan dalam Murabahah; No. 73/DSN-MUI/XI/2008 tentang Musyarakah Mutanaqishah. Model menyederhanakan: struktur ujrah dan harga pengalihan porsi di tiap bank bisa berbeda.</p>
+  </section>
+
+  <section class="sec" id="rencana" aria-labelledby="s4">
+    <div class="sec-h"><span class="n">05</span><h2 id="s4">Rencana 90 hari</h2></div>
+    <p class="lead small">Urutannya disengaja: fondasi dulu, lalu memindahkan produk besar saat waktunya tepat, baru menumbuhkan. Tanggal dihitung dari 4 November 2026 dan jatuh tempo depositomu.</p>
+    <div id="plan" style="display:grid;gap:18px"></div>
+  </section>
+
+  <section class="sec" id="bagikan" aria-labelledby="s9">
+    <div class="sec-h"><span class="n">06</span><h2 id="s9">Bagikan progresmu</h2></div>
+    <p class="lead small">Tiga momen dalam 90 hari yang paling layak dibagikan: saat mulai, saat fondasi selesai, dan saat skor dibandingkan di hari ke-90. Kartunya hanya memuat langkah dan skor, tanpa angka penghasilan, tabungan, atau zakat.</p>
+    <div class="sharegrid">
+      <img id="sh-img" class="shimg" alt="Kartu progres rencana 90 hari untuk Instagram">
+      <div style="display:grid;gap:12px;align-content:start;min-width:0">
+        <div><span class="k">Momen</span><div class="pills" id="sh-ms"><button data-m="0" aria-pressed="true">Mulai</button><button data-m="1" aria-pressed="false">Hari 30</button><button data-m="2" aria-pressed="false">Hari 90</button></div></div>
+        <div><span class="k">Format</span><div class="pills" id="sh-fmt"><button data-f="story" aria-pressed="true">Story 9:16</button><button data-f="feed" aria-pressed="false">Feed 4:5</button></div></div>
+        <label class="shtog" for="sh-scores"><input type="checkbox" id="sh-scores" checked> Tampilkan persen syariah</label>
+        <button class="btn" id="sh-save">Simpan gambar</button>
+        <button class="btn alt" id="sh-cap">Salin caption</button>
+        <p class="small" id="sh-status" role="status" aria-live="polite"></p>
+        <p class="small muted">Di laporan asli, hari dan jumlah langkah diambil dari centang di rencana. Di contoh ini, angkanya fiktif.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="tanya" aria-labelledby="s5">
+    <div class="sec-h"><span class="n">07</span><h2 id="s5">Pertanyaan untuk dibawa ke bank dan asuransi</h2></div>
+    <p class="lead small">Bawa daftar ini saat bertemu petugas atau saat chat dengan layanan pelanggan. Centang yang sudah terjawab; centangnya tersimpan di perangkat ini.</p>
+    <div class="asks" id="asks"></div>
+  </section>
+
+  <section class="sec" id="hindari" aria-labelledby="s7">
+    <div class="sec-h"><span class="n">08</span><h2 id="s7">Yang perlu kamu hindari</h2></div>
+    <ul class="avoid">
+      <li><span>Mencairkan deposito sebelum 15 Desember hanya supaya pindah lebih cepat. Tunggu jatuh tempo, lalu matikan perpanjangan otomatisnya.</span></li>
+      <li><span>Memilih bank KPR dari angka promo saja, tanpa meminta kebijakan potongan pelunasan secara tertulis.</span></li>
+      <li><span>Menganggap nisbah sama dengan hasil. Yang disepakati hanya porsi pembagiannya.</span></li>
+      <li><span>Memindahkan dana uang muka ke investasi yang nilainya bisa turun, padahal dibutuhkan dalam 2 tahun.</span></li>
+      <li><span>Menghentikan BPJS saat menambah asuransi syariah. BPJS tetap jadi lapisan dasar.</span></li>
+    </ul>
+  </section>
+
+  <section class="sec" id="metode" aria-labelledby="s8">
+    <div class="sec-h"><span class="n">09</span><h2 id="s8">Data, rujukan, dan batasan</h2></div>
+    <div class="cols">
+      <div class="cell"><span class="k">Dari kuis</span><p class="small">11 jawaban tentang kebiasaan keuangan, termasuk tebakanmu sendiri. Dasar persentase syariah, level, lencana, dan urutan rencana.</p></div>
+      <div class="cell"><span class="k">Dari form "Lengkapi data"</span><p class="small">Penghasilan bersih, pengeluaran rutin, dana darurat, deposito dan jatuh temponya, investasi, serta target rumah.</p></div>
+    </div>
+    <ol class="refs" id="refs"></ol>
+    <p class="small muted">Rujukan terakhir ditinjau 13 Oktober 2026.</p>
+    <p class="small"><b>Batasan.</b> Laporan ini panduan edukasi, bukan fatwa, bukan nasihat investasi, hukum, atau pajak, dan tidak berafiliasi dengan lembaga keuangan mana pun. Skor dan bobotnya keputusan editorial Peta Syariah dan belum ditelaah ahli syariah berlisensi. Untuk keputusan penting, diskusikan dengan ustadz atau penasihat keuangan syariah yang kamu percaya.</p>
+  </section>
+
+  <footer><span>Peta Syariah · Laporan Pro · contoh</span><span>Rp89.000 sekali bayar · perbarui kapan saja dengan mengulang kuis</span></footer>
+</main>
+
+<script>
+(function(){
+"use strict";
+const $=id=>document.getElementById(id);
+const girih="url(\"data:image/svg+xml,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 56 56"><g fill="none" stroke="#D4EE3A" stroke-width="1.2"><path d="M28 6l6 10 11-1-4 11 9 7-11 4 1 11-10-5-8 9-6-9-10 5 1-11-11-4 9-7-4-11 11 1z"/><circle cx="28" cy="28" r="6"/></g></svg>')+"\")";
+document.documentElement.style.setProperty("--girih",girih);
+const rp=n=>"Rp"+Math.round(n).toLocaleString("id-ID");
+const rpS=n=>{const a=Math.abs(n); if(a>=1e9) return "Rp"+(a/1e9).toLocaleString("id-ID",{maximumFractionDigits:2})+" M"; if(a>=1e6) return "Rp"+(a/1e6).toLocaleString("id-ID",{maximumFractionDigits:1})+" jt"; return rp(a);};
+
+/* pillars: same scoring as the quiz */
+const P=[
+ ["Tabungan & dana darurat","Tabungan",42,83,"Gaji sebagian syariah, sebagian konvensional. Tabungan dan deposito di bank konvensional. Dana darurat kurang dari 3 bulan.","Fondasinya ada. Yang perlu diubah adalah tempat uangnya, dan dana daruratnya perlu ditambah."],
+ ["Cara bayar","Bayar",40,82,"Kartu kredit untuk belanja sehari-hari.","Kartu kredit konvensional mengenakan bunga bila tagihan tidak dibayar penuh. Debit, QRIS, atau kartu syariah adalah alternatifnya."],
+ ["Cicilan & utang","Cicilan",100,100,"Belum punya pembiayaan rumah atau kendaraan.","Skornya penuh, tapi keputusan terbesarmu ada di sini: memilih akad KPR dalam 2 tahun."],
+ ["Asuransi","Asuransi",70,91,"BPJS saja.","BPJS dihitung positif sebagai lapisan dasar. Tambahan asuransi syariah bisa melengkapinya."],
+ ["Investasi","Investasi",60,88,"Campuran syariah dan konvensional.","Arahkan investasi baru ke instrumen syariah. Dana uang muka sebaiknya tidak ikut diinvestasikan ke instrumen yang nilainya bisa turun."],
+ ["Zakat & sedekah","Zakat",35,81,"Baru zakat fitrah.","Penghasilanmu sudah melewati nisab BAZNAS 2026. Pilar ini yang paling cepat dirapikan."]];
+$("pillars").innerHTML=P.map(p=>`<div class="pillar"><div class="top"><h3>${p[0]}</h3><span class="sc">${p[2]}${p[3]!==p[2]?" → "+p[3]:""}</span></div><div class="track" aria-hidden="true"><span class="pot" style="width:${p[3]}%"></span><span class="now" style="width:${p[2]}%"></span></div><p class="ans"><b>Jawabanmu:</b> ${p[4]}</p><p class="small muted">${p[5]}</p></div>`).join("");
+
+/* radar */
+const cx=90,cy=86,R=54,n=6,pt=(i,r)=>{const a=(-90+i*60)*Math.PI/180;return [cx+r*Math.cos(a),cy+r*Math.sin(a)];};
+const poly=f=>P.map((p,i)=>pt(i,f(p)).map(v=>v.toFixed(1)).join(",")).join(" ");
+let g="";[25,50,75,100].forEach(l=>g+=`<polygon points="${poly(()=>R*l/100)}" fill="none" stroke="rgba(212,238,58,${l===100?.45:.2})"/>`);
+P.forEach((_,i)=>{const[x,y]=pt(i,R);g+=`<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(212,238,58,.2)"/>`;});
+g+=`<polygon points="${poly(p=>R*p[3]/100)}" fill="rgba(212,238,58,.08)" stroke="#D4EE3A" stroke-width="1.5" stroke-dasharray="4 3"/>`;
+g+=`<polygon points="${poly(p=>R*Math.max(4,p[2])/100)}" fill="rgba(212,238,58,.3)" stroke="#D4EE3A" stroke-width="2" stroke-linejoin="round"/>`;
+P.forEach((p,i)=>{const[x,y]=pt(i,R*p[2]/100);g+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5" fill="#D4EE3A" stroke="#13241C" stroke-width="1.5"><title>${p[0]}: ${p[2]} → ${p[3]}</title></circle>`;});
+P.forEach((p,i)=>{const[x,y]=pt(i,R+13);const an=Math.abs(x-cx)<4?"middle":(x>cx?"start":"end");const dy=y<cy-R?-1:(y>cy+R?9:4);g+=`<text x="${x.toFixed(1)}" y="${(y+dy).toFixed(1)}" text-anchor="${an}">${p[1]}</text>`;});
+$("radar").innerHTML=g; $("radar").setAttribute("aria-label","Radar enam pilar, sekarang ke potensi: "+P.map(p=>p[0]+" "+p[2]+" ke "+p[3]).join(", "));
+
+/* cash flow */
+const F=[["Penghasilan bersih",15,"in"],["Pengeluaran rutin",9,"out"],["Zakat penghasilan",.375,"keep"],["Dana darurat",1.5,"keep"],["Sisa untuk uang muka",4.125,"left"]];
+let off=0; $("flow").innerHTML=F.map((f,i)=>{ const left=i===0?0:off; if(i>0) off+=f[1]; const w=f[1]/15*100;
+  return `<div class="frow ${f[2]}"><span>${f[0]}</span><span class="num">${i===0?"":"− "}${rpS(f[1]*1e6).replace("− ","")}</span><div class="bar" aria-hidden="true"><i style="left:${i===0?0:left/15*100}%;width:${w}%"></i></div></div>`; }).join("");
+
+/* KPR */
+const pmt=(B,a,k)=>{const r=a/1200;return B*r/(1-Math.pow(1+r,-k));};
+const B=640e6,N=180,EX=60,Pm=pmt(B,9.5,N); let bal=B,rate=8,p=pmt(B,8,N),mm=[],tot=0,atEx=0;
+for(let t=1;t<=N;t++){ if(t>1&&(t-1)%36===0){rate+=1;p=pmt(bal,rate,N-t+1);} const i=bal*rate/1200,pr=Math.min(p-i,bal); bal-=pr; tot+=i+pr; mm.push(i+pr); if(t===EX) atEx=bal; }
+const r=9.5/1200, econ=B*Math.pow(1+r,EX)-Pm*(Math.pow(1+r,EX)-1)/r, owe=Pm*(N-EX), gap=owe-econ;
+$("kpr-t").innerHTML=[["Cicilan awal",rp(Pm),rp(mm[0])],["Cicilan tahun ke-13",rp(Pm),rp(mm[156])],["Total bayar 15 tahun",rpS(Pm*N),rpS(tot)],["Kewajiban bila lunas di tahun ke-5",rpS(owe),rpS(atEx)]].map(x=>`<tr><td>${x[0]}</td><td class="r num">${x[1]}</td><td class="r num">${x[2]}</td></tr>`).join("");
+$("kpr-note").innerHTML=`Di murabahah, kewajibanmu saat melunasi adalah sisa harga jual. Sekitar <b class="num">${rpS(gap)}</b> di antaranya sisa margin, yang hanya berkurang bila bank memberi potongan pelunasan, dan potongan itu tidak boleh diperjanjikan di akad. Kalau kamu berencana melunasi lebih cepat, MMQ lebih lentur. Kalau kepastian cicilan lebih penting, murabahah lebih tenang.`;
+const W=640,H=220,ml=70,mr=14,mt=14,mb=28,w=W-ml-mr,h=H-mt-mb,lo=5.5e6,hi=7.5e6;
+const x=i=>ml+w*i/(N-1),y=v=>mt+h-h*(v-lo)/(hi-lo); let s="";
+for(let v=lo;v<=hi+1;v+=5e5) s+=`<line x1="${ml}" x2="${W-mr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${ml-8}" y="${y(v)+4}" text-anchor="end">${(v/1e6).toLocaleString("id-ID")} jt</text>`;
+[0,5,10,15].forEach(yr=>s+=`<text x="${x(Math.min(yr*12,N-1))}" y="${H-8}" text-anchor="middle">${yr?"th "+yr:""}</text>`);
+s+=`<line x1="${x(EX)}" x2="${x(EX)}" y1="${mt}" y2="${mt+h}" stroke="var(--ink)" stroke-dasharray="4 4"/><text x="${x(EX)+6}" y="${mt+12}" style="fill:var(--ink)">lunas di th 5?</text>`;
+s+=`<path d="M${x(0)},${y(Pm)} L${x(N-1)},${y(Pm)}" stroke="var(--olive)" stroke-width="3" fill="none"/>`;
+s+=`<path d="${mm.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(v).toFixed(1)).join(" ")}" stroke="var(--teal)" stroke-width="3" fill="none"/>`;
+s+=`<text x="${W-mr}" y="${y(Pm)-8}" text-anchor="end" style="fill:var(--olive)">Murabahah</text><text x="${x(20)}" y="${y(mm[20])+18}" style="fill:var(--teal)">MMQ</text>`;
+$("kpr").innerHTML=s; $("kpr").setAttribute("aria-label",`Cicilan murabahah tetap ${rp(Pm)}; MMQ dari ${rp(mm[0])} naik bertahap ke ${rp(mm[N-1])}`);
+
+/* plan: same rules as the app, dated */
+const FT={"02":"02/DSN-MUI/IV/2000 tentang Tabungan","03":"03/DSN-MUI/IV/2000 tentang Deposito","04":"04/DSN-MUI/IV/2000 tentang Murabahah","07":"07/DSN-MUI/IV/2000 tentang Pembiayaan Mudharabah (Qiradh)","17":"17/DSN-MUI/IX/2000 tentang Sanksi atas Nasabah Mampu yang Menunda-nunda Pembayaran","20":"20/DSN-MUI/IV/2001 tentang Pedoman Pelaksanaan Investasi untuk Reksa Dana Syari'ah","21":"21/DSN-MUI/X/2001 tentang Pedoman Umum Asuransi Syari'ah","23":"23/DSN-MUI/III/2002 tentang Potongan Pelunasan dalam Murabahah","52":"52/DSN-MUI/III/2006 tentang Akad Wakalah bil Ujrah pada Asuransi Syari'ah dan Reasuransi Syari'ah","54":"54/DSN-MUI/X/2006 tentang Syariah Card","69":"69/DSN-MUI/VI/2008 tentang Surat Berharga Syariah Negara","73":"73/DSN-MUI/XI/2008 tentang Musyarakah Mutanaqishah","77":"77/DSN-MUI/VI/2010 tentang Jual-Beli Emas secara Tidak Tunai","80":"80/DSN-MUI/III/2011 tentang Penerapan Prinsip Syariah dalam Mekanisme Perdagangan Efek Bersifat Ekuitas di Pasar Reguler Bursa Efek","102":"102/DSN-MUI/X/2016 tentang Akad Al-Ijarah Al-Maushufah fi Al-Dzimmah untuk Produk Pembiayaan Pemilikan Rumah (PPR)-Indent"};
+const PH=[["Fase 1 · Fondasi","Hari 1–30 · 4 Nov–3 Des",[
+  ["4–10 Nov","30 menit","Zakat & sedekah","Hitung zakatmu dan jadwalkan pembayarannya","Cukup hitung sekali, lalu atur pembayarannya otomatis.",["Rp375.000 per bulan dari penghasilan Rp15 jt","Pilih lembaga zakat resmi (BAZNAS atau LAZ berizin)","Atur autodebit di tanggal gajian"],[],true],
+  ["4–10 Nov","1 hari","Tabungan & dana darurat","Buka rekening tabungan syariah sebagai pusat tabunganmu","Satu rekening syariah khusus tabungan membuat langkah berikutnya lebih mudah, tanpa harus memindahkan semuanya sekaligus.",["Pilih bank syariah atau unit usaha syariah yang aplikasinya nyaman kamu pakai","Tanyakan akadnya: wadiah atau mudharabah","Pindahkan dana darurat Rp20 jt ke rekening ini"],["02"]],
+  ["Mulai 25 Nov","Bertahap","Tabungan & dana darurat","Tambah dana darurat Rp1,5 jt per bulan sampai 3 bulan pengeluaran","Dana darurat menjaga kamu dari berutang saat ada kejadian mendadak.",["Target awal Rp27 jt (3 × Rp9 jt), tercapai sekitar bulan ke-5","Simpan di tabungan yang mudah dicairkan, bukan deposito","Setelah itu naikkan target ke 6 bulan"],["02"]],
+  ["Minggu 3","15 menit","Investasi","Catat jadwal penawaran sukuk tabungan berikutnya","Sukuk negara ritel hanya dijual di masa penawaran tertentu. Kalau jadwalnya pas, deposito yang jatuh tempo bisa langsung dipindah.",["Cek jadwal penawaran SBN ritel di situs Kemenkeu atau mitra distribusi resmi","Siapkan akun di salah satu mitra distribusi","Bandingkan hitungannya di bagian 03"],["69"]]]],
+ ["Fase 2 · Pindahkan bertahap","Hari 31–60 · 4 Des–2 Jan",[
+  ["25 Des","1–2 minggu","Tabungan & dana darurat","Arahkan gaji ke rekening syariah","Kalau gaji masuk ke rekening syariah, tabungan, zakat, dan pembayaran rutin ikut tertata.",["Tanyakan ke HR apakah gaji bisa ditransfer ke bank lain","Kalau belum bisa, atur transfer otomatis di hari gajian"],["02"]],
+  ["15 Des","Saat jatuh tempo","Tabungan & dana darurat","Pindahkan deposito Rp50 jt ke deposito mudharabah","Menunggu jatuh tempo menghindari biaya pencairan lebih awal.",["Matikan perpanjangan otomatis (ARO) sebelum 15 Desember","Bandingkan nisbah dan realisasi bagi hasil di 2–3 bank syariah","Pilih tenor yang selesai sebelum uang muka dibutuhkan"],["03"]],
+  ["Desember","1 bulan","Cara bayar","Rapikan pemakaian kartu: bayar penuh, lalu pertimbangkan kartu syariah","Kartu pembiayaan syariah memakai akad kafalah, qardh, dan ijarah, dengan biaya yang disepakati di awal.",["Bayar tagihan penuh sebelum jatuh tempo","Bandingkan iuran dan ketentuan kartu syariah (iB), atau beralih ke debit"],["54","17"]],
+  ["Desember","2 minggu","Asuransi","Bandingkan perlindunganmu dengan asuransi syariah","Asuransi syariah memakai dana tabarru' milik peserta bersama; perusahaan mengelola dengan ujrah.",["Mulai dari kesehatan, lalu jiwa bila ada tanggungan","Pertahankan BPJS sebagai lapisan dasar"],["21","52"]]]],
+ ["Fase 3 · Tumbuhkan","Hari 61–90 · 3 Jan–2 Feb",[
+  ["Januari","Rutin","Investasi","Pisahkan dana uang muka rumah di rekening syariah sendiri","Kalau dananya dipisah, tujuannya lebih gampang dijaga.",["Setor Rp4,125 jt per bulan, atau Rp4,58 jt untuk tepat 24 bulan","Gunakan instrumen yang nilainya stabil karena dana dibutuhkan dalam 2 tahun","Tinjau setiap 6 bulan"],[]],
+  ["Januari","Mulai bulan ini","Investasi","Arahkan investasi baru ke instrumen syariah","Reksa dana syariah, saham syariah, sukuk negara, dan emas bisa dimulai dari nominal kecil.",["Investasi lama Rp30 jt: cek mana yang syariah, tanpa harus menjual sekaligus","Saham: pastikan ada di Daftar Efek Syariah terbaru","Sukuk negara ritel: imbal hasil dikenai PPh final 10%"],["20","80","69"]],
+  ["Sebelum akad","Sebelum akad","Cicilan & utang","Pilih akad pembiayaan rumah sebelum memilih bank","Murabahah memberi cicilan tetap; MMQ lebih lentur untuk pelunasan dipercepat. Rumah inden punya akad khusus.",["Pakai simulasi di bagian 03 dengan penawaran bank yang sebenarnya","Untuk rumah inden, tanyakan apakah bank memakai ijarah maushufah fi al-dzimmah"],["04","73","102","23"]],
+  ["2 Feb 2027","Hari ke-90","Zakat & sedekah","Ulangi kuis dan bandingkan kartu profilmu","Dari situ kelihatan langkah mana yang sudah berjalan dan mana yang belum.",["Bandingkan skor praktik dan pemahaman","Pilih pilar fokus untuk 90 hari berikutnya"],[]]]]];
+$("plan").innerHTML=PH.map(ph=>`<div class="phase"><div class="phase-h"><h3>${ph[0]}</h3><span>${ph[1]}</span></div>`+ph[2].map(t=>`<div class="task"><div class="when"><b>${t[0]}</b>${t[1]}</div><div><h3>${t[3]}</h3><p class="small muted" style="margin-top:4px">${t[4]}</p><ul>${t[5].map(x=>`<li>${x}</li>`).join("")}</ul><div class="chips">${t[7]?'<span class="chip go">Mulai di sini</span>':""}<span class="chip p">${t[2]}</span>${t[6].length?`<span class="chip">${t[6].length} rujukan</span>`:""}</div>${t[6].length?`<p class="cite" style="margin-top:8px">${t[6].map(k=>"Fatwa DSN-MUI No. "+FT[k]).join("<br>")}</p>`:""}</div></div>`).join("")+`</div>`).join("");
+
+/* ask checklists: same questions as the app */
+const ASK=[["Saat membuka tabungan syariah","buka",["Akadnya wadiah atau mudharabah?","Kalau mudharabah: berapa nisbah dan realisasi bagi hasil 3 bulan terakhir?","Apakah bonus wadiah dijanjikan di awal? (seharusnya tidak)","Apakah dijamin LPS? Penjaminan itu jaring pengaman, bukan bagian dari akad"]],
+ ["Saat memindahkan deposito","dep",["Berapa nisbah dan realisasi bagi hasilnya?","Apa yang terjadi bila dicairkan sebelum jatuh tempo?","Ini produk simpanan atau produk investasi? POJK 4/2026 memisahkan keduanya","Fatwa yang dirujuk dari DSN-MUI, atau hanya opini DPS bank?"]],
+ ["Saat mengajukan pembiayaan rumah","kpr",["Apakah bank memiliki rumahnya dulu sebelum menjual atau menyewakan kepadaku?","Untuk MMQ: bagaimana ujrah ditinjau, dan berapa harga pengalihan porsi bank?","Denda keterlambatan disalurkan ke mana?","Kebijakan potongan pelunasan secara tertulis","Fatwa yang dirujuk mencakup versi produk ini?"]],
+ ["Saat membandingkan asuransi syariah","asr",["Berapa ujrah yang diambil perusahaan?","Bagaimana surplus dana tabarru' dibagikan?","Dana tabarru' dipisah dari dana investasi?","Perusahaan atau unit syariahnya berizin OJK?"]],
+ ["Saat memilih kartu syariah","kartu",["Akad apa yang dipakai: kafalah, qardh, atau ijarah?","Denda keterlambatan disalurkan ke mana?","Iuran dan biaya dihitung tetap, atau persen dari saldo?"]],
+ ["Sebelum investasi","inv",["Sahamnya ada di DES terbaru? DES ditinjau sekitar Mei dan November","Reksa dana: siapa DPS-nya dan apa kebijakan investasinya?","Berapa biaya pengelolaan per tahun?"]]];
+const KEY="petasyariah.pro.asks"; let st={}; try{ st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}; }catch(_){ st={}; }
+const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(_){} };
+const cnt=a=>a[2].filter((_,i)=>st[a[1]+i]).length;
+$("asks").innerHTML=ASK.map(a=>`<div class="askg"><div class="sec-h"><h3>${a[0]}</h3></div><ul>${a[2].map((q,i)=>`<li><label><input type="checkbox" id="ask-${a[1]}${i}" data-k="${a[1]}${i}" ${st[a[1]+i]?"checked":""}><span>${q}</span></label></li>`).join("")}</ul><span class="prog" data-g="${a[1]}">${cnt(a)} dari ${a[2].length} terjawab</span></div>`).join("");
+$("asks").addEventListener("change",e=>{ const k=e.target.dataset.k; if(!k) return; st[k]=e.target.checked; save(); const a=ASK.find(x=>k.startsWith(x[1])&&/^\d+$/.test(k.slice(x[1].length))); if(a) document.querySelector(`.prog[data-g="${a[1]}"]`).textContent=cnt(a)+" dari "+a[2].length+" terjawab"; });
+
+/* share */
+/* ===== Kartu share Instagram (Story 9:16, Feed 4:5). Tanpa angka uang pribadi. ===== */
+const SHARE=(function(){
+const PERSONA_STYLE={
+ "Penjaga Amanah":{c:"#D4EE3A",e:"star"},
+ "Penggerak":{c:"#F2C14E",e:"book"},
+ "Penjelajah":{c:"#7FCB8E",e:"compass"},
+ "Perintis":{c:"#FF9E7A",e:"sunrise"}};
+const F='"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif', M='"JetBrains Mono",ui-monospace,Menlo,monospace';
+function wrap(ctx,t,maxW){ const w=String(t).split(" "),L=[]; let s=""; w.forEach(x=>{ const tt=s?s+" "+x:x; if(ctx.measureText(tt).width>maxW&&s){L.push(s);s=x;} else s=tt; }); if(s)L.push(s); return L; }
+function text(ctx,t,x,y,font,color,maxW,lh,ls){ ctx.font=font; ctx.fillStyle=color; try{ctx.letterSpacing=ls||"0px";}catch(_){} const L=maxW?wrap(ctx,t,maxW):[t]; L.forEach((l,i)=>ctx.fillText(l,x,y+i*(lh||0))); try{ctx.letterSpacing="0px";}catch(_){} return y+(L.length-1)*(lh||0); }
+function rrect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function star(ctx,cx,cy,r){ ctx.beginPath(); for(let i=0;i<16;i++){ const a=-Math.PI/2+i*Math.PI/8, rr=i%2?r*.62:r; ctx.lineTo(cx+rr*Math.cos(a),cy+rr*Math.sin(a)); } ctx.closePath(); }
+function bg(ctx,W,H){ const g=ctx.createLinearGradient(0,0,W*.6,H); g.addColorStop(0,"#13241C"); g.addColorStop(1,"#1E3A2C"); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  ctx.save(); ctx.globalAlpha=.07; ctx.strokeStyle="#D4EE3A"; ctx.lineWidth=2; for(let y=60;y<H;y+=150) for(let x=(y/150%2?75:0);x<W+80;x+=150){ star(ctx,x,y,34); ctx.stroke(); } ctx.restore(); }
+function emblem(ctx,kind,cx,cy,r,c){ ctx.save(); ctx.fillStyle=c; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill(); ctx.fillStyle="#13241C"; ctx.strokeStyle="#13241C"; ctx.lineWidth=r*.09; ctx.lineCap="round"; ctx.lineJoin="round";
+  if(kind==="star"){ star(ctx,cx,cy,r*.62); ctx.fill(); ctx.fillStyle=c; ctx.beginPath(); ctx.arc(cx,cy,r*.2,0,Math.PI*2); ctx.fill(); }
+  else if(kind==="compass"){ ctx.beginPath(); ctx.arc(cx,cy,r*.6,0,Math.PI*2); ctx.stroke(); ctx.beginPath(); ctx.moveTo(cx+r*.36,cy-r*.36); ctx.lineTo(cx+r*.08,cy+r*.08); ctx.lineTo(cx-r*.36,cy+r*.36); ctx.lineTo(cx-r*.08,cy-r*.08); ctx.closePath(); ctx.fill(); }
+  else if(kind==="book"){ ctx.beginPath(); ctx.moveTo(cx,cy-r*.28); ctx.quadraticCurveTo(cx-r*.3,cy-r*.44,cx-r*.6,cy-r*.3); ctx.lineTo(cx-r*.6,cy+r*.4); ctx.quadraticCurveTo(cx-r*.3,cy+r*.26,cx,cy+r*.42); ctx.quadraticCurveTo(cx+r*.3,cy+r*.26,cx+r*.6,cy+r*.4); ctx.lineTo(cx+r*.6,cy-r*.3); ctx.quadraticCurveTo(cx+r*.3,cy-r*.44,cx,cy-r*.28); ctx.moveTo(cx,cy-r*.28); ctx.lineTo(cx,cy+r*.42); ctx.stroke(); }
+  else { ctx.beginPath(); ctx.arc(cx,cy+r*.22,r*.36,Math.PI,0); ctx.fill(); ctx.beginPath(); ctx.moveTo(cx-r*.66,cy+r*.24); ctx.lineTo(cx+r*.66,cy+r*.24); ctx.stroke(); for(let i=0;i<5;i++){ const a=Math.PI+(i+1)*Math.PI/6; ctx.beginPath(); ctx.moveTo(cx+r*.48*Math.cos(a),cy+r*.22+r*.48*Math.sin(a)); ctx.lineTo(cx+r*.66*Math.cos(a),cy+r*.22+r*.66*Math.sin(a)); ctx.stroke(); } }
+  ctx.restore(); }
+function radar(ctx,P,cx,cy,R,c,fs){ const n=P.length, pt=(i,r)=>{ const a=-Math.PI/2+i*2*Math.PI/n; return [cx+r*Math.cos(a),cy+r*Math.sin(a)]; };
+  ctx.save(); ctx.lineWidth=2; [.25,.5,.75,1].forEach(l=>{ ctx.strokeStyle=`rgba(212,238,58,${l===1?.45:.18})`; ctx.beginPath(); P.forEach((_,i)=>{ const p=pt(i,R*l); i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]); }); ctx.closePath(); ctx.stroke(); });
+  const shape=(k)=>{ ctx.beginPath(); P.forEach((p,i)=>{ const q=pt(i,R*Math.max(.05,p[k]/100)); i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]); }); ctx.closePath(); };
+  shape("now"); ctx.globalAlpha=.32; ctx.fillStyle=c; ctx.fill(); ctx.globalAlpha=1; ctx.strokeStyle=c; ctx.lineWidth=5; ctx.lineJoin="round"; ctx.stroke();
+  ctx.font=`600 ${fs}px ${F}`; ctx.fillStyle="rgba(241,245,236,.9)"; P.forEach((p,i)=>{ const q=pt(i,R+fs*.9); ctx.textAlign=Math.abs(q[0]-cx)<5?"center":(q[0]>cx?"left":"right"); ctx.textBaseline="middle"; ctx.fillText(p.label,q[0],q[1]); });
+  ctx.restore(); ctx.textAlign="left"; ctx.textBaseline="alphabetic"; }
+function chipW(ctx,k,v){ ctx.font=`600 28px ${F}`; const kw=ctx.measureText(k).width; ctx.font=`700 34px ${F}`; return kw+ctx.measureText(v).width+70; }
+function chip(ctx,x,y,k,v,c){ ctx.font=`600 28px ${F}`; const kw=ctx.measureText(k).width; ctx.font=`700 34px ${F}`; const vw=ctx.measureText(v).width; const w=kw+vw+70,h=72;
+  rrect(ctx,x,y,w,h,36); ctx.strokeStyle="rgba(241,245,236,.35)"; ctx.lineWidth=2; ctx.stroke();
+  text(ctx,k,x+28,y+46,`600 28px ${F}`,"#B9C7BD"); text(ctx,v,x+42+kw,y+47,`700 34px ${F}`,c); return w; }
+/* o: {fmt, kind:"type"|"progress", persona, tagline, pillars:[{label,now}], strong, focus, showScores, praktik, paham, inklusi, day, done, total, phases:[[nama,selesai,total]], from, to, toLabel} */
+function draw(cv,o){
+  const W=1080,H=o.fmt==="feed"?1350:1920, st=o.fmt!=="feed"; cv.width=W; cv.height=H; const ctx=cv.getContext("2d");
+  const S=PERSONA_STYLE[o.persona]||PERSONA_STYLE["Perintis"], c=S.c, X=90, top=st?240:110;
+  bg(ctx,W,H);
+  text(ctx,"PETA SYARIAH",X,top,`700 30px ${F}`,"#D4EE3A",0,0,"6px");
+  emblem(ctx,S.e,W-X-70,top-10,70,c);
+  if(o.kind==="type"){
+    text(ctx,"Keuanganku sudah",X,top+70,`500 42px ${F}`,"#F1F5EC");
+    const big=st?250:190, by=top+70+Math.round(big*.95);
+    ctx.font=`800 ${big}px ${F}`; try{ctx.letterSpacing="-8px";}catch(_){} const pw=ctx.measureText(o.pct+"%").width; try{ctx.letterSpacing="0px";}catch(_){}
+    text(ctx,o.pct+"%",X,by,`800 ${big}px ${F}`,c,0,0,"-8px");
+    text(ctx,"syariah",X+pw+24,by,`700 ${st?64:52}px ${F}`,"#F1F5EC");
+    let y=text(ctx,"Level "+o.persona,X,by+(st?92:74),`700 ${st?46:40}px ${F}`,c);
+    if(o.showGuess) y=text(ctx,(o.pct>=o.guessV+10?"Tadinya kutebak cuma ":"Tadinya kutebak ")+o.guessLabel+".",X,y+(st?66:56),`500 ${st?38:32}px ${F}`,"#F1F5EC",W-2*X,st?50:42);
+    if(st){ radar(ctx,o.pillars,W/2,y+330,180,c,30);
+      let cy=y+590, cx=X; cx+=chip(ctx,cx,cy,"Lencana ",o.badges+" dari 8",c)+16; if(cx+chipW(ctx,"Fokusku ",o.focus)>W-X){ cx=X; cy+=88; } chip(ctx,cx,cy,"Fokusku ",o.focus,"#F1F5EC");
+      if(o.inklusi) text(ctx,"Termasuk 13,41% penduduk yang sudah memakai produk syariah (SNLIK 2025)",X,cy+140,`500 30px ${F}`,"#B9C7BD",W-2*X,42);
+      text(ctx,"Berapa persen punyamu?",X,H-250,`800 54px ${F}`,"#D4EE3A");
+      text(ctx,"Cek gratis, 3 menit  ·  #PetaSyariahku",X,H-195,`500 34px ${F}`,"#F1F5EC");
+    } else {
+      radar(ctx,o.pillars,W-280,H-400,140,c,26);
+      let cy=y+60; chip(ctx,X,cy,"Lencana ",o.badges+" dari 8",c); chip(ctx,X,cy+90,"Fokusku ",o.focus,"#F1F5EC");
+      text(ctx,"Berapa persen punyamu?",X,H-150,`800 48px ${F}`,"#D4EE3A");
+      text(ctx,"Cek gratis, 3 menit  ·  #PetaSyariahku",X,H-98,`500 30px ${F}`,"#F1F5EC");
+    }
+  } else {
+    text(ctx,"Rencana 90 hari syariahku",X,top+70,`500 42px ${F}`,"#F1F5EC");
+    text(ctx,o.persona,X,top+(st?135:130),`700 38px ${F}`,c);
+    const by=top+(st?400:330);
+    text(ctx,"Hari "+o.day,X,by,`800 ${st?210:170}px ${F}`,"#F1F5EC",0,0,"-6px");
+    ctx.font=`800 ${st?210:170}px ${F}`; try{ctx.letterSpacing="-6px";}catch(_){} const dw=ctx.measureText("Hari "+o.day).width; try{ctx.letterSpacing="0px";}catch(_){}
+    text(ctx,"/ 90",X+dw+24,by,`500 ${st?60:50}px ${M}`,"#B9C7BD");
+    const py=by+(st?90:70), pw=W-2*X; rrect(ctx,X,py,pw,30,15); ctx.fillStyle="rgba(241,245,236,.14)"; ctx.fill();
+    rrect(ctx,X,py,Math.max(30,pw*Math.min(1,o.day/90)),30,15); ctx.fillStyle=c; ctx.fill();
+    [1,2].forEach(i=>{ ctx.fillStyle="#13241C"; ctx.fillRect(X+pw*i/3-3,py,6,30); });
+    let ry=py+(st?150:120);
+    o.phases.forEach(ph=>{ const full=ph[1]>=ph[2]&&ph[2]>0;
+      ctx.beginPath(); ctx.arc(X+28,ry-14,26,0,Math.PI*2); ctx.fillStyle=full?c:"rgba(241,245,236,.12)"; ctx.fill();
+      if(full){ ctx.strokeStyle="#13241C"; ctx.lineWidth=6; ctx.lineCap="round"; ctx.beginPath(); ctx.moveTo(X+16,ry-14); ctx.lineTo(X+25,ry-4); ctx.lineTo(X+41,ry-25); ctx.stroke(); }
+      text(ctx,ph[0],X+80,ry,`700 42px ${F}`,"#F1F5EC");
+      ctx.font=`500 36px ${M}`; const t=ph[1]+"/"+ph[2]+" langkah"; text(ctx,t,W-X-ctx.measureText(t).width,ry,`500 36px ${M}`,full?c:"#B9C7BD");
+      ry+=st?104:86; });
+    if(o.showScores&&o.to!=null){ text(ctx,o.toLabel||"Skor praktik",X,ry+40,`600 32px ${F}`,"#B9C7BD"); text(ctx,`${o.from}% → ${o.to}%`,X,ry+(st?120:110),`500 ${st?84:70}px ${M}`,c); }
+    text(ctx,"Pelan-pelan, satu per satu.",X,H-(st?300:150),`800 ${st?52:46}px ${F}`,"#D4EE3A");
+    text(ctx,"Mulai petamu  ·  #PetaSyariahku",X,H-(st?245:98),`500 34px ${F}`,"#F1F5EC");
+  }
+  return cv;
+}
+async function save(cv,name,statusEl){
+  const set=t=>{ if(statusEl) statusEl.textContent=t; };
+  let dl=null; try{ dl=window.claude&&window.claude.use?await window.claude.use("downloads"):null; }catch(_){ dl=null; }
+  if(!dl){ set("Tekan lama gambar di atas, lalu pilih Simpan gambar."); return; }
+  const blob=await new Promise(r=>cv.toBlob(r,"image/png"));
+  try{ await dl.save({filename:name,data:blob}); set("Gambar tersimpan. Buka Instagram, pilih Story, lalu unggah dari galeri."); }
+  catch(e){ const c=e&&e.code; set(c==="declined"?"Penyimpanan dibatalkan.":c==="rate_limited"?"Tunggu sebentar, lalu coba lagi.":"Tidak bisa menyimpan di sini. Tekan lama gambar di atas untuk menyimpannya."); }
+}
+async function hasSave(){ try{ return !!(window.claude&&window.claude.use&&await window.claude.use("downloads")); }catch(_){ return false; } }
+return {draw,save,hasSave,PERSONA_STYLE};
+})();
+
+const MS=[{day:1,done:0,ph:[0,0,0],to:88,toLabel:"Persen syariah → target 90 hari"},{day:30,done:4,ph:[4,0,0],to:null},{day:90,done:10,ph:[4,4,2],to:81,toLabel:"Persen syariah, hari 1 → hari 90"}];
+const SH={m:0,fmt:"story"}; const shCv=document.createElement("canvas");
+function shSpec(){ const m=MS[SH.m]; return {fmt:SH.fmt,kind:"progress",persona:"Penggerak",day:m.day,done:m.done,total:12,phases:[["Fondasi",m.ph[0],4],["Pindah bertahap",m.ph[1],4],["Tumbuh",m.ph[2],4]],showScores:$("sh-scores").checked,from:58,to:m.to,toLabel:m.toLabel}; }
+async function renderShare(){ try{ await document.fonts.ready; }catch(_){} SHARE.draw(shCv,shSpec()); $("sh-img").src=shCv.toDataURL("image/png");
+  $("sh-save").hidden=!(await SHARE.hasSave()); $("sh-status").textContent=$("sh-save").hidden?"Tekan lama gambar untuk menyimpannya.":""; }
+const pick=(id,key,attr)=>$(id).querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{ SH[key]=attr==="m"?+b.dataset.m:b.dataset.f; $(id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); renderShare(); }));
+pick("sh-ms","m","m"); pick("sh-fmt","fmt","f"); $("sh-scores").addEventListener("change",renderShare);
+$("sh-save").addEventListener("click",()=>SHARE.save(shCv,"peta-syariah-hari-"+MS[SH.m].day+".png",$("sh-status")));
+$("sh-cap").addEventListener("click",()=>{ const m=MS[SH.m]; const txt=m.day===1?"Hari pertama rencana 90 hari keuangan syariahku. Mulai dari yang dasar dulu: tabungan, dana darurat, zakat. Pelan-pelan, satu per satu. #PetaSyariahku":m.day===30?"Hari 30 dari 90. Fondasi keuangan syariahku sudah beres, sekarang mulai pindah bertahap. #PetaSyariahku":`Hari 90. ${m.done} dari 12 langkah sudah jalan, keuanganku dari 58% jadi ${m.to}% syariah. Langkah kecil ternyata kerasa juga. #PetaSyariahku`;
+  const ok=()=>{ $("sh-cap").textContent="Caption tersalin"; setTimeout(()=>$("sh-cap").textContent="Salin caption",1600); };
+  try{ navigator.clipboard.writeText(txt).then(ok,()=>{ $("sh-status").textContent=txt; }); }catch(_){ $("sh-status").textContent=txt; } });
+renderShare();
+
+/* references */
+const REF=Object.keys(FT).map(k=>"Fatwa DSN-MUI No. "+FT[k]).concat(["POJK No. 8 Tahun 2025 tentang Penerbitan Daftar Efek Syariah dan Daftar Efek Syariah Luar Negeri","POJK No. 4 Tahun 2026 tentang Penyelenggaraan Produk Investasi Perbankan Syariah","SK Ketua BAZNAS No. 15 Tahun 2026 tentang nilai nisab zakat penghasilan dan jasa","Harga emas Antam di Pegadaian, 9 Okt 2026 (Databoks)","SNLIK 2025, OJK–BPS","PP 91/2021: PPh final 10% atas imbal hasil SBN termasuk sukuk"]);
+$("refs").innerHTML=REF.map(r=>`<li>${r}</li>`).join("");
+})();
+</script>
