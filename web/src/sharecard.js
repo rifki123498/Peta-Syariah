@@ -1,4 +1,5 @@
 import { saveImage } from "./platform.js";
+import { tr } from "./i18n.js";
 /* ===== Kartu share Instagram (Story 9:16, Feed 4:5). Tanpa angka uang pribadi. ===== */
 export const SHARE=(function(){
 const PERSONA_STYLE={
@@ -8,7 +9,7 @@ const PERSONA_STYLE={
  "Perintis":{c:"#FF9E7A",e:"sunrise"}};
 const F='"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif', M='"JetBrains Mono",ui-monospace,Menlo,monospace';
 function wrap(ctx,t,maxW){ const w=String(t).split(" "),L=[]; let s=""; w.forEach(x=>{ const tt=s?s+" "+x:x; if(ctx.measureText(tt).width>maxW&&s){L.push(s);s=x;} else s=tt; }); if(s)L.push(s); return L; }
-function text(ctx,t,x,y,font,color,maxW,lh,ls){ ctx.font=font; ctx.fillStyle=color; try{ctx.letterSpacing=ls||"0px";}catch(_){} const L=maxW?wrap(ctx,t,maxW):[t]; L.forEach((l,i)=>ctx.fillText(l,x,y+i*(lh||0))); try{ctx.letterSpacing="0px";}catch(_){} return y+(L.length-1)*(lh||0); }
+function text(ctx,t,x,y,font,color,maxW,lh,ls){ t=tr(t); ctx.font=font; ctx.fillStyle=color; try{ctx.letterSpacing=ls||"0px";}catch(_){} const L=maxW?wrap(ctx,t,maxW):[t]; L.forEach((l,i)=>ctx.fillText(l,x,y+i*(lh||0))); try{ctx.letterSpacing="0px";}catch(_){} return y+(L.length-1)*(lh||0); }
 function rrect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
 function star(ctx,cx,cy,r){ ctx.beginPath(); for(let i=0;i<16;i++){ const a=-Math.PI/2+i*Math.PI/8, rr=i%2?r*.62:r; ctx.lineTo(cx+rr*Math.cos(a),cy+rr*Math.sin(a)); } ctx.closePath(); }
 function bg(ctx,W,H){ const g=ctx.createLinearGradient(0,0,W*.6,H); g.addColorStop(0,"#13241C"); g.addColorStop(1,"#1E3A2C"); ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
@@ -23,10 +24,10 @@ function radar(ctx,P,cx,cy,R,c,fs){ const n=P.length, pt=(i,r)=>{ const a=-Math.
   ctx.save(); ctx.lineWidth=2; [.25,.5,.75,1].forEach(l=>{ ctx.strokeStyle=`rgba(212,238,58,${l===1?.45:.18})`; ctx.beginPath(); P.forEach((_,i)=>{ const p=pt(i,R*l); i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]); }); ctx.closePath(); ctx.stroke(); });
   const shape=(k)=>{ ctx.beginPath(); P.forEach((p,i)=>{ const q=pt(i,R*Math.max(.05,p[k]/100)); i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]); }); ctx.closePath(); };
   shape("now"); ctx.globalAlpha=.32; ctx.fillStyle=c; ctx.fill(); ctx.globalAlpha=1; ctx.strokeStyle=c; ctx.lineWidth=5; ctx.lineJoin="round"; ctx.stroke();
-  ctx.font=`600 ${fs}px ${F}`; ctx.fillStyle="rgba(241,245,236,.9)"; P.forEach((p,i)=>{ const q=pt(i,R+fs*.9); ctx.textAlign=Math.abs(q[0]-cx)<5?"center":(q[0]>cx?"left":"right"); ctx.textBaseline="middle"; ctx.fillText(p.label,q[0],q[1]); });
+  ctx.font=`600 ${fs}px ${F}`; ctx.fillStyle="rgba(241,245,236,.9)"; P.forEach((p,i)=>{ const q=pt(i,R+fs*.9); ctx.textAlign=Math.abs(q[0]-cx)<5?"center":(q[0]>cx?"left":"right"); ctx.textBaseline="middle"; ctx.fillText(tr(p.label),q[0],q[1]); });
   ctx.restore(); ctx.textAlign="left"; ctx.textBaseline="alphabetic"; }
-function chipW(ctx,k,v){ ctx.font=`600 28px ${F}`; const kw=ctx.measureText(k).width; ctx.font=`700 34px ${F}`; return kw+ctx.measureText(v).width+70; }
-function chip(ctx,x,y,k,v,c){ ctx.font=`600 28px ${F}`; const kw=ctx.measureText(k).width; ctx.font=`700 34px ${F}`; const vw=ctx.measureText(v).width; const w=kw+vw+70,h=72;
+function chipW(ctx,k,v){ k=tr(k); v=tr(v); ctx.font=`600 28px ${F}`; const kw=ctx.measureText(k).width; ctx.font=`700 34px ${F}`; return kw+ctx.measureText(v).width+70; }
+function chip(ctx,x,y,k,v,c){ k=tr(k); v=tr(v); ctx.font=`600 28px ${F}`; const kw=ctx.measureText(k).width; ctx.font=`700 34px ${F}`; const vw=ctx.measureText(v).width; const w=kw+vw+70,h=72;
   rrect(ctx,x,y,w,h,36); ctx.strokeStyle="rgba(241,245,236,.35)"; ctx.lineWidth=2; ctx.stroke();
   text(ctx,k,x+28,y+46,`600 28px ${F}`,"#B9C7BD"); text(ctx,v,x+42+kw,y+47,`700 34px ${F}`,c); return w; }
 /* o: {fmt, kind:"type"|"progress", persona, tagline, pillars:[{label,now}], strong, focus, showScores, praktik, paham, inklusi, day, done, total, phases:[[nama,selesai,total]], from, to, toLabel} */

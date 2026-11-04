@@ -61,7 +61,7 @@ export const CONFIG = fetch("/api/config").then((r) => (r.ok ? r.json() : {})).c
 /* ---------- events ---------- */
 export function track(name, props) {
   const event_id = uid();
-  const body = JSON.stringify({ name, props: props || {}, anonId: ANON_ID, eventId: event_id, arm: PRICE_ARM, price: PRICE, ref: REF, url: location.pathname + location.search, ts: Date.now() });
+  const body = JSON.stringify({ name, props: props || {}, mc: LS.get("ps.consent") === "yes", anonId: ANON_ID, eventId: event_id, arm: PRICE_ARM, price: PRICE, ref: REF, url: location.pathname + location.search, ts: Date.now() });
   try {
     if (navigator.sendBeacon) navigator.sendBeacon("/api/events", new Blob([body], { type: "application/json" }));
     else fetch("/api/events", { method: "POST", headers: { "content-type": "application/json" }, body, keepalive: true }).catch(() => {});
@@ -79,7 +79,8 @@ export function track(name, props) {
 /* ---------- checkout ---------- */
 export async function checkout(extra) {
   try {
-    const r = await fetch("/api/checkout", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ anonId: ANON_ID, price: PRICE, arm: PRICE_ARM, ref: REF, ...extra }) });
+    const r = await fetch("/api/checkout", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ mc: LS.get("ps.consent") === "yes", anonId: ANON_ID, price: PRICE, arm: PRICE_ARM, ref: REF, ...extra }) });
+    if (r.status === 400) return await r.json();
     if (!r.ok) throw new Error("checkout " + r.status);
     return await r.json();
   } catch (_) {

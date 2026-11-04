@@ -67,6 +67,18 @@ async function sendCapi(env: Env, req: Request, eventName: string, eventId: stri
   }).catch(() => {});
 }
 
+/* Version of syarat.html + privasi.html the buyer agreed to. Bump when either page changes materially. */
+const TERMS_VERSION = "2026-11-04";
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function parseBuyer(v: any): { name: string; email: string; wa: string | null } | null {
+  if (!v || typeof v !== "object" || v.consent !== true) return null;
+  const name = typeof v.name === "string" ? v.name.trim().slice(0, 80) : "";
+  const email = typeof v.email === "string" ? v.email.trim().toLowerCase().slice(0, 120) : "";
+  if (name.length < 2 || !EMAIL_RE.test(email)) return null;
+  const wa = typeof v.wa === "string" && /^\+62\d{8,13}$/.test(v.wa) ? v.wa : null;
+  return { name, email, wa };
+}
+
 app.get("/api/config", (c) => c.json({ pixelId: c.env.META_PIXEL_ID || null, priceArms: arms(c.env), payments: !!c.env.XENDIT_SECRET_KEY }));
 
 app.post("/api/events", async (c) => {
@@ -83,7 +95,8 @@ app.post("/api/events", async (c) => {
   ).bind(eventId, name, anonId, Number.isInteger(b.arm) ? b.arm : null, Number.isInteger(b.price) ? b.price : null, clip(b.ref, 32), url, props,
     clip(c.req.header("user-agent"), 300), clip(c.req.header("cf-ipcountry"), 4), now()).run();
   const std = CAPI_MAP[name];
-  if (std) c.executionCtx.waitUntil(sendCapi(c.env, c.req.raw, std, eventId, anonId, url, name === "checkout_start" ? { value: b.price, currency: "IDR" } : undefined));
+  /* Meta CAPI only for visitors who accepted the cookie bar (mc = marketing consent). */
+  if (std && b.mc === true) c.executionCtx.waitUntil(sendCapi(c.env, c.req.raw, std, eventId, anonId, url, name === "checkout_start" ? { value: b.price, currency: "IDR" } : undefined));
   return c.json({ ok: true });
 });
 
@@ -94,10 +107,16 @@ app.post("/api/checkout", async (c) => {
   if (!arms(c.env).includes(price)) return c.json({ error: "bad_price" }, 400);
   const id = "PS-" + crypto.randomUUID().slice(0, 13).replace(/-/g, "").toUpperCase();
   const anonId = clip(b.anonId, 64), ref = clip(b.ref, 32), arm = Number.isInteger(b.arm) ? b.arm : null;
+  const buyer = parseBuyer(b.buyer);
+  if (!buyer) return c.json({ error: "bad_buyer" }, 400);
+  const t = now();
+  const insert = (mode: string, status: string, providerRef: string | null = null, invoiceUrl: string | null = null) =>
+    c.env.DB.prepare(
+      "INSERT INTO orders (id,anon_id,price,arm,ref,mode,status,provider_ref,invoice_url,created_at,buyer_name,buyer_email,buyer_wa,consent_at,terms_version,meta_consent) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+    ).bind(id, anonId, price, arm, ref, mode, status, providerRef, invoiceUrl, t, buyer.name, buyer.email, buyer.wa, t, TERMS_VERSION, b.mc === true ? 1 : 0).run();
 
   if (!c.env.XENDIT_SECRET_KEY) {
-    await c.env.DB.prepare("INSERT INTO orders (id,anon_id,price,arm,ref,mode,status,created_at) VALUES (?,?,?,?,?,'waitlist','waitlist',?)")
-      .bind(id, anonId, price, arm, ref, now()).run();
+    await insert("waitlist", "waitlist");
     return c.json({ mode: "waitlist", orderId: id });
   }
 
@@ -108,18 +127,19 @@ app.post("/api/checkout", async (c) => {
     body: JSON.stringify({
       external_id: id, amount: price, currency: "IDR",
       description: "Peta Syariah Lengkap (sekali bayar)",
+      payer_email: buyer.email,
+      customer: { given_names: buyer.name, email: buyer.email, ...(buyer.wa ? { mobile_number: buyer.wa } : {}) },
+      items: [{ name: "Peta Syariah Lengkap", quantity: 1, price, category: "Produk digital" }],
       success_redirect_url: `${base}/?order=${id}`,
       failure_redirect_url: `${base}/?order=${id}&gagal=1`,
     }),
   });
   if (!r.ok) {
-    await c.env.DB.prepare("INSERT INTO orders (id,anon_id,price,arm,ref,mode,status,created_at) VALUES (?,?,?,?,?,'invoice','failed',?)")
-      .bind(id, anonId, price, arm, ref, now()).run();
+    await insert("invoice", "failed");
     return c.json({ mode: "waitlist", orderId: id, error: "payment_unavailable" });
   }
   const inv: any = await r.json();
-  await c.env.DB.prepare("INSERT INTO orders (id,anon_id,price,arm,ref,mode,status,provider_ref,invoice_url,created_at) VALUES (?,?,?,?,?,'invoice','pending',?,?,?)")
-    .bind(id, anonId, price, arm, ref, inv.id || null, inv.invoice_url || null, now()).run();
+  await insert("invoice", "pending", inv.id || null, inv.invoice_url || null);
   return c.json({ mode: "redirect", orderId: id, url: inv.invoice_url });
 });
 
@@ -133,11 +153,11 @@ app.post("/api/webhooks/xendit", async (c) => {
   const status = String(b.status || "").toUpperCase();
   const mapped = status === "PAID" || status === "SETTLED" ? "paid" : status === "EXPIRED" ? "expired" : null;
   if (!mapped) return c.json({ ok: true, ignored: status });
-  const row: any = await c.env.DB.prepare("SELECT id,anon_id,price,status FROM orders WHERE id=?").bind(id).first();
+  const row: any = await c.env.DB.prepare("SELECT id,anon_id,price,status,meta_consent FROM orders WHERE id=?").bind(id).first();
   if (!row) return c.json({ error: "unknown_order" }, 404);
   if (row.status !== "paid") {
     await c.env.DB.prepare("UPDATE orders SET status=?, paid_at=? WHERE id=?").bind(mapped, mapped === "paid" ? now() : null, id).run();
-    if (mapped === "paid") c.executionCtx.waitUntil(sendCapi(c.env, c.req.raw, "Purchase", "purchase-" + id, row.anon_id, "/", { value: row.price, currency: "IDR", order_id: id }));
+    if (mapped === "paid" && row.meta_consent === 1) c.executionCtx.waitUntil(sendCapi(c.env, c.req.raw, "Purchase", "purchase-" + id, row.anon_id, "/", { value: row.price, currency: "IDR", order_id: id }));
   }
   return c.json({ ok: true });
 });
@@ -157,7 +177,22 @@ app.get("/api/admin/funnel", async (c) => {
   return c.json({ days, events: ev.results, orders: od.results });
 });
 
+/* Buyer list for fulfilment and waitlist follow-up: GET /api/admin/orders?days=30 with the same Bearer token. */
+app.get("/api/admin/orders", async (c) => {
+  if (!c.env.ADMIN_TOKEN || c.req.header("authorization") !== "Bearer " + c.env.ADMIN_TOKEN) return c.json({ error: "unauthorized" }, 401);
+  const days = Math.min(365, Math.max(1, parseInt(c.req.query("days") || "30", 10)));
+  const rows = await c.env.DB.prepare(
+    "SELECT id,price,mode,status,buyer_name,buyer_email,buyer_wa,created_at,paid_at FROM orders WHERE created_at>=? ORDER BY created_at DESC LIMIT 1000",
+  ).bind(now() - days * 864e5).all();
+  return c.json({ days, orders: rows.results });
+});
+
 app.all("/api/*", (c) => c.json({ error: "not_found" }, 404));
 app.all("*", (c) => c.env.ASSETS.fetch(c.req.raw));
 
-export default app;
+/* Daily retention job: anonymous usage events are kept at most 12 months (privasi.html). */
+async function scheduled(_ev: ScheduledEvent, env: Env) {
+  await env.DB.prepare("DELETE FROM events WHERE created_at < ?").bind(now() - 365 * 864e5).run();
+}
+
+export default { fetch: app.fetch, scheduled };

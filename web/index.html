@@ -370,6 +370,37 @@ select{width:100%;font:inherit;font-size:.95rem;padding:10px 12px;border:1px sol
 @media (min-width:700px){.consent{grid-template-columns:minmax(0,1fr) auto;align-items:center}}
 body.has-consent{padding-bottom:170px}
 .cbtns{display:flex;gap:8px}.cbtns .btn{width:auto;padding:10px 18px}
+/* lander v2: hook-problem-solution-cta */
+.tb-r{display:flex;align-items:center;gap:10px}
+.lang-btn{background:transparent;color:var(--hero-ink);border:2px solid rgba(255,255,255,.35);border-radius:999px;padding:6px 10px;font:700 .78rem/1 var(--mono,monospace);cursor:pointer}
+.lang-btn:hover{border-color:var(--lime)}
+.guess{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:22px}
+.guess-q{font-weight:700;color:var(--hero-ink);margin-right:4px}
+.guess-chip{border:2px solid var(--lime);background:transparent;color:var(--hero-ink);border-radius:999px;padding:10px 14px;font-weight:700;font-size:.92rem;cursor:pointer;min-height:44px}
+.guess-chip:hover,.guess-chip:focus-visible{background:var(--lime);color:var(--on-lime)}
+.problems{display:grid;gap:12px}
+@media (min-width:760px){.problems{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.problems .box h3{font-size:1rem;margin-top:4px}
+.gap-strip{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px 14px;align-items:center;border:2px solid var(--ink);border-radius:16px;padding:16px;background:var(--surface);box-shadow:var(--shadow);max-width:720px}
+.gap-strip>div{display:grid;gap:2px}
+.gap-strip b{font-family:var(--display);font-size:clamp(1.8rem,7vw,2.4rem);font-weight:800;letter-spacing:-.03em;line-height:1}
+.gap-strip span{font-size:.82rem;color:var(--muted)}
+.gap-strip .arrow{font-size:1.6rem;font-weight:800}
+.gap-strip p{grid-column:1/-1}
+.howto{list-style:none;margin:0;padding:0;display:grid;gap:14px;counter-reset:none}
+@media (min-width:760px){.howto{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.howto li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;align-items:start;border:2px solid var(--ink);border-radius:16px;padding:14px;background:var(--surface)}
+.howto .n{width:40px;height:40px;border-radius:50%;background:var(--lime);color:var(--on-lime);border:2px solid var(--ink);display:grid;place-items:center;font-weight:800;font-family:var(--mono,monospace)}
+.howto h3{font-size:1rem}
+.buyer{gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.buyer label{display:grid;gap:4px;font-weight:700;font-size:.88rem}
+.buyer input:not([type=checkbox]){font:inherit;font-size:1rem;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);font-weight:400;min-height:44px}
+.buyer input:focus-visible{outline:2px solid var(--teal);outline-offset:1px}
+.buyer .agree{grid-template-columns:22px minmax(0,1fr);gap:8px;font-weight:400;font-size:.84rem;align-items:start}
+.buyer .agree input{width:18px;height:18px;margin-top:2px;accent-color:var(--teal)}
+.ferr{color:#B3261E;font-size:.86rem;font-weight:700}
+@media (prefers-color-scheme:dark){.ferr{color:#FF8A80}}
+.i18n-note{margin:0 0 12px;padding:10px 12px;border:1px dashed var(--line);border-radius:10px;font-size:.88rem;color:var(--muted)}
 .faq{display:grid;gap:10px;max-width:720px}
 .faq details{border:2px solid var(--ink);border-radius:var(--r);background:var(--surface);padding:12px 14px}
 .faq summary{font-weight:700;cursor:pointer}
@@ -380,85 +411,85 @@ body.has-consent{padding-bottom:170px}
 <main id="v-lander">
   <header class="topbar"><div class="in">
     <div class="logo"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 4.1L20 7l-2.1 4.5L19 16l-4.6.5L12 21l-2.4-4.5L5 16l1.1-4.5L4 7l5.1-.9z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>Peta Syariah</div>
-    <button class="pill-cta go-start">Mulai →</button>
+    <div class="tb-r"><button class="lang-btn" id="lang-toggle" type="button" aria-label="Ganti bahasa ke English" data-noi18n>EN</button><button class="pill-cta go-start">Mulai →</button></div>
   </div></header>
 
-  <section class="hero"><div class="in">
+  <!-- 1 · HOOK -->
+  <section class="hero" aria-labelledby="h-hook"><div class="in">
     <div>
-      <p class="kicker"><span>Untuk yang mau hijrah finansial tapi bingung mulai dari mana</span><span>Gratis, tanpa login</span></p>
-      <h1>Keuanganmu mungkin <span class="hl">lebih syariah</span> dari yang kamu kira.</h1>
-      <p class="lead">Lebih dari separuh nilai pasar saham di BEI ternyata saham syariah. Jawab 11 pertanyaan, lihat berapa persen keuanganmu yang sudah syariah, lencana apa yang sudah kamu punya, dan keuntungan apa yang belum kamu ambil.</p>
-      <div class="ctas"><button class="btn gold go-start">Hitung persenku →</button><a class="ulink" href="#fakta">Syariah ada di mana saja? →</a></div>
-      <p class="trust">Gratis, tanpa login · 11 pertanyaan · hasil langsung keluar</p>
+      <p class="kicker"><span>Untuk yang mau hijrah finansial</span><span>Gratis · 3 menit · tanpa login</span></p>
+      <h1 id="h-hook">Keuanganmu mungkin <span class="hl">lebih syariah</span> dari yang kamu kira.</h1>
+      <p class="lead">Coba tebak dulu berapa persennya. Lalu jawab 11 pertanyaan singkat dan lihat angka sebenarnya, lengkap dengan lencana yang ternyata sudah kamu punya.</p>
+      <div class="guess" role="group" aria-label="Tebak persen keuangan syariahmu">
+        <span class="guess-q">Tebakanmu?</span>
+        <button class="guess-chip" data-guess="12">&lt; 25%</button><button class="guess-chip" data-guess="37">25–50%</button><button class="guess-chip" data-guess="62">50–75%</button><button class="guess-chip" data-guess="87">&gt; 75%</button>
+      </div>
+      <div class="ctas"><button class="btn gold go-start">Hitung persenku →</button><a class="ulink" href="#masalah">Kenapa ini penting? ↓</a></div>
     </div>
-    <div class="steps" aria-label="Empat langkah">
-      <article class="step"><span class="stag">Langkah 1 · Kenali diri</span><h3>Berapa persen keuanganmu syariah?</h3>
-        <svg viewBox="0 0 120 84" width="100%" aria-hidden="true"><polygon points="60,6 100,26 100,58 60,78 20,58 20,26" fill="none" stroke="#CFD8CF" stroke-width="1.5"/><polygon points="60,20 88,32 84,54 60,62 34,52 30,30" fill="#D4EE3A" fill-opacity=".85" stroke="#13231C" stroke-width="1.5"/><circle cx="60" cy="20" r="3" fill="#13231C"/><circle cx="88" cy="32" r="3" fill="#13231C"/><circle cx="84" cy="54" r="3" fill="#13231C"/></svg>
-        <button class="mini-btn go-start">Mulai kuis →</button></article>
-      <article class="step lime"><span class="stag">Langkah 2 · Temukan</span><h3>Keuntungan yang belum kamu ambil</h3>
-        <div class="mod"><span>Contoh</span><b>Pajak sukuk negara 10%, deposito 20%</b><div class="bar"><i></i></div></div>
-        <button class="mini-btn go-start">Cek punyaku →</button></article>
-      <article class="step"><span class="stag">Langkah 3 · Praktik</span><h3>Rencana 90 hari</h3>
-        <div class="chk"><div><span>Buka tabungan syariah</span><span>✓</span></div><span class="fake">Atur autodebit zakat…</span></div></article>
-      <article class="step"><span class="stag">Langkah 4 · Tumbuh</span><h3>Lihat skormu naik</h3>
-        <div class="trk"><i class="on">✓</i><span class="ln"></span><i>2</i><span class="ln"></span><i>3</i></div>
-        <div class="trk" style="margin-top:-2px"><span>Fondasi</span><span>Pindah</span><span>Tumbuh</span></div></article>
+    <div style="display:grid;gap:10px">
+      <span class="script" style="color:var(--lime)">contoh hasilnya</span>
+      <div class="pcard" id="l-card" aria-label="Contoh kartu hasil"></div>
     </div>
   </div></section>
 
-  <section class="sec-l" id="fakta">
-    <span class="script">ternyata…</span>
-    <h2>Syariah ada di tempat yang <span class="hl">nggak kamu sangka.</span></h2>
-    <p class="lead2">Banyak yang sudah berjalan dengan prinsip syariah tanpa label "syariah" di depannya.</p>
+  <!-- 2 · PROBLEM -->
+  <section class="sec-l" id="masalah" aria-labelledby="h-problem">
+    <span class="script">kamu nggak sendirian</span>
+    <h2 id="h-problem">Mau pindah ke syariah, tapi <span class="hl">nggak tahu mulai dari mana?</span></h2>
+    <div class="problems">
+      <article class="box"><span class="k">01</span><h3>Nggak tahu posisimu sekarang</h3><p class="small muted">Gaji, tabungan, cicilan, asuransi, investasi: mana yang sudah syariah, mana yang belum?</p></article>
+      <article class="box"><span class="k">02</span><h3>Takut harus pindah semuanya sekaligus</h3><p class="small muted">Kesannya ribet dan mahal, jadi akhirnya ditunda terus.</p></article>
+      <article class="box"><span class="k">03</span><h3>Nggak kelihatan untungnya</h3><p class="small muted">Selain label "syariah", apa yang sebenarnya kamu dapat kalau pindah?</p></article>
+    </div>
+    <div class="gap-strip">
+      <div><b class="num">43,42%</b><span>penduduk melek keuangan syariah</span></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div><b class="num">13,41%</b><span>yang sudah memakai produknya</span></div>
+      <p class="small">Banyak yang sudah paham, tapi belum melangkah. Biasanya bukan karena nggak mau, tapi karena nggak tahu langkah pertamanya.</p>
+      <p class="cite">SNLIK 2025, OJK–BPS.</p>
+    </div>
+  </section>
+
+  <!-- 3 · REFRAME -->
+  <section class="sec-l" id="fakta" aria-labelledby="h-fakta">
+    <span class="script">kabar baiknya…</span>
+    <h2 id="h-fakta">Syariah ada di tempat yang <span class="hl">nggak kamu sangka.</span></h2>
+    <p class="lead2">Banyak yang sudah berjalan dengan prinsip syariah tanpa label "syariah" di depannya. Bisa jadi kamu juga.</p>
     <div class="facts2" id="l-facts"></div>
   </section>
 
-  <section class="sec-l" id="kenapa">
-    <span class="script">kenapa perlu isi kuis ini?</span>
-    <h2>Setelah 3 menit, kamu dapat <span class="hl">empat hal ini, gratis.</span></h2>
+  <!-- 4 · SOLUTION -->
+  <section class="sec-l" id="cara" aria-labelledby="h-solution">
+    <span class="script">cara kerjanya</span>
+    <h2 id="h-solution">Peta Syariah mengubah bingung jadi <span class="hl">langkah yang jelas.</span></h2>
+    <ol class="howto">
+      <li><span class="n">1</span><div><h3>Tebak, lalu hitung</h3><p class="small muted">Tebak persenmu, jawab 11 pertanyaan kebiasaan, dan lihat persentase syariah serta levelmu: Perintis, Penjelajah, Penggerak, atau Penjaga Amanah.</p></div></li>
+      <li><span class="n">2</span><div><h3>Temukan yang sudah dan belum</h3><p class="small muted">Lencana yang ternyata sudah kamu punya, dan keuntungan yang belum kamu ambil, seperti zakat yang bisa mengurangi pajak atau sukuk negara yang pajaknya separuh pajak deposito.</p></div></li>
+      <li><span class="n">3</span><div><h3>Pindah satu per satu</h3><p class="small muted">Satu langkah pertama untuk minggu ini, gratis. Rencana 90 hari lengkap dan hitungan rupiahnya ada di peta lengkap.</p></div></li>
+    </ol>
     <div class="benefits">
-      <article class="box"><span class="k">01</span><h3>Persentase syariah dan levelmu</h3><p class="small muted">Dihitung dari enam bagian keuanganmu: tabungan, cara bayar, cicilan, asuransi, investasi, dan zakat. Dibandingkan juga dengan tebakanmu sendiri.</p></article>
-      <article class="box"><span class="k">02</span><h3>Langkah pertama untuk minggu ini</h3><p class="small muted">Satu hal konkret yang paling masuk akal dikerjakan dulu, dipilih dari jawabanmu.</p></article>
-      <article class="box"><span class="k">03</span><h3>Lencana yang sudah kamu punya</h3><p class="small muted">Delapan kebiasaan syariah, dari rekening sampai zakat rutin. Banyak orang kaget ternyata sudah punya beberapa.</p></article>
-      <article class="box"><span class="k">04</span><h3>Keuntungan yang belum kamu ambil</h3><p class="small muted">Misalnya zakat lewat lembaga resmi yang bisa mengurangi pajak, atau sukuk negara yang pajaknya separuh pajak deposito.</p></article>
+      <article class="box"><span class="k">Gratis</span><h3>Persentase syariah dan levelmu</h3><p class="small muted">Dari enam bagian keuanganmu, dibandingkan dengan tebakanmu sendiri.</p></article>
+      <article class="box"><span class="k">Gratis</span><h3>Lencana yang sudah kamu punya</h3><p class="small muted">Delapan kebiasaan syariah, dari rekening sampai zakat rutin.</p></article>
+      <article class="box"><span class="k">Gratis</span><h3>Keuntungan yang belum kamu ambil</h3><p class="small muted">Daftar keuntungan yang berlaku untukmu, lengkap dengan dasar aturannya.</p></article>
+      <article class="box"><span class="k">Gratis</span><h3>Langkah pertama minggu ini</h3><p class="small muted">Satu hal konkret yang paling masuk akal dikerjakan dulu.</p></article>
     </div>
-    <p class="small muted">Tanpa login. Jawabanmu hanya disimpan di perangkatmu sendiri.</p>
-    <button class="btn gold go-start" style="max-width:360px">Hitung persenku →</button>
+    <p class="small muted">Panduan edukasi, bukan fatwa. Rujukan: fatwa DSN-MUI, aturan OJK, dan data resmi yang dicantumkan di setiap hasil.</p>
   </section>
 
-  <section class="sec-l" id="kamus">
-    <span class="script">belum kenal istilahnya?</span>
-    <h2>Kenalan dulu dengan <span class="hl">4 akad yang paling sering kamu temui.</span></h2>
-    <p class="lead2">Bagian ini gratis. Penjelasan 9 akad lengkap, dengan daftar hal yang perlu dicek sebelum tanda tangan, ada di peta lengkap.</p>
-    <div class="akad" id="akad-free"></div>
-  </section>
-
-  <section class="sec-l">
-    <span class="script">syariah itu kepake di mana sih?</span>
-    <h2>Nggak harus jadi ustadz buat <span class="hl">paham akad.</span></h2>
-    <p class="lead2">Pilih yang paling mirip sama kondisimu. Ini hal kecil yang sering kelewat, dan apa bedanya kalau dicek dulu.</p>
-    <span class="script" style="font-size:1.15rem">contoh kayak gini dibahas di peta lengkap</span>
-    <div class="seg" role="tablist" aria-label="Pilih situasi" id="seg"></div>
-    <div class="chat"><div class="hd"><i></i><span id="sc-title"></span></div><div class="bd" id="sc-body" aria-live="polite"></div></div>
-    <p class="small muted">Contoh situasi untuk ilustrasi, bukan testimoni pengguna.</p>
-  </section>
-
-  <section class="sec-l">
-    <span class="script">nanti bisa ngapain aja?</span>
-    <h2>Kira-kira begini <span class="hl">90 harimu.</span></h2>
-    <div class="stepper" role="tablist" aria-label="Tahapan" id="stp"></div>
-    <div class="paper"><div class="top"><b id="st-num">00</b><span class="script" id="st-when">hari ini</span></div>
-      <div class="note"><small>Catatan</small><p id="st-note"></p><div class="dash"></div><div class="dash" style="width:70%"></div><span class="stnote" id="st-sticky"></span></div></div>
-    <div class="stage-copy"><h3 id="st-h"></h3><p class="lead2" id="st-p"></p></div>
-  </section>
-
-  <section class="final" id="isi"><div class="in">
-    <div style="display:grid;gap:16px">
-      <span class="script" style="color:var(--lime)">contoh hasilnya</span>
-      <div class="pcard" id="l-card" aria-label="Contoh kartu profil"></div>
+  <!-- 5 · CTA -->
+  <section class="final" id="isi" aria-labelledby="h-cta"><div class="in">
+    <div style="display:grid;gap:16px;align-content:start">
+      <span class="script" style="color:var(--lime)">giliranmu</span>
+      <h2 id="h-cta" style="color:var(--hero-ink)">Berapa persen keuanganmu yang <span class="hl">sudah syariah?</span></h2>
+      <p style="color:var(--hero-muted)">Gratis, 3 menit, tanpa login. Jawabanmu hanya disimpan di perangkatmu.</p>
+      <div class="guess dark" role="group" aria-label="Tebak persen keuangan syariahmu">
+        <span class="guess-q">Tebakanmu?</span>
+        <button class="guess-chip" data-guess="12">&lt; 25%</button><button class="guess-chip" data-guess="37">25–50%</button><button class="guess-chip" data-guess="62">50–75%</button><button class="guess-chip" data-guess="87">&gt; 75%</button>
+      </div>
+      <button class="btn gold go-start" style="max-width:360px">Yuk, hitung persen syariahmu →</button>
     </div>
-    <div style="display:grid;gap:16px">
-      <h2 style="color:var(--hero-ink)">Isi <span class="hl">peta lengkap</span></h2>
+    <div style="display:grid;gap:14px;align-content:start">
+      <h3 style="color:var(--hero-ink)">Mau langsung tahu rupiahnya? <span class="hl">Peta lengkap</span></h3>
       <ul class="incl dark">
         <li><span>Keuntungan yang belum kamu ambil, dihitung dalam rupiah dari angkamu</span></li>
         <li><span>Rencana 90 hari yang disusun dari jawabanmu, tiap langkah dengan rujukan fatwa</span></li>
@@ -466,14 +497,8 @@ body.has-consent{padding-bottom:170px}
         <li><span>Katalog 14 produk syariah bank dan non-bank</span></li>
         <li><span>Ensiklopedia 9 akad dan salah kaprahnya</span></li>
       </ul>
-      <div class="proof">
-        <div><b class="num">43,42%</b><span>penduduk melek keuangan syariah</span></div>
-        <div><b class="num">13,41%</b><span>yang sudah memakai produknya</span></div>
-        <div><b class="num">3,2×</b><span>lebih banyak yang paham daripada yang memakai</span></div>
-      </div>
-      <p class="cite">SNLIK 2025, OJK–BPS. Angka ketiga adalah rasio kedua indeks, hitungan kami.</p>
-      <p style="color:var(--hero-ink)"><b><span class="px">Rp89.000</span>, sekali bayar.</b> <span style="color:var(--hero-muted)">Bukan langganan, dan aksesnya tidak kedaluwarsa. Kuis dan kartu profil tetap gratis.</span></p>
-      <button class="btn gold go-start">Yuk, hitung persen syariahmu →</button>
+      <p style="color:var(--hero-ink)"><b><span class="px">Rp89.000</span>, sekali bayar.</b> <span style="color:var(--hero-muted)">Bukan langganan, dan aksesnya tidak kedaluwarsa. Kuis dan hasilnya tetap gratis.</span></p>
+      <p class="cite"><a href="/contoh-laporan.html" style="color:var(--lime)">Lihat contoh laporan</a> · Panduan edukasi, bukan fatwa.</p>
     </div>
   </div></section>
 
@@ -482,7 +507,7 @@ body.has-consent{padding-bottom:170px}
     <div class="faq">
       <details><summary>Kenapa saya perlu mengisi kuis ini?</summary><p>Supaya kamu tahu seberapa syariah keuanganmu sekarang dan apa yang paling masuk akal dikerjakan dulu. Hasilnya gratis: persentase dan levelmu, lencana yang sudah kamu punya, langkah pertama untuk minggu ini, dan keuntungan yang belum kamu ambil.</p></details>
       <details><summary>Bagaimana persentase syariah dihitung?</summary><p>Dari jawabanmu di enam bagian keuangan: tabungan, cara bayar, cicilan, asuransi, investasi, dan zakat. Bobot tiap jawaban dijelaskan di "Cara kami menilai" di bawah halaman. Angka ini alat bantu refleksi, bukan vonis halal-haram.</p></details>
-      <details><summary>Ada penjelasan dasar soal syariah untuk pemula?</summary><p>Ada. Istilah yang sulit dijelaskan langsung di bawah pertanyaan, dan 4 akad dasar bisa kamu baca gratis di halaman ini. Ensiklopedia 9 akad ada di peta lengkap.</p></details>
+      <details><summary>Apakah saya harus pindah semuanya sekaligus?</summary><p>Tidak. Rencananya disusun bertahap: fondasi dulu, lalu memindahkan produk besar saat waktunya tepat, misalnya deposito saat jatuh tempo.</p></details>
       <details><summary>Peta lengkap <span class="px">Rp89.000</span> berlaku berapa lama?</summary><p>Sekali bayar, bukan langganan, dan aksesnya tidak kedaluwarsa. Rencana 90 hari bisa kamu susun ulang kapan saja dengan mengulang kuis.</p></details>
       <details><summary>Apakah ini fatwa?</summary><p>Bukan. Peta Syariah adalah panduan edukasi. Keputusan akhir tetap ada padamu dan ustadz yang kamu percaya.</p></details>
     </div>
@@ -581,9 +606,17 @@ body.has-consent{padding-bottom:170px}
       <li><span>Katalog 14 produk syariah bank dan non-bank (sukuk negara, reksa dana, emas, asuransi, dana pensiun, wakaf) yang dipetakan ke tujuanmu</span></li>
       <li><span>Ensiklopedia 9 akad dan salah kaprahnya</span></li>
     </ul>
-    <button class="btn gold" id="pw-pay">Saya mau peta lengkap · <span class="px">Rp89.000</span></button>
+    <form id="pw-form" class="buyer stack" novalidate>
+      <p class="k">Data pembeli</p>
+      <label for="b-name">Nama lengkap<input id="b-name" name="name" autocomplete="name" required maxlength="80"></label>
+      <label for="b-email">Email<span class="muted small"> · untuk bukti pembelian dan memulihkan akses</span><input id="b-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="120"></label>
+      <label for="b-wa">Nomor WhatsApp<span class="muted small"> · opsional, untuk bantuan</span><input id="b-wa" name="wa" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" placeholder="08xxxxxxxxxx"></label>
+      <label class="agree"><input type="checkbox" id="b-agree" required><span>Saya sudah membaca dan setuju dengan <a href="/syarat.html" target="_blank" rel="noopener">Syarat dan refund</a> serta <a href="/privasi.html" target="_blank" rel="noopener">Kebijakan privasi</a>, termasuk penyimpanan nama, email, dan nomor WhatsApp untuk mengirim akses dan bukti pembelian.</span></label>
+      <p class="ferr" id="buy-err" role="alert" hidden></p>
+      <button class="btn gold" id="pw-pay" type="submit">Saya mau peta lengkap · <span class="px">Rp89.000</span></button>
+    </form>
     <div class="demo-note fd" id="pw-demo" hidden role="status" aria-live="polite">
-      <p><b>Terima kasih atas minatmu.</b> Peta lengkap belum bisa dibeli hari ini, jadi <b>tidak ada tagihan</b>. Kirim pesan di bawah supaya kami bisa mengabarimu begitu dibuka.</p>
+      <p><b>Terima kasih atas minatmu.</b> Peta lengkap belum bisa dibeli hari ini, jadi <b>tidak ada tagihan</b>. Kami akan mengabarimu lewat email begitu dibuka. Kalau mau lebih cepat, kirim juga pesan di bawah.</p>
       <p class="small" id="fd-msg" style="background:var(--surface);border-radius:8px;padding:10px"></p>
       <a class="btn" id="fd-wa" href="#" target="_blank" rel="noopener" hidden>Kirim lewat WhatsApp</a>
       <button class="btn alt" id="fd-copy">Salin pesan</button>

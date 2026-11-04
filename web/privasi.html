@@ -12,23 +12,82 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-app
 main{max-width:720px;margin:0 auto;padding:32px max(16px,env(safe-area-inset-right,0px)) 64px max(16px,env(safe-area-inset-left,0px))}
 h1{font-size:1.8rem;line-height:1.15}h2{font-size:1.1rem;margin-top:28px}a{color:var(--teal)}
 .note{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;color:var(--muted);font-size:.9rem}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+#lang-toggle{background:transparent;color:var(--ink);border:2px solid var(--line);border-radius:999px;padding:6px 12px;font:700 .8rem/1 ui-monospace,monospace;cursor:pointer;min-height:36px}
+mark{background:#FCEFA8;color:#13231C;padding:0 3px;border-radius:3px}
+ol,ul{padding-left:1.2em}
 </style>
 </head>
 <body>
 <main>
-  <p><a href="/">← Peta Syariah</a></p>
+  <div class="top"><a href="/">← Peta Syariah</a><button id="lang-toggle" type="button">EN</button></div>
+  <div data-l="id">
   <h1>Kebijakan privasi</h1>
-  <p class="note">Draf. Perlu ditinjau penasihat hukum sebelum peluncuran berbayar, terutama terhadap UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi.</p>
-  <h2>Data yang kami kumpulkan</h2>
-  <p>Jawaban kuis dan angka keuangan yang kamu isi disimpan di perangkatmu sendiri (penyimpanan browser), tidak dikirim ke server kami.</p>
-  <p>Kami mencatat kejadian penggunaan tanpa nama, misalnya halaman dibuka, kuis selesai, atau tombol bayar ditekan, bersama kode acak perangkat, persentase hasil, dan level. Ini dipakai untuk memperbaiki produk.</p>
-  <p>Saat kamu membayar, penyedia pembayaran memproses datamu sesuai kebijakan mereka. Kami menyimpan nomor pesanan, harga, dan status pembayaran.</p>
-  <h2>Cookie iklan</h2>
-  <p>Jika kamu menekan "Setuju", kami memuat Meta Pixel untuk mengukur kampanye iklan. Jika kamu menolak, Pixel tidak dimuat. Pilihanmu tersimpan di perangkat ini dan bisa diubah dengan menghapus data situs di browsermu.</p>
+  <p class="note">Berlaku sejak 4 November 2026. Disusun dengan mengacu pada UU No. 27 Tahun 2022 tentang Pelindungan Data Pribadi.</p>
+
+  <h2>Pengendali data</h2>
+  <p><mark>[PERLU DATA: nama PT Perorangan]</mark>, NIB <mark>[PERLU DATA: NIB]</mark>, beralamat di <mark>[PERLU DATA: alamat usaha]</mark>. Kontak untuk urusan data pribadi: email <mark>[PERLU DATA: email kontak]</mark> atau WhatsApp <mark>[PERLU DATA: nomor WhatsApp Business]</mark>.</p>
+
+  <h2>Yang tetap di perangkatmu</h2>
+  <p>Jawaban kuis dan angka keuangan yang kamu isi (penghasilan, tabungan, zakat, dan sejenisnya) disimpan di browsermu sendiri dan tidak dikirim ke server kami. Kartu hasil untuk dibagikan tidak pernah menampilkan angka rupiahmu.</p>
+
+  <h2>Yang kami simpan</h2>
+  <ul>
+    <li><b>Data penggunaan tanpa nama</b>: halaman dibuka, kuis selesai, tombol bayar ditekan, bersama kode acak perangkat, persentase hasil, level, dan negara dari jaringan. Dasar: kepentingan sah untuk memperbaiki produk. Disimpan paling lama 12 bulan.</li>
+    <li><b>Data pembeli</b>: nama, email, nomor WhatsApp (jika diisi), nomor pesanan, harga, status pembayaran, serta waktu dan versi persetujuanmu. Dasar: persetujuanmu dan pelaksanaan pembelian. Dipakai untuk mengirim akses dan bukti pembelian, memproses refund, membantu jika ada kendala, dan mengabarimu saat pembelian dibuka jika kamu mendaftar di daftar tunggu. Disimpan selama diperlukan untuk kewajiban pembukuan dan pajak, lalu dihapus.</li>
+  </ul>
+  <p>Kami tidak menjual data pribadimu dan tidak memakainya untuk iklan tanpa persetujuan terpisah.</p>
+
+  <h2>Pihak lain yang memproses data</h2>
+  <ul>
+    <li><b>Xendit</b>, penyedia pembayaran: menerima nama, email, dan nomor WhatsApp (jika diisi) untuk membuat tagihan, lalu memproses pembayaranmu sesuai kebijakan mereka.</li>
+    <li><b>Cloudflare</b>: tempat aplikasi dan basis data kami berjalan.</li>
+    <li><b>Meta</b>: hanya jika kamu menekan "Setuju" pada bar cookie. Kami memuat Meta Pixel dan mengirim kejadian tanpa nama (dengan kode perangkat yang di-hash) untuk mengukur iklan. Jika kamu menolak, Pixel tidak dimuat.</li>
+  </ul>
+
   <h2>Hakmu</h2>
-  <p>Kamu bisa meminta data kejadian yang terkait dengan perangkatmu dihapus. Hubungi kami di <span>[PERLU DATA: email kontak]</span>.</p>
+  <p>Kamu berhak meminta akses, perbaikan, atau penghapusan data pribadimu, dan menarik persetujuan kapan saja. Hubungi kontak di atas dengan email pembelianmu; kami menanggapi dalam 3 hari kerja. Menarik persetujuan tidak membatalkan pembelian yang sudah selesai, tetapi kami berhenti menghubungimu.</p>
+
+  <h2>Keamanan</h2>
+  <p>Data dikirim lewat HTTPS dan hanya bisa dibaca oleh pengelola dengan kunci akses. Jika terjadi kebocoran data pribadi, kami memberi tahu kamu dan otoritas terkait sesuai ketentuan yang berlaku.</p>
+
   <h2>Batasan</h2>
   <p>Peta Syariah adalah panduan edukasi, bukan fatwa, bukan nasihat investasi, hukum, atau pajak, dan tidak berafiliasi dengan lembaga keuangan mana pun.</p>
+  </div>
+  <div data-l="en" hidden>
+  <h1>Privacy policy</h1>
+  <p class="note">Effective 4 November 2026. Written with reference to Indonesia's Personal Data Protection Law (UU No. 27 of 2022). If the English and Indonesian versions differ, the Indonesian version prevails.</p>
+
+  <h2>Data controller</h2>
+  <p><mark>[PERLU DATA: PT Perorangan name]</mark>, NIB <mark>[PERLU DATA: NIB]</mark>, registered at <mark>[PERLU DATA: business address]</mark>. Contact for personal data matters: email <mark>[PERLU DATA: contact email]</mark> or WhatsApp <mark>[PERLU DATA: WhatsApp Business number]</mark>.</p>
+
+  <h2>What stays on your device</h2>
+  <p>Your quiz answers and the financial figures you enter (income, savings, zakat and the like) are stored in your own browser and are not sent to our server. Share cards never show your rupiah amounts.</p>
+
+  <h2>What we store</h2>
+  <ul>
+    <li><b>Anonymous usage data</b>: pages opened, quiz completed, pay button pressed, with a random device code, your result percentage, level, and country from the network. Basis: legitimate interest in improving the product. Kept for at most 12 months.</li>
+    <li><b>Buyer data</b>: name, email, WhatsApp number (if given), order number, price, payment status, and the time and version of your consent. Basis: your consent and performing the purchase. Used to deliver access and receipts, process refunds, help with problems, and notify you when purchases open if you joined the waitlist. Kept as long as needed for bookkeeping and tax obligations, then deleted.</li>
+  </ul>
+  <p>We do not sell your personal data and do not use it for advertising without separate consent.</p>
+
+  <h2>Other processors</h2>
+  <ul>
+    <li><b>Xendit</b>, payment provider: receives your name, email and WhatsApp number (if given) to create the invoice, then processes your payment under its own policy.</li>
+    <li><b>Cloudflare</b>: hosts our app and database.</li>
+    <li><b>Meta</b>: only if you press "Setuju" (agree) on the cookie bar. We load the Meta Pixel and send anonymous events (with a hashed device code) to measure ads. If you decline, the Pixel is not loaded.</li>
+  </ul>
+
+  <h2>Your rights</h2>
+  <p>You may request access to, correction of, or deletion of your personal data, and withdraw consent at any time. Contact us at the address above with your purchase email; we respond within 3 working days. Withdrawing consent does not cancel a completed purchase, but we stop contacting you.</p>
+
+  <h2>Security</h2>
+  <p>Data travels over HTTPS and can only be read by the operator with an access key. If a personal data breach occurs, we notify you and the relevant authority as required by law.</p>
+
+  <h2>Limitations</h2>
+  <p>Peta Syariah is an educational guide, not a fatwa, and not investment, legal or tax advice, and is not affiliated with any financial institution.</p>
+  </div>
 </main>
+<script src="/legal.js"></script>
 </body>
 </html>

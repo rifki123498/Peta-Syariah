@@ -1,5 +1,6 @@
 import { track as ptrack, initConsent, PRICE, fmtRp, checkout, orderStatus, SHARE_URL } from "./platform.js";
 import { SHARE } from "./sharecard.js";
+import { initI18n, isEN, tr } from "./i18n.js";
 import { zakatTaxSaving, annualPkp, marginalRate, sukukVsDeposito } from "./finance.js";
 (function(){
 "use strict";
@@ -96,8 +97,9 @@ const OWNER_PREVIEW=(location.hash||"").replace("#","")==="pratinjau";
 let answered=false;
 
 function renderQ(){
+  while(skipQ(S.step)) S.step++;
   const st=STEPS[S.step]; answered=false;
-  $("q-count").textContent="Pertanyaan "+(S.step+1)+"/"+STEPS.length; $("q-bar").style.width=((S.step+1)/STEPS.length*100)+"%";
+  $("q-count").textContent="Pertanyaan "+qPos()+"/"+qTotal(); $("q-bar").style.width=(qPos()/qTotal()*100)+"%";
   const tag=$("q-tag"); tag.className="qtag"; tag.textContent= st.k==="about" ? "Tentang kamu" : QTAG[st.k];
   $("q-text").textContent=st.q; $("q-hint").textContent=st.h||""; $("q-exp").hidden=true;
   const tl=termsIn(st.q+" "+st.o.map(o=>o[1]).join(" ")+" "+(st.h||"")); $("q-terms").innerHTML=termsHTML(tl); $("q-terms").hidden=!tl.length; SHOWN=tl.map(g=>g[0]);
@@ -117,7 +119,10 @@ function choose(st,b){
   S.ans[st.id]=b.dataset.v; save(); b.setAttribute("aria-pressed","true"); answered=true; setTimeout(next,180);
 }
 $("q-next").addEventListener("click",next);
-function next(){ if(S.step<STEPS.length-1){ S.step++; save(); renderQ(); window.scrollTo(0,0); } else finish(); }
+const skipQ=i=>S.preGuess&&STEPS[i]&&STEPS[i].id==="guess";
+const qTotal=()=>STEPS.length-(S.preGuess?1:0);
+const qPos=()=>STEPS.slice(0,S.step+1).filter((x,i)=>!skipQ(i)).length;
+function next(){ let n=S.step+1; while(n<STEPS.length&&skipQ(n)) n++; if(n<STEPS.length){ S.step=n; save(); renderQ(); window.scrollTo(0,0); } else finish(); }
 function renderIntro1(){ answered=true; S.step=0;
   $("q-count").textContent="Sebelum mulai"; $("q-bar").style.width="2%";
   const tag=$("q-tag"); tag.className="qtag"; tag.textContent="11 pertanyaan · sekitar 3 menit";
@@ -128,7 +133,7 @@ function renderIntro1(){ answered=true; S.step=0;
   $("q-opts").innerHTML='<button id="q-intro1go">Mulai →</button>';
   $("q-intro1go").addEventListener("click",()=>{ renderQ(); window.scrollTo(0,0); });
   const box=$("q-box"); box.classList.remove("fade"); void box.offsetWidth; box.classList.add("fade"); }
-$("q-back").addEventListener("click",()=>{ if(S.step>0){ S.step--; renderQ(); } else show("v-lander"); });
+$("q-back").addEventListener("click",()=>{ let p=S.step-1; while(p>=0&&skipQ(p)) p--; if(p>=0){ S.step=p; renderQ(); } else show("v-lander"); });
 function finish(){
   track("quiz_complete"); $("q-box").hidden=true; $("q-loading").hidden=false;
   const li=[...document.querySelectorAll("#q-checks li")]; li.forEach(x=>x.classList.remove("on"));
@@ -267,7 +272,7 @@ function renderResult(){
   $("r-pname").textContent=p[0]; $("r-ntask").textContent=T.length+" "; $("r-ngain").textContent=G.length+" keuntungan";
   $("pw-n").textContent=T.length; $("pw-sub").innerHTML=`<b>Dari ${SC.praktik}% ke sekitar ${PJ.praktik}% syariah dalam 90 hari.</b> <span class="muted">Untuk level ${p[0]}, dimulai dari ${PILLARS[weakest]}. ${G.length?G.length+" keuntungan yang belum kamu ambil dihitung dalam rupiah. ":""}Potensi adalah perkiraan bila semua langkah dijalankan.</span>`;
   track("result_view",{pct:SC.praktik,badges:SC.badges,guess:g?g.v:null}); renderShare();
-  if(WAITLIST_WA){ const fb=`Halo, masukan untuk Peta Syariah. Hasil saya: ${SC.praktik}% syariah, level ${p[0]}.\n\nYang paling berguna: \nYang membingungkan: \nApakah hasilnya terasa pas? `; $("r-fb").href="https://wa.me/"+WAITLIST_WA+"?text="+encodeURIComponent(fb); $("r-fb").hidden=false; }
+  if(WAITLIST_WA){ const fb=isEN?`Hi, feedback for Peta Syariah. My result: ${SC.praktik}% sharia, level ${tr(p[0])}.\n\nMost useful: \nConfusing: \nDid the result feel right? `:`Halo, masukan untuk Peta Syariah. Hasil saya: ${SC.praktik}% syariah, level ${p[0]}.\n\nYang paling berguna: \nYang membingungkan: \nApakah hasilnya terasa pas? `; $("r-fb").href="https://wa.me/"+WAITLIST_WA+"?text="+encodeURIComponent(fb); $("r-fb").hidden=false; }
 }
 
 
@@ -280,11 +285,11 @@ async function renderShare(){ if(!SC) return; try{ await document.fonts.ready; }
 $("sh-fmt").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{ SH.fmt=b.dataset.f; $("sh-fmt").querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); renderShare(); }));
 $("sh-scores").addEventListener("change",renderShare);
 $("sh-save").addEventListener("click",()=>{ track("share_save",{fmt:SH.fmt,scores:$("sh-scores").checked}); SHARE.save(shCv,"peta-syariah-"+SH.fmt+".png",$("sh-status")); });
-$("sh-cap").addEventListener("click",()=>{ const o=shSpec(); const txt=`Ternyata keuanganku sudah ${o.pct}% syariah, level ${o.persona}. ${o.showGuess?`Tadinya kutebak ${o.guessLabel}. `:""}Yang mau kubenahi dulu: ${o.focus}. Berapa persen punyamu? Cek gratis, 3 menit. #PetaSyariahku\n${SHARE_URL}`;
+$("sh-cap").addEventListener("click",()=>{ const o=shSpec(); const txt=isEN?`My finances are already ${o.pct}% sharia, level ${tr(o.persona)}. ${o.showGuess?`I guessed ${tr(o.guessLabel)}. `:""}What I want to fix first: ${tr(o.focus)}. What's your percentage? Free check, 3 minutes. #PetaSyariahku\n${SHARE_URL}`:`Ternyata keuanganku sudah ${o.pct}% syariah, level ${o.persona}. ${o.showGuess?`Tadinya kutebak ${o.guessLabel}. `:""}Yang mau kubenahi dulu: ${o.focus}. Berapa persen punyamu? Cek gratis, 3 menit. #PetaSyariahku\n${SHARE_URL}`;
   const ok=()=>{ $("sh-cap").textContent="Caption tersalin"; setTimeout(()=>$("sh-cap").textContent="Salin caption",1600); };
   try{ navigator.clipboard.writeText(txt).then(ok,()=>{ $("sh-status").textContent=txt; }); }catch(_){ $("sh-status").textContent=txt; }
   track("share_caption"); });
-function restart(){ if(S.know1At&&Date.now()-S.know1At>30*864e5){ S.know1={}; S.know1At=null; } S.ans={}; S.step=0; save(); show("v-quiz"); renderIntro1(); track("quiz_start"); }
+function restart(){ S.preGuess=false; if(S.know1At&&Date.now()-S.know1At>30*864e5){ S.know1={}; S.know1At=null; } S.ans={}; S.step=0; save(); show("v-quiz"); renderIntro1(); track("quiz_start"); }
 function armRestart(btn){ const label=btn.textContent; let armed=false, t=null;
   btn.addEventListener("click",()=>{ if(armed){ clearTimeout(t); btn.textContent=label; armed=false; restart(); return; }
     armed=true; btn.textContent="Jawaban lama akan diganti. Ketuk lagi untuk mengulang"; t=setTimeout(()=>{ armed=false; btn.textContent=label; },4000); }); }
@@ -298,17 +303,28 @@ $("r-unlock").addEventListener("click",()=>{ track("paywall_view"); $("pw-demo")
 $("pw-close").addEventListener("click",()=>sheet("paywall",false));
 ["paywall","method"].forEach(id=>$(id).addEventListener("click",e=>{ if(e.target.id===id) sheet(id,false); }));
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ sheet("paywall",false); sheet("method",false); } });
-$("pw-pay").addEventListener("click",async()=>{
+/* buyer form: name + email required, WhatsApp optional, explicit consent to Syarat & Privasi */
+const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+function normWa(v){ let d=String(v||"").replace(/[^\d+]/g,""); if(!d) return ""; if(d.startsWith("+")) d=d.slice(1); if(d.startsWith("0")) d="62"+d.slice(1); return /^62\d{8,13}$/.test(d)?"+"+d:null; }
+function fillBuyer(){ const b=S.buyer||{}; if(b.name) $("b-name").value=b.name; if(b.email) $("b-email").value=b.email; if(b.wa) $("b-wa").value=b.wa; }
+fillBuyer();
+$("pw-form").addEventListener("submit",async(e)=>{
+  e.preventDefault();
+  const name=$("b-name").value.trim(), email=$("b-email").value.trim(), waRaw=$("b-wa").value.trim(), wa=normWa(waRaw);
+  const err=name.length<2?"Isi nama lengkapmu.":!EMAIL_RE.test(email)?"Cek lagi alamat emailmu.":wa===null?"Nomor WhatsApp belum benar. Contoh: 081234567890.":!$("b-agree").checked?"Centang persetujuan Syarat dan Kebijakan privasi dulu.":"";
+  $("buy-err").textContent=err; $("buy-err").hidden=!err; if(err) return;
+  S.buyer={name,email,wa:waRaw}; save();
   track("checkout_start",{price:PRICE,level:persona(SC)[0],pct:SC.praktik,badges:SC.badges});
   S.minat=(S.minat||0)+1; save();
   $("pw-pay").disabled=true; $("pw-pay").textContent="Menyiapkan pembayaran…";
-  const co=await checkout({level:persona(SC)[0],pct:SC.praktik});
+  const co=await checkout({buyer:{name,email,wa:wa||"",consent:true}});
+  if(co&&co.error==="bad_buyer"){ $("pw-pay").disabled=false; $("pw-pay").textContent="Saya mau peta lengkap · "+fmtRp(PRICE); $("buy-err").textContent="Data pembeli belum lengkap. Cek nama dan email."; $("buy-err").hidden=false; return; }
   if(co&&co.mode==="redirect"&&co.url){ S.orderId=co.orderId; save(); location.href=co.url; return; }
   $("pw-pay").textContent="Saya mau peta lengkap · "+fmtRp(PRICE);
-  const msg=`Halo, saya mau Peta Syariah lengkap (${fmtRp(PRICE)}). Hasil saya: ${SC.praktik}% syariah, level ${persona(SC)[0]}. Kabari saya saat sudah bisa dibeli.`;
+  const msg=isEN?`Hi, I'm ${name} and I'd like the Peta Syariah full map (${fmtRp(PRICE)}).${co&&co.orderId?` Order number: ${co.orderId}.`:""} Please let me know when it can be bought.`:`Halo, saya ${name} mau Peta Syariah lengkap (${fmtRp(PRICE)}).${co&&co.orderId?` Nomor pesanan: ${co.orderId}.`:""} Kabari saya saat sudah bisa dibeli.`;
   $("fd-msg").textContent=msg;
   if(WAITLIST_WA){ $("fd-wa").href="https://wa.me/"+WAITLIST_WA+"?text="+encodeURIComponent(msg); $("fd-wa").hidden=false; }
-  $("pw-demo-go").hidden=!OWNER_PREVIEW; $("pw-demo").hidden=false; $("pw-pay").disabled=true;
+  $("pw-demo-go").hidden=!OWNER_PREVIEW; $("pw-form").hidden=true; $("pw-demo").hidden=false;
 });
 $("fd-wa").addEventListener("click",()=>track("wa_click"));
 $("r-fb").addEventListener("click",()=>track("feedback_click"));
@@ -538,31 +554,15 @@ const AKAD=[
  ["Kafalah","كفالة","Penjaminan","Pihak ketiga menjamin kewajiban pihak lain.","Dipakai di kartu syariah: bank menjamin pembayaranmu ke merchant.","11",["Imbalan penjaminan disebutkan jelas","Denda keterlambatan disalurkan ke dana sosial"]],
  ["Tabarru'","تبرع","Hibah tolong-menolong","Kontribusi peserta ke dana bersama untuk saling menanggung risiko.","Dana tabarru' milik peserta bersama, bukan milik perusahaan asuransi.","21",["Dana tabarru' terpisah dari dana investasi","Besaran ujrah disebutkan","Aturan pembagian surplus tertulis","Penanggungnya benar perusahaan atau unit syariah berizin"]]];
 $("l-facts").innerHTML=FACTS.map(factHTML).join("");
-$("akad-free").innerHTML=[0,1,2,8].map(i=>AKAD[i]).map(a=>`<article><span class="ar" lang="ar" dir="rtl">${a[1]}</span><h3>${a[0]} <span class="muted small" style="font-weight:500">· ${a[2]}</span></h3><p class="small">${a[3]}</p><p class="myth"><b>Salah kaprah:</b> ${a[4]}</p><p class="cite">${f(a[5])}</p></article>`).join("");
 function renderAkad(){ $("akad-list").innerHTML=AKAD.map(a=>`<article><span class="ar" lang="ar" dir="rtl">${a[1]}</span><h3>${a[0]} <span class="muted small" style="font-weight:500">· ${a[2]}</span></h3><p class="small">${a[3]}</p><p class="myth"><b>Salah kaprah:</b> ${a[4]}</p>${a[6]?`<details><summary class="small" style="color:var(--teal);font-weight:700;cursor:pointer">Cek di akadmu sebelum tanda tangan</summary><ul class="akcheck">${a[6].map(x=>`<li>${x}</li>`).join("")}</ul></details>`:""}<p class="cite">${f(a[5])}</p></article>`).join(""); }
 function renderSrc(){ const keys=Object.keys(FT); $("src-list").innerHTML=keys.map(k=>`<li>${f(k)}</li>`).join("")+OTHER.map(o=>`<li><a href="${o[1]}" target="_blank" rel="noopener">${o[0]}</a></li>`).join(""); }
 
 /* ================= VIEWS ================= */
 const views=["v-lander","v-quiz","v-result","v-full"];
 function show(id){ views.forEach(v=>$(v).hidden=(v!==id)); window.scrollTo(0,0); }
-document.querySelectorAll(".go-start").forEach(b=>b.addEventListener("click",()=>{ track("quiz_start",{from:b.textContent.trim()}); S.step=0; S.ans={}; show("v-quiz"); renderIntro1(); }));
-const SCN={karyawan:["Karyawan","Hari-hari karyawan",["Gaji masuk rekening konvensional, deposito diperpanjang otomatis terus. Belum tahu bedanya nisbah dan bunga.","Bandingkan nisbah deposito mudharabah dan catat tanggal jatuh temponya.","Deposito dipindah tepat saat jatuh tempo, tanpa biaya pencairan awal."]],
- rumah:["Mau beli rumah","Lagi cari rumah",["Ditawari promo margin rendah, langsung tertarik tanpa tanya apa-apa lagi.","Bandingkan murabahah dan MMQ, lalu lihat sisa margin kalau mau lunas lebih cepat.","Minta kebijakan potongan pelunasan secara tertulis sebelum akad."]],
- saham:["Punya saham","Investor pemula",["Pegang saham yang dulu masuk daftar syariah, tidak pernah dicek lagi.","Cek rasionya dengan aturan Daftar Efek Syariah 2026.","Tahu saham mana yang berisiko keluar daftar, dan berapa dividen yang perlu dibersihkan."]]};
-function renderScn(k){ document.querySelectorAll("#seg button").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.k===k))); const c=SCN[k];
-  $("sc-title").textContent=c[1]; $("sc-body").innerHTML=`<span class="lbl-c">Sebelum</span><div class="bub">${c[2][0]}</div><span class="lbl-c">Kamu cek di Peta Syariah</span><div class="bub me">${c[2][1]}</div><span class="lbl-c">Sesudah</span><div class="bub ok">${c[2][2]}</div>`; }
-$("seg").innerHTML=Object.keys(SCN).map(k=>`<button role="tab" data-k="${k}">${SCN[k][0]}</button>`).join("");
-$("seg").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{ renderScn(b.dataset.k); track("scenario_tab",{k:b.dataset.k}); }));
-renderScn("karyawan");
-const STG=[["00","hari ini","Gajiku masuk ke mana aja ya","terus mulai dari mana…","Pernah dengar “bank syariah sama aja”. Penasaran, tapi bingung mulai dari mana.","Kuisnya gratis, sekitar 3 menit, dan memetakan enam bagian keuanganmu: tabungan, cara bayar, cicilan, asuransi, investasi, dan zakat."],
- ["01","hari 1–30","Tabungan syariah: sudah dibuka","zakatku berapa ya per bulan?","Bulan pertama: rapikan yang dasar dulu.","Buka tabungan syariah, mulai dana darurat, dan jadwalkan zakat. Ini yang paling cepat bisa dikerjakan."],
- ["02","hari 31–60","Deposito jatuh tempo bulan depan","pindah pas jatuh tempo aja","Bulan kedua: pindah satu per satu.","Gaji, deposito, dan asuransi dipindah bergantian. Deposito menunggu jatuh tempo supaya nggak kena biaya pencairan."],
- ["03","hari 61–90","Cek saham dengan aturan 2026","ternyata ada yang mau keluar daftar","Bulan ketiga: mulai investasi syariah.","Reksa dana, sukuk, atau saham syariah. Di akhir, ulangi kuis dan bandingkan skornya."]];
-function renderStg(i){ document.querySelectorAll("#stp button").forEach((b,j)=>b.setAttribute("aria-selected",String(j===i))); const g=STG[i];
-  $("st-num").textContent=g[0]; $("st-when").textContent=g[1]; $("st-note").textContent=g[2]; $("st-sticky").textContent=g[3]; $("st-h").textContent=g[4]; $("st-p").textContent=g[5]; }
-$("stp").innerHTML=`<span>Nol</span>`+STG.map((g,i)=>(i?'<span class="ln"></span>':'')+`<button role="tab" aria-label="Tahap ${g[0]}, ${g[1]}">${g[0]}</button>`).join("")+`<span>Mantap</span>`;
-$("stp").querySelectorAll("button").forEach((b,i)=>b.addEventListener("click",()=>renderStg(i)));
-renderStg(0);
+document.querySelectorAll(".go-start").forEach(b=>b.addEventListener("click",()=>{ track("quiz_start",{from:b.textContent.trim()}); S.step=0; S.ans={}; S.preGuess=false; show("v-quiz"); renderIntro1(); }));
+/* guess chips on the lander: commit to a guess, then go straight to question 1 (guess step is skipped) */
+document.querySelectorAll(".guess-chip").forEach(b=>b.addEventListener("click",()=>{ S.ans={guess:b.dataset.guess}; S.preGuess=true; S.step=0; save(); track("quiz_start",{from:"guess",guess:+b.dataset.guess}); show("v-quiz"); renderQ(); }));
 /* ---------- keuntungan (paid) ---------- */
 let untungInit=false;
 function initUntung(){
@@ -579,6 +579,7 @@ function calcUntung(){
 
 /* ---------- boot ---------- */
 document.querySelectorAll(".px").forEach(el=>el.textContent=fmtRp(PRICE));
+initI18n();
 initConsent();
 (async()=>{ const oid=new URLSearchParams(location.search).get("order"); if(!oid) return;
   for(let i=0;i<10;i++){ const r=await orderStatus(oid);

@@ -13,6 +13,10 @@ database_name = "peta-syariah-db"
 database_id = "00000000-0000-0000-0000-000000000000"
 migrations_dir = "worker/migrations"
 
+[triggers]
+# Daily retention cleanup (UTC)
+crons = ["17 20 * * *"]
+
 [vars]
 PRICE_ARMS = "89000,179000"
 PUBLIC_BASE_URL = ""
