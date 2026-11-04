@@ -43,7 +43,7 @@ const CAPI_MAP: Record<string, string> = {
   lp_view: "PageView", quiz_complete: "CompleteRegistration", paywall_view: "ViewContent", checkout_start: "InitiateCheckout",
 };
 
-const arms = (env: Env) => String(env.PRICE_ARMS || "69000").split(",").map((x) => parseInt(x, 10)).filter((x) => x > 0);
+const arms = (env: Env) => String(env.PRICE_ARMS || "89000").split(",").map((x) => parseInt(x, 10)).filter((x) => x > 0);
 const clip = (v: unknown, n: number) => (typeof v === "string" ? v.slice(0, n) : null);
 const now = () => Date.now();
 

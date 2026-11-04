@@ -6,13 +6,13 @@ Framework: "How to Sell Consumer Apps Globally" (Radja Thaher, ALIF Academy, 10 
 - Tracking live first (Pixel + CAPI + analytics). Judge nothing until events are verified end to end.
 - Budget ~Rp100.000/day, Indonesia only. One campaign, one ad set, one ad per test; stop each test at 3.000 impressions.
 - Creative: founder-led talking head + screen recording. Hook direction: curiosity and pride ("Coba tebak, berapa persen keuanganmu sudah syariah?"), never fear. Keep text in the 9:16 safe zone.
-- Price: Rp69.000 shown as a launch price against a struck-through Rp149.000 (owner decision, 4 Nov 2026). Single arm; the A/B mechanism stays (`PRICE_ARMS`, `PRICE_ANCHOR`).
+- Price: Rp89.000 shown as a "Harga spesial" against a struck-through Rp149.000 (owner decision, 4 Nov 2026). Single arm; the A/B mechanism stays (`PRICE_ARMS`, `PRICE_ANCHOR`).
 
 ## Unit economics (deck assumptions: CPM $2, CTR 2%, $1 = Rp17.890)
 - Breakeven CAC = price × 0,993 ÷ 1,11 (0,7% QRIS fee, 11% ad tax).
 - CPC at these assumptions ≈ Rp1.789.
-- Rp69.000 → breakeven CAC ≈ Rp61.700 → needs ≥ 2,9% of link clicks to buy; ROAS 1,75 needs ≈ 4,5%.
-- Deck's real Indonesian web-quiz funnel converted ~1,6% of clicks → Rp69.000 would run at ROAS ≈ 0,6 (Rp89.000 was ≈ 0,8). The lower price only pays if it lifts conversion by roughly 30% or more.
+- Rp89.000 → breakeven CAC ≈ Rp79.600 → needs ≥ 2,25% of link clicks to buy; ROAS 1,75 needs ≈ 3,5%.
+- Deck's real Indonesian web-quiz funnel converted ~1,6% of clicks → Rp89.000 would run at ROAS ≈ 0,8. The struck-through anchor has to lift conversion toward ~2,3% just to break even.
 
 ## Funnel targets (read after ~1.000 link clicks per price arm)
 | Step | Target | If below |

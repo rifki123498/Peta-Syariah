@@ -580,6 +580,7 @@ function calcUntung(){
 /* ---------- boot ---------- */
 document.querySelectorAll(".px").forEach(el=>el.textContent=fmtRp(PRICE));
 document.querySelectorAll(".px-was").forEach(el=>el.textContent=ANCHOR>PRICE?fmtRp(ANCHOR):"");
+document.querySelectorAll(".px-save").forEach(el=>el.textContent=fmtRp(ANCHOR-PRICE));
 if(!(ANCHOR>PRICE)) document.querySelectorAll(".tag-promo").forEach(el=>el.hidden=true);
 initI18n();
 initConsent();

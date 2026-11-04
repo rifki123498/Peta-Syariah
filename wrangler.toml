@@ -18,7 +18,7 @@ migrations_dir = "worker/migrations"
 crons = ["17 20 * * *"]
 
 [vars]
-PRICE_ARMS = "69000"
+PRICE_ARMS = "89000"
 PUBLIC_BASE_URL = ""
 META_PIXEL_ID = ""
 

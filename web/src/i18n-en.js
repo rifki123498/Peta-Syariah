@@ -1,7 +1,7 @@
 /* Indonesian → English dictionary. Keys are exact visible text nodes (whitespace-collapsed, trimmed).
    Add an entry here whenever user-facing Indonesian copy changes; tests/e2e checks the EN lander for leftovers. */
 export const EN = {
-  "Harga perkenalan": "Launch price",
+  "Harga spesial · hemat": "Special price · save",
   "Bayar sekarang": "Pay now",
   "(opsional) · untuk bukti beli dan memulihkan akses kalau ganti HP": "(optional) · for your receipt and to restore access if you change phones",
   "nama@email.com": "name@email.com",

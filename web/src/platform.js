@@ -15,7 +15,7 @@ function uid() {
 export const ANON_ID = (() => { let id = LS.get("ps.anon"); if (!id) { id = uid(); LS.set("ps.anon", id); } return id; })();
 
 /* Price arms come from build-time env so the first paint never waits on the network. */
-const ARMS = String(import.meta.env.VITE_PRICE_ARMS || "69000").split(",").map((x) => parseInt(x, 10)).filter((x) => x > 0);
+const ARMS = String(import.meta.env.VITE_PRICE_ARMS || "89000").split(",").map((x) => parseInt(x, 10)).filter((x) => x > 0);
 function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 const forced = new URLSearchParams(location.search).get("harga");
 export const PRICE = ARMS.includes(+forced) ? +forced : ARMS[hash(ANON_ID) % ARMS.length];

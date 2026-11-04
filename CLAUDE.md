@@ -1,6 +1,6 @@
 # Peta Syariah — project rules for Claude Code
 
-Consumer web app (Indonesia) that tells people what percent of their finances is already sharia-compliant, which sharia habits ("lencana") they already have, which concrete benefits they have not taken yet, and sells a one-time Pro report (Rp69.000 launch price shown against Rp149.000, set by the owner).
+Consumer web app (Indonesia) that tells people what percent of their finances is already sharia-compliant, which sharia habits ("lencana") they already have, which concrete benefits they have not taken yet, and sells a one-time Pro report (Rp89.000 special price shown against a struck-through Rp149.000, set by the owner).
 
 Read before any work: `docs/spec.md` (what to build, in what order), `docs/copy-guide.md` (voice and guardrails), `docs/facts-and-sources.md` (every fact the product may state), `docs/test-plan.md` (launch metrics and kill rules). The working prototype is in `prototype/` — port its logic, copy and design; do not redesign from scratch.
 

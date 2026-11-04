@@ -6,7 +6,7 @@ Things only the owner can do. Each unblocks the next. Updated 4 Nov 2026.
 1. **Check the brand name.** Search "Peta Syariah" at pdki-indonesia.dgip.go.id (merek) and on Instagram/TikTok. A quick web search found no app or brand with this name, but that is not a trademark check.
 2. **Buy the domain.** Check petasyariah.id and petasyariah.com at a registrar (Cloudflare Registrar for .com; a PANDI-accredited registrar for .id). Then in Cloudflare: Workers & Pages → peta-syariah → Settings → Domains & Routes → Add custom domain. Set the GitHub variable `PUBLIC_BASE_URL` to the new URL.
 3. ~~Set up the business entity.~~ Done: PT Perorangan created (4 Nov 2026).
-4. **Send Claude the 5 seller details** so the remaining [PERLU DATA] marks in `web/syarat.html` and `web/privasi.html` can be filled: PT name, NIB, business address, contact email, WhatsApp Business number. Terms (no refunds, optional email only) and UU PDP sections are already written in ID and EN. A lawyer review is still recommended before paid traffic.
+4. **Send Claude the NIB** (PT name, address, email and WhatsApp are filled in `web/syarat.html` and `web/privasi.html`; NIB is a TODO comment there). Terms (no refunds, optional email only) and UU PDP sections are already written in ID and EN. A lawyer review is still recommended before paid traffic.
 5. **Create a WhatsApp Business number** for support and put it in `.env.production` (`VITE_WAITLIST_WA`) instead of the personal number. Consider making the GitHub repo private.
 
 ## P1 — to take payments (after P0 items 2–4)

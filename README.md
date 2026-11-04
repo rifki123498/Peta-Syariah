@@ -1,6 +1,6 @@
 # Peta Syariah
 
-Web app Indonesia: berapa persen keuanganmu yang sudah syariah, lencana yang sudah kamu punya, dan keuntungan yang belum kamu ambil. Kuis gratis; peta lengkap berbayar sekali (Rp69.000, dicoret dari Rp149.000).
+Web app Indonesia: berapa persen keuanganmu yang sudah syariah, lencana yang sudah kamu punya, dan keuntungan yang belum kamu ambil. Kuis gratis; peta lengkap berbayar sekali (Rp89.000, harga spesial dari Rp149.000).
 
 ## Stack
 - `web/` — Vite (vanilla JS). `index.html` (lander, kuis, hasil, paywall, peta lengkap), `contoh-laporan.html` (contoh laporan Pro), `privasi.html`.

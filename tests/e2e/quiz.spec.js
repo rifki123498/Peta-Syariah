@@ -9,7 +9,7 @@ async function answer(page, v) {
 }
 
 async function runQuiz(page) {
-  await page.goto("/?harga=69000");
+  await page.goto("/?harga=89000");
   await page.locator('#consent [data-c="no"]').click();
   await page.locator(".pill-cta").click();
   await page.locator("#q-intro1go").click();
@@ -26,8 +26,9 @@ test("lander shows verified facts, consent bar and price arm", async ({ page }) 
   await page.goto("/");
   await expect(page.locator("#consent")).toBeVisible();
   await expect(page.locator("#l-facts .fact")).toHaveCount(5);
-  await expect(page.locator(".px").first()).toHaveText("Rp69.000");
+  await expect(page.locator(".px").first()).toHaveText("Rp89.000");
   await expect(page.locator(".px-was").first()).toHaveText("Rp149.000");
+  await expect(page.locator(".tag-promo").first()).toHaveText("Harga spesial · hemat Rp60.000");
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize().width);
 });
 
@@ -55,7 +56,7 @@ test("paywall needs no data; optional email is validated and stored", async ({ p
   await page.fill("#b-email", "dinda.e2e@example.com");
   await page.locator("#pw-pay").click();
   await expect(page.locator("#pw-demo")).toBeVisible();
-  await expect(page.locator("#fd-msg")).toContainText("Rp69.000");
+  await expect(page.locator("#fd-msg")).toContainText("Rp89.000");
   const rows = await (await request.get("/api/admin/orders?days=1", { headers: { authorization: "Bearer test-admin" } })).json();
   const mine = rows.orders.find((o) => o.buyer_email === "dinda.e2e@example.com");
   expect(mine).toBeTruthy();
@@ -69,15 +70,15 @@ test("paying without an email works", async ({ page }) => {
   await expect(page.locator("#pw-demo")).toBeVisible();
 });
 
-test("checkout API rejects a bad email and the old 89k price", async ({ request }) => {
-  let r = await request.post("/api/checkout", { data: { anonId: "e2e", price: 69000, arm: 0, buyer: { email: "x@y", consent: true } } });
+test("checkout API rejects a bad email and a price outside the arms", async ({ request }) => {
+  let r = await request.post("/api/checkout", { data: { anonId: "e2e", price: 89000, arm: 0, buyer: { email: "x@y", consent: true } } });
   expect(r.status()).toBe(400);
-  r = await request.post("/api/checkout", { data: { anonId: "e2e", price: 89000, arm: 0, buyer: BUYER } });
+  r = await request.post("/api/checkout", { data: { anonId: "e2e", price: 69000, arm: 0, buyer: BUYER } });
   expect((await r.json()).error).toBe("bad_price");
 });
 
 test("guess chip on the lander skips the guess question", async ({ page }) => {
-  await page.goto("/?harga=69000");
+  await page.goto("/?harga=89000");
   await page.locator('#consent [data-c="no"]').click();
   await page.locator('.hero .guess-chip[data-guess="37"]').click();
   await expect(page.locator("#q-count")).toHaveText("Pertanyaan 1/10");
@@ -89,7 +90,7 @@ test("guess chip on the lander skips the guess question", async ({ page }) => {
 });
 
 test("English mode translates lander, quiz and result", async ({ page }) => {
-  await page.goto("/?harga=69000&lang=en");
+  await page.goto("/?harga=89000&lang=en");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await page.locator('#consent [data-c="no"]').click();
   await expect(page.locator("h1")).toContainText("Your finances may be more sharia than you think.");
@@ -112,7 +113,7 @@ test("English mode translates lander, quiz and result", async ({ page }) => {
 
 test("paid order unlocks the full map with the Keuntungan tab", async ({ page, request }) => {
   await runQuiz(page);
-  const co = await (await request.post("/api/checkout", { data: { anonId: "e2e", price: 69000, arm: 0, buyer: BUYER } })).json();
+  const co = await (await request.post("/api/checkout", { data: { anonId: "e2e", price: 89000, arm: 0, buyer: BUYER } })).json();
   const hook = await request.post("/api/webhooks/xendit", { headers: { "x-callback-token": "test-callback" }, data: { external_id: co.orderId, status: "PAID" } });
   expect(hook.ok()).toBeTruthy();
   await page.goto("/?order=" + co.orderId);
