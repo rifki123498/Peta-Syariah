@@ -3,7 +3,7 @@
 import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 
-const NAME = "peta-syariah";
+const NAME = "peta-syariah-db";
 const run = (cmd) => execSync(cmd, { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
 
 let id = null;

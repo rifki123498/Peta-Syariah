@@ -63,7 +63,7 @@ jobs:
         run: node scripts/ensure-d1.mjs
       - if: steps.cf.outputs.skip != '1'
         name: Apply migrations
-        run: npx wrangler d1 migrations apply peta-syariah --remote
+        run: npx wrangler d1 migrations apply peta-syariah-db --remote
       - if: steps.cf.outputs.skip != '1'
         name: Deploy Worker
         run: |

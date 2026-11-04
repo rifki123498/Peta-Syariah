@@ -14,7 +14,7 @@ npm ci
 cp .env.example .env            # opsional
 printf 'XENDIT_CALLBACK_TOKEN=test-callback\nADMIN_TOKEN=test-admin\n' > .dev.vars
 npm run build
-npx wrangler d1 migrations apply peta-syariah --local
+npx wrangler d1 migrations apply peta-syariah-db --local
 npx wrangler dev --local        # http://127.0.0.1:8787
 ```
 Untuk mengubah tampilan dengan hot reload: `npm run dev` (Vite, proxy `/api` ke Worker di 8787).
