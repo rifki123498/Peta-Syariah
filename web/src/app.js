@@ -1,4 +1,4 @@
-import { track as ptrack, initConsent, PRICE, fmtRp, checkout, orderStatus, SHARE_URL } from "./platform.js";
+import { track as ptrack, initConsent, PRICE, ANCHOR, fmtRp, checkout, orderStatus, SHARE_URL } from "./platform.js";
 import { SHARE } from "./sharecard.js";
 import { initI18n, isEN, tr } from "./i18n.js";
 import { zakatTaxSaving, annualPkp, marginalRate, sukukVsDeposito } from "./finance.js";
@@ -303,25 +303,25 @@ $("r-unlock").addEventListener("click",()=>{ track("paywall_view"); $("pw-demo")
 $("pw-close").addEventListener("click",()=>sheet("paywall",false));
 ["paywall","method"].forEach(id=>$(id).addEventListener("click",e=>{ if(e.target.id===id) sheet(id,false); }));
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ sheet("paywall",false); sheet("method",false); } });
-/* buyer form: name + email required, WhatsApp optional, explicit consent to Syarat & Privasi */
+/* paywall: one optional email field, then pay. Paying = accepting Syarat & Privasi (stated under the button). */
 const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-function normWa(v){ let d=String(v||"").replace(/[^\d+]/g,""); if(!d) return ""; if(d.startsWith("+")) d=d.slice(1); if(d.startsWith("0")) d="62"+d.slice(1); return /^62\d{8,13}$/.test(d)?"+"+d:null; }
-function fillBuyer(){ const b=S.buyer||{}; if(b.name) $("b-name").value=b.name; if(b.email) $("b-email").value=b.email; if(b.wa) $("b-wa").value=b.wa; }
-fillBuyer();
+if(S.buyer&&S.buyer.email) $("b-email").value=S.buyer.email;
+const payLabel=()=>"Bayar sekarang "+fmtRp(PRICE);
 $("pw-form").addEventListener("submit",async(e)=>{
   e.preventDefault();
-  const name=$("b-name").value.trim(), email=$("b-email").value.trim(), waRaw=$("b-wa").value.trim(), wa=normWa(waRaw);
-  const err=name.length<2?"Isi nama lengkapmu.":!EMAIL_RE.test(email)?"Cek lagi alamat emailmu.":wa===null?"Nomor WhatsApp belum benar. Contoh: 081234567890.":!$("b-agree").checked?"Centang persetujuan Syarat dan Kebijakan privasi dulu.":"";
+  const email=$("b-email").value.trim();
+  const err=email&&!EMAIL_RE.test(email)?"Cek lagi alamat emailmu, atau kosongkan saja.":"";
   $("buy-err").textContent=err; $("buy-err").hidden=!err; if(err) return;
-  S.buyer={name,email,wa:waRaw}; save();
-  track("checkout_start",{price:PRICE,level:persona(SC)[0],pct:SC.praktik,badges:SC.badges});
+  if(email){ S.buyer={email}; save(); }
+  track("checkout_start",{price:PRICE,level:persona(SC)[0],pct:SC.praktik,badges:SC.badges,email:!!email});
   S.minat=(S.minat||0)+1; save();
   $("pw-pay").disabled=true; $("pw-pay").textContent="Menyiapkan pembayaran…";
-  const co=await checkout({buyer:{name,email,wa:wa||"",consent:true}});
-  if(co&&co.error==="bad_buyer"){ $("pw-pay").disabled=false; $("pw-pay").textContent="Saya mau peta lengkap · "+fmtRp(PRICE); $("buy-err").textContent="Data pembeli belum lengkap. Cek nama dan email."; $("buy-err").hidden=false; return; }
+  const co=await checkout({buyer:{email,consent:true}});
+  if(co&&co.error==="bad_buyer"){ $("pw-pay").disabled=false; $("pw-pay").textContent=payLabel(); $("buy-err").textContent="Cek lagi alamat emailmu, atau kosongkan saja."; $("buy-err").hidden=false; return; }
   if(co&&co.mode==="redirect"&&co.url){ S.orderId=co.orderId; save(); location.href=co.url; return; }
-  $("pw-pay").textContent="Saya mau peta lengkap · "+fmtRp(PRICE);
-  const msg=isEN?`Hi, I'm ${name} and I'd like the Peta Syariah full map (${fmtRp(PRICE)}).${co&&co.orderId?` Order number: ${co.orderId}.`:""} Please let me know when it can be bought.`:`Halo, saya ${name} mau Peta Syariah lengkap (${fmtRp(PRICE)}).${co&&co.orderId?` Nomor pesanan: ${co.orderId}.`:""} Kabari saya saat sudah bisa dibeli.`;
+  $("pw-pay").textContent=payLabel();
+  const ord=co&&co.orderId?co.orderId:"";
+  const msg=isEN?`Hi, I'd like the Peta Syariah full map (${fmtRp(PRICE)}).${ord?` Order number: ${ord}.`:""} Please let me know when it can be bought.`:`Halo, saya mau Peta Syariah lengkap (${fmtRp(PRICE)}).${ord?` Nomor pesanan: ${ord}.`:""} Kabari saya saat sudah bisa dibeli.`;
   $("fd-msg").textContent=msg;
   if(WAITLIST_WA){ $("fd-wa").href="https://wa.me/"+WAITLIST_WA+"?text="+encodeURIComponent(msg); $("fd-wa").hidden=false; }
   $("pw-demo-go").hidden=!OWNER_PREVIEW; $("pw-form").hidden=true; $("pw-demo").hidden=false;
@@ -579,6 +579,8 @@ function calcUntung(){
 
 /* ---------- boot ---------- */
 document.querySelectorAll(".px").forEach(el=>el.textContent=fmtRp(PRICE));
+document.querySelectorAll(".px-was").forEach(el=>el.textContent=ANCHOR>PRICE?fmtRp(ANCHOR):"");
+if(!(ANCHOR>PRICE)) document.querySelectorAll(".tag-promo").forEach(el=>el.hidden=true);
 initI18n();
 initConsent();
 (async()=>{ const oid=new URLSearchParams(location.search).get("order"); if(!oid) return;

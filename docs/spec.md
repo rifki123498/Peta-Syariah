@@ -63,7 +63,7 @@ Story 1080×1920 and Feed 1080×1350 PNG, drawn on canvas. Free card: % syariah,
 Native apps, subscriptions, product recommendations by brand, any automated halal/haram status of named banks.
 
 ## 8. Owner decisions still open
-1. Price test arms (proposal: Rp89.000 vs Rp179.000) and whether access is truly "tidak kedaluwarsa".
+1. Price: Rp69.000 launch price vs Rp149.000 anchor (decided 4 Nov 2026) and whether access is truly "tidak kedaluwarsa".
 2. Payment provider and legal entity (PT Perorangan is the simplest start).
 3. Sharia reviewer (DSN-MUI certified) to review weights and copy before paid launch.
 4. Employer outside-activity / conflict-of-interest clearance.

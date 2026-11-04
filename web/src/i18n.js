@@ -23,6 +23,7 @@ const PATTERNS = [
   [/^Radar enam pilar: (.+)$/, (m) => "Six-pillar radar: " + m[1].split(", ").map((p) => p.replace(/^(.+) (\d+)$/, (_, n, v) => `${tr(n)} ${v}`)).join(", ")],
   [/^Bangun dana darurat: target awal (.+)$/, (m) => `Build an emergency fund: first target ${rpJt(m[1])}`],
   [/^Saya mau peta lengkap · (.+)$/, (m) => `I want the full map · ${m[1]}`],
+  [/^Bayar sekarang (Rp.+)$/, (m) => `Pay now ${m[1]}`],
   [/^Tadinya kutebak (cuma )?(.+)\.$/, (m) => `I guessed ${m[1] ? "only " : ""}${tr(m[2])}.`],
   [/^([✓○]) (.+)$/, (m) => `${m[1]} ${tr(m[2])}`],
   [/^(\d+) dari (\d+) terjawab$/, (m) => `${m[1]} of ${m[2]} answered`],

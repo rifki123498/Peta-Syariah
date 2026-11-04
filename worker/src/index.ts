@@ -43,7 +43,7 @@ const CAPI_MAP: Record<string, string> = {
   lp_view: "PageView", quiz_complete: "CompleteRegistration", paywall_view: "ViewContent", checkout_start: "InitiateCheckout",
 };
 
-const arms = (env: Env) => String(env.PRICE_ARMS || "89000,179000").split(",").map((x) => parseInt(x, 10)).filter((x) => x > 0);
+const arms = (env: Env) => String(env.PRICE_ARMS || "69000").split(",").map((x) => parseInt(x, 10)).filter((x) => x > 0);
 const clip = (v: unknown, n: number) => (typeof v === "string" ? v.slice(0, n) : null);
 const now = () => Date.now();
 
@@ -68,15 +68,14 @@ async function sendCapi(env: Env, req: Request, eventName: string, eventId: stri
 }
 
 /* Version of syarat.html + privasi.html the buyer agreed to. Bump when either page changes materially. */
-const TERMS_VERSION = "2026-11-04";
+const TERMS_VERSION = "2026-11-04.2";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-function parseBuyer(v: any): { name: string; email: string; wa: string | null } | null {
+function parseBuyer(v: any): { name: string | null; email: string | null; wa: string | null } | null {
+  /* Email is optional (Xendit only needs external_id + amount). Pressing pay = accepting Syarat & Privasi. */
   if (!v || typeof v !== "object" || v.consent !== true) return null;
-  const name = typeof v.name === "string" ? v.name.trim().slice(0, 80) : "";
   const email = typeof v.email === "string" ? v.email.trim().toLowerCase().slice(0, 120) : "";
-  if (name.length < 2 || !EMAIL_RE.test(email)) return null;
-  const wa = typeof v.wa === "string" && /^\+62\d{8,13}$/.test(v.wa) ? v.wa : null;
-  return { name, email, wa };
+  if (email && !EMAIL_RE.test(email)) return null;
+  return { name: null, email: email || null, wa: null };
 }
 
 app.get("/api/config", (c) => c.json({ pixelId: c.env.META_PIXEL_ID || null, priceArms: arms(c.env), payments: !!c.env.XENDIT_SECRET_KEY }));
@@ -127,8 +126,7 @@ app.post("/api/checkout", async (c) => {
     body: JSON.stringify({
       external_id: id, amount: price, currency: "IDR",
       description: "Peta Syariah Lengkap (sekali bayar)",
-      payer_email: buyer.email,
-      customer: { given_names: buyer.name, email: buyer.email, ...(buyer.wa ? { mobile_number: buyer.wa } : {}) },
+      ...(buyer.email ? { payer_email: buyer.email, customer: { email: buyer.email } } : {}),
       items: [{ name: "Peta Syariah Lengkap", quantity: 1, price, category: "Produk digital" }],
       success_redirect_url: `${base}/?order=${id}`,
       failure_redirect_url: `${base}/?order=${id}&gagal=1`,

@@ -401,6 +401,10 @@ body.has-consent{padding-bottom:170px}
 .ferr{color:#B3261E;font-size:.86rem;font-weight:700}
 @media (prefers-color-scheme:dark){.ferr{color:#FF8A80}}
 .i18n-note{margin:0 0 12px;padding:10px 12px;border:1px dashed var(--line);border-radius:10px;font-size:.88rem;color:var(--muted)}
+.px-was{opacity:.6;font-weight:500;margin-right:2px}
+.px-was:empty{display:none}
+.amt .px-was{display:block;font-size:.5em;line-height:1.2}
+.tag-promo{display:inline-block;background:var(--lime);color:var(--on-lime);border:2px solid var(--ink);border-radius:999px;padding:2px 10px;font-size:.74rem;font-weight:800;margin-bottom:6px}
 .faq{display:grid;gap:10px;max-width:720px}
 .faq details{border:2px solid var(--ink);border-radius:var(--r);background:var(--surface);padding:12px 14px}
 .faq summary{font-weight:700;cursor:pointer}
@@ -497,7 +501,7 @@ body.has-consent{padding-bottom:170px}
         <li><span>Katalog 14 produk syariah bank dan non-bank</span></li>
         <li><span>Ensiklopedia 9 akad dan salah kaprahnya</span></li>
       </ul>
-      <p style="color:var(--hero-ink)"><b><span class="px">Rp89.000</span>, sekali bayar.</b> <span style="color:var(--hero-muted)">Bukan langganan, dan aksesnya tidak kedaluwarsa. Kuis dan hasilnya tetap gratis.</span></p>
+      <p style="color:var(--hero-ink)"><span class="tag-promo">Harga perkenalan</span><br><b><s class="px-was">Rp149.000</s> <span class="px">Rp89.000</span>, sekali bayar.</b> <span style="color:var(--hero-muted)">Bukan langganan, dan aksesnya tidak kedaluwarsa. Kuis dan hasilnya tetap gratis.</span></p>
       <p class="cite"><a href="/contoh-laporan.html" style="color:var(--lime)">Lihat contoh laporan</a> · Panduan edukasi, bukan fatwa.</p>
     </div>
   </div></section>
@@ -512,7 +516,7 @@ body.has-consent{padding-bottom:170px}
       <details><summary>Apakah ini fatwa?</summary><p>Bukan. Peta Syariah adalah panduan edukasi. Keputusan akhir tetap ada padamu dan ustadz yang kamu percaya.</p></details>
     </div>
   </section>
-  <footer class="lfoot"><span>Peta Syariah · panduan edukasi, bukan fatwa · <a href="/contoh-laporan.html">Contoh laporan</a> · <a href="/privasi.html">Privasi</a> · <a href="/syarat.html">Syarat dan refund</a></span><button class="link" id="l-method">Cara kami menilai</button></footer>
+  <footer class="lfoot"><span>Peta Syariah · panduan edukasi, bukan fatwa · <a href="/contoh-laporan.html">Contoh laporan</a> · <a href="/privasi.html">Privasi</a> · <a href="/syarat.html">Syarat penggunaan</a></span><button class="link" id="l-method">Cara kami menilai</button></footer>
 </main>
 
 <!-- ================= QUIZ ================= -->
@@ -574,7 +578,7 @@ body.has-consent{padding-bottom:170px}
         <div><b id="r-ngain"></b>dihitung dalam rupiah dari angkamu</div>
       </div>
     </div>
-    <button class="btn gold" id="r-unlock">Buka peta lengkap · <span class="px">Rp89.000</span></button>
+    <button class="btn gold" id="r-unlock">Buka peta lengkap · <s class="px-was">Rp149.000</s> <span class="px">Rp89.000</span></button>
     <p class="small muted" style="margin-top:-8px">Sekali bayar, bukan langganan, dan aksesnya tidak kedaluwarsa.</p>
   </div>
 </main>
@@ -598,7 +602,7 @@ body.has-consent{padding-bottom:170px}
   <div class="sheet stack" role="dialog" aria-modal="true" aria-labelledby="pw-h">
     <div class="row" style="align-items:center"><h2 id="pw-h" tabindex="-1" style="flex:3 1 200px">Peta Syariah Lengkap</h2><button class="link" id="pw-close" style="flex:0 0 auto">Tutup</button></div>
     <p class="pw-out" id="pw-sub"></p>
-    <div class="price"><span class="amt num"><span class="px">Rp89.000</span></span><span class="muted">sekali bayar · akses tidak kedaluwarsa</span></div>
+    <div class="price"><span class="tag-promo">Harga perkenalan</span><span class="amt num"><s class="px-was">Rp149.000</s> <span class="px">Rp89.000</span></span><span class="muted">sekali bayar · akses tidak kedaluwarsa</span></div>
     <ul class="incl">
       <li><span>Keuntungan yang belum kamu ambil, dalam rupiah: potongan pajak dari zakat, selisih pajak sukuk dan deposito, dan lainnya</span></li>
       <li><span>Rencana 90 hari: <b id="pw-n"></b> langkah, tiap langkah dengan rujukan dan "yang perlu diwaspadai"</span></li>
@@ -607,22 +611,19 @@ body.has-consent{padding-bottom:170px}
       <li><span>Ensiklopedia 9 akad dan salah kaprahnya</span></li>
     </ul>
     <form id="pw-form" class="buyer stack" novalidate>
-      <p class="k">Data pembeli</p>
-      <label for="b-name">Nama lengkap<input id="b-name" name="name" autocomplete="name" required maxlength="80"></label>
-      <label for="b-email">Email<span class="muted small"> · untuk bukti pembelian dan memulihkan akses</span><input id="b-email" name="email" type="email" autocomplete="email" inputmode="email" required maxlength="120"></label>
-      <label for="b-wa">Nomor WhatsApp<span class="muted small"> · opsional, untuk bantuan</span><input id="b-wa" name="wa" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" placeholder="08xxxxxxxxxx"></label>
-      <label class="agree"><input type="checkbox" id="b-agree" required><span>Saya sudah membaca dan setuju dengan <a href="/syarat.html" target="_blank" rel="noopener">Syarat dan refund</a> serta <a href="/privasi.html" target="_blank" rel="noopener">Kebijakan privasi</a>, termasuk penyimpanan nama, email, dan nomor WhatsApp untuk mengirim akses dan bukti pembelian.</span></label>
+      <label for="b-email">Email <span class="muted small">(opsional) · untuk bukti beli dan memulihkan akses kalau ganti HP</span><input id="b-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" placeholder="nama@email.com"></label>
       <p class="ferr" id="buy-err" role="alert" hidden></p>
-      <button class="btn gold" id="pw-pay" type="submit">Saya mau peta lengkap · <span class="px">Rp89.000</span></button>
+      <button class="btn gold" id="pw-pay" type="submit">Bayar sekarang <s class="px-was">Rp149.000</s> <span class="px">Rp89.000</span></button>
+      <p class="small muted">Dengan membayar, kamu setuju dengan <a href="/syarat.html" target="_blank" rel="noopener">Syarat</a> dan <a href="/privasi.html" target="_blank" rel="noopener">Kebijakan privasi</a>.</p>
     </form>
     <div class="demo-note fd" id="pw-demo" hidden role="status" aria-live="polite">
-      <p><b>Terima kasih atas minatmu.</b> Peta lengkap belum bisa dibeli hari ini, jadi <b>tidak ada tagihan</b>. Kami akan mengabarimu lewat email begitu dibuka. Kalau mau lebih cepat, kirim juga pesan di bawah.</p>
+      <p><b>Terima kasih atas minatmu.</b> Peta lengkap belum bisa dibeli hari ini, jadi <b>tidak ada tagihan</b>. Kalau kamu mengisi email, kami kabari begitu dibuka. Atau kirim pesan di bawah.</p>
       <p class="small" id="fd-msg" style="background:var(--surface);border-radius:8px;padding:10px"></p>
       <a class="btn" id="fd-wa" href="#" target="_blank" rel="noopener" hidden>Kirim lewat WhatsApp</a>
       <button class="btn alt" id="fd-copy">Salin pesan</button>
       <button class="link" id="pw-demo-go" hidden>Lihat pratinjau isi (pemilik)</button>
     </div>
-    <p class="small muted">Panduan edukasi, bukan fatwa, dan tidak berafiliasi dengan lembaga keuangan mana pun. <a href="/syarat.html">Syarat dan refund</a></p>
+    <p class="small muted">Panduan edukasi, bukan fatwa, dan tidak berafiliasi dengan lembaga keuangan mana pun. <a href="/syarat.html">Syarat penggunaan</a></p>
   </div>
 </div>
 

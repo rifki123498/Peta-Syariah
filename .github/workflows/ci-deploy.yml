@@ -57,7 +57,8 @@ jobs:
         run: npm run build
         env:
           VITE_META_PIXEL_ID: ${{ vars.META_PIXEL_ID }}
-          VITE_PRICE_ARMS: ${{ vars.PRICE_ARMS || '89000,179000' }}
+          VITE_PRICE_ARMS: ${{ vars.PRICE_ARMS || '69000' }}
+          VITE_PRICE_ANCHOR: ${{ vars.PRICE_ANCHOR || '149000' }}
       - if: steps.cf.outputs.skip != '1'
         name: Ensure D1 database
         run: node scripts/ensure-d1.mjs
@@ -68,7 +69,7 @@ jobs:
         name: Deploy Worker
         run: |
           npx wrangler deploy \
-            --var PRICE_ARMS:"${{ vars.PRICE_ARMS || '89000,179000' }}" \
+            --var PRICE_ARMS:"${{ vars.PRICE_ARMS || '69000' }}" \
             --var META_PIXEL_ID:"${{ vars.META_PIXEL_ID }}" \
             --var PUBLIC_BASE_URL:"${{ vars.PUBLIC_BASE_URL }}"
       - if: steps.cf.outputs.skip != '1'

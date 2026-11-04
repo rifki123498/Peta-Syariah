@@ -9,7 +9,7 @@ async function answer(page, v) {
 }
 
 async function runQuiz(page) {
-  await page.goto("/?harga=89000");
+  await page.goto("/?harga=69000");
   await page.locator('#consent [data-c="no"]').click();
   await page.locator(".pill-cta").click();
   await page.locator("#q-intro1go").click();
@@ -23,10 +23,11 @@ async function runQuiz(page) {
 }
 
 test("lander shows verified facts, consent bar and price arm", async ({ page }) => {
-  await page.goto("/?harga=179000");
+  await page.goto("/");
   await expect(page.locator("#consent")).toBeVisible();
   await expect(page.locator("#l-facts .fact")).toHaveCount(5);
-  await expect(page.locator(".px").first()).toHaveText("Rp179.000");
+  await expect(page.locator(".px").first()).toHaveText("Rp69.000");
+  await expect(page.locator(".px-was").first()).toHaveText("Rp149.000");
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize().width);
 });
 
@@ -42,41 +43,41 @@ test("Dinda profile scores 58%, level Penggerak, 2 of 8 badges", async ({ page }
   await expect(page.locator("body")).not.toContainText("Perlindungan");
 });
 
-const BUYER = { name: "Dinda Pratiwi", email: "dinda@example.com", wa: "+6281234567890", consent: true };
+const BUYER = { email: "dinda@example.com", consent: true };
 
-test("checkout asks for buyer data and consent, then falls back to waitlist", async ({ page, request }) => {
+test("paywall needs no data; optional email is validated and stored", async ({ page, request }) => {
   await runQuiz(page);
   await page.locator("#r-unlock").click();
-  await page.locator("#pw-pay").click();
-  await expect(page.locator("#buy-err")).toHaveText("Isi nama lengkapmu.");
-  await page.fill("#b-name", "Dinda Pratiwi");
+  await expect(page.locator("#pw-form input")).toHaveCount(1);
   await page.fill("#b-email", "dinda@contoh");
   await page.locator("#pw-pay").click();
-  await expect(page.locator("#buy-err")).toHaveText("Cek lagi alamat emailmu.");
+  await expect(page.locator("#buy-err")).toContainText("Cek lagi alamat emailmu");
   await page.fill("#b-email", "dinda.e2e@example.com");
-  await page.fill("#b-wa", "0812-3456-7890");
-  await page.locator("#pw-pay").click();
-  await expect(page.locator("#buy-err")).toContainText("Centang persetujuan");
-  await page.locator("#b-agree").check();
   await page.locator("#pw-pay").click();
   await expect(page.locator("#pw-demo")).toBeVisible();
-  await expect(page.locator("#fd-msg")).toContainText("Rp89.000");
-  await expect(page.locator("#fd-msg")).toContainText("Dinda Pratiwi");
+  await expect(page.locator("#fd-msg")).toContainText("Rp69.000");
   const rows = await (await request.get("/api/admin/orders?days=1", { headers: { authorization: "Bearer test-admin" } })).json();
   const mine = rows.orders.find((o) => o.buyer_email === "dinda.e2e@example.com");
   expect(mine).toBeTruthy();
-  expect(mine.buyer_wa).toBe("+6281234567890");
   expect(mine.status).toBe("waitlist");
 });
 
-test("checkout API rejects orders without buyer consent", async ({ request }) => {
-  const r = await request.post("/api/checkout", { data: { anonId: "e2e", price: 89000, arm: 0, buyer: { ...BUYER, consent: false } } });
+test("paying without an email works", async ({ page }) => {
+  await runQuiz(page);
+  await page.locator("#r-unlock").click();
+  await page.locator("#pw-pay").click();
+  await expect(page.locator("#pw-demo")).toBeVisible();
+});
+
+test("checkout API rejects a bad email and the old 89k price", async ({ request }) => {
+  let r = await request.post("/api/checkout", { data: { anonId: "e2e", price: 69000, arm: 0, buyer: { email: "x@y", consent: true } } });
   expect(r.status()).toBe(400);
-  expect((await r.json()).error).toBe("bad_buyer");
+  r = await request.post("/api/checkout", { data: { anonId: "e2e", price: 89000, arm: 0, buyer: BUYER } });
+  expect((await r.json()).error).toBe("bad_price");
 });
 
 test("guess chip on the lander skips the guess question", async ({ page }) => {
-  await page.goto("/?harga=89000");
+  await page.goto("/?harga=69000");
   await page.locator('#consent [data-c="no"]').click();
   await page.locator('.hero .guess-chip[data-guess="37"]').click();
   await expect(page.locator("#q-count")).toHaveText("Pertanyaan 1/10");
@@ -88,7 +89,7 @@ test("guess chip on the lander skips the guess question", async ({ page }) => {
 });
 
 test("English mode translates lander, quiz and result", async ({ page }) => {
-  await page.goto("/?harga=89000&lang=en");
+  await page.goto("/?harga=69000&lang=en");
   await expect(page.locator("html")).toHaveAttribute("lang", "en");
   await page.locator('#consent [data-c="no"]').click();
   await expect(page.locator("h1")).toContainText("Your finances may be more sharia than you think.");
@@ -111,7 +112,7 @@ test("English mode translates lander, quiz and result", async ({ page }) => {
 
 test("paid order unlocks the full map with the Keuntungan tab", async ({ page, request }) => {
   await runQuiz(page);
-  const co = await (await request.post("/api/checkout", { data: { anonId: "e2e", price: 89000, arm: 0, buyer: BUYER } })).json();
+  const co = await (await request.post("/api/checkout", { data: { anonId: "e2e", price: 69000, arm: 0, buyer: BUYER } })).json();
   const hook = await request.post("/api/webhooks/xendit", { headers: { "x-callback-token": "test-callback" }, data: { external_id: co.orderId, status: "PAID" } });
   expect(hook.ok()).toBeTruthy();
   await page.goto("/?order=" + co.orderId);
@@ -124,9 +125,9 @@ test("paid order unlocks the full map with the Keuntungan tab", async ({ page, r
 
 test("legal pages switch to English", async ({ page }) => {
   await page.goto("/syarat.html?lang=en");
-  await expect(page.locator("h1:visible")).toHaveText("Terms of use and refund policy");
+  await expect(page.locator("h1:visible")).toHaveText("Terms of use");
   await page.locator("#lang-toggle").click();
-  await expect(page.locator("h1:visible")).toHaveText("Syarat penggunaan dan kebijakan refund");
+  await expect(page.locator("h1:visible")).toHaveText("Syarat penggunaan");
 });
 
 test("sample report renders with share card", async ({ page }) => {

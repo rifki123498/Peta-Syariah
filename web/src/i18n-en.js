@@ -1,6 +1,15 @@
 /* Indonesian → English dictionary. Keys are exact visible text nodes (whitespace-collapsed, trimmed).
    Add an entry here whenever user-facing Indonesian copy changes; tests/e2e checks the EN lander for leftovers. */
 export const EN = {
+  "Harga perkenalan": "Launch price",
+  "Bayar sekarang": "Pay now",
+  "(opsional) · untuk bukti beli dan memulihkan akses kalau ganti HP": "(optional) · for your receipt and to restore access if you change phones",
+  "nama@email.com": "name@email.com",
+  "Dengan membayar, kamu setuju dengan": "By paying, you agree to the",
+  "Syarat": "Terms",
+  "dan": "and the",
+  "Cek lagi alamat emailmu, atau kosongkan saja.": "Check your email address, or leave it empty.",
+  ". Kalau kamu mengisi email, kami kabari begitu dibuka. Atau kirim pesan di bawah.": ". If you entered an email, we'll let you know when it opens. Or send the message below.",
   "Mulai →": "Start →",
   "Untuk yang mau hijrah finansial": "For anyone moving their money to sharia",
   "Gratis · 3 menit · tanpa login": "Free · 3 minutes · no login",
@@ -125,7 +134,7 @@ export const EN = {
   "Peta Syariah · panduan edukasi, bukan fatwa ·": "Peta Syariah · an educational guide, not a fatwa ·",
   "Contoh laporan": "Sample report",
   "Privasi": "Privacy",
-  "Syarat dan refund": "Terms and refunds",
+  "Syarat penggunaan": "Terms of use",
   "Cara kami menilai": "How we score",
   "Kami memakai cookie iklan Meta untuk mengukur kampanye. Jawaban kuismu tetap di perangkatmu.": "We use Meta advertising cookies to measure campaigns. Your quiz answers stay on your device.",
   "Kebijakan privasi": "Privacy policy",
