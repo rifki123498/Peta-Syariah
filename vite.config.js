@@ -13,6 +13,7 @@ export default defineConfig({
         main: resolve(__dirname, "web/index.html"),
         laporan: resolve(__dirname, "web/contoh-laporan.html"),
         privasi: resolve(__dirname, "web/privasi.html"),
+        syarat: resolve(__dirname, "web/syarat.html"),
       },
     },
   },

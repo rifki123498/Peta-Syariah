@@ -14,6 +14,25 @@ type Env = {
 
 const app = new Hono<{ Bindings: Env }>();
 
+/* Best-effort per-isolate rate limit by IP. Stops casual spam of /api/events and /api/checkout;
+   not a substitute for Cloudflare WAF rules once traffic grows. */
+const hits = new Map<string, number[]>();
+function limited(key: string, max: number, windowMs: number) {
+  const t = Date.now();
+  const arr = (hits.get(key) || []).filter((x) => t - x < windowMs);
+  arr.push(t);
+  hits.set(key, arr);
+  if (hits.size > 5000) hits.clear();
+  return arr.length > max;
+}
+app.use("/api/*", async (c, next) => {
+  const ip = c.req.header("cf-connecting-ip") || "local";
+  const path = new URL(c.req.url).pathname;
+  const rule = path === "/api/checkout" ? [10, 60_000] : path === "/api/events" ? [120, 60_000] : null;
+  if (rule && limited(path + "|" + ip, rule[0], rule[1])) return c.json({ error: "rate_limited" }, 429);
+  await next();
+});
+
 const EVENT_NAMES = new Set([
   "lp_view", "quiz_start", "q_answer", "quiz_complete", "result_view", "share_save", "share_caption",
   "paywall_view", "checkout_start", "purchase_return", "consent", "wa_click", "feedback_click",
