@@ -20,7 +20,7 @@ Exact questions, options and weights are in `STEPS` in the prototype. Order: goa
 
 ### 3.3 Scoring (keep identical to prototype unless the owner changes it)
 - Six pillars: Tabungan & dana darurat (rekening 35% · tabungan 35% · dana darurat 30%), Cara bayar, Cicilan & utang, Asuransi, Investasi (average of selected instruments; saham = 70 because most but not all IDX stocks are sharia), Zakat & sedekah.
-- % syariah = average of six pillars. Level: Perintis <30, Penjelajah 30–54, Penggerak 55–79, Penjaga Amanah ≥80.
+- % syariah = average of six pillars. Level (hijrah journey, describes habits not faith): Niat <30, Hijrah 30–54, Istiqamah 55–79, Amanah ≥80. EN shows Niyyah for Niat; the other three stay as is.
 - 8 lencana (`BADGES`), benefits (`GAINS`, max 4 shown, rupiah locked), potential after 90 days (`project()`).
 
 ### 3.4 Result

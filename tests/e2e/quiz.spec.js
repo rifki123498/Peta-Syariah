@@ -32,10 +32,10 @@ test("lander shows verified facts, consent bar and price arm", async ({ page }) 
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize().width);
 });
 
-test("Dinda profile scores 58%, level Penggerak, 2 of 8 badges", async ({ page }) => {
+test("Dinda profile scores 58%, level Istiqamah, 2 of 8 badges", async ({ page }) => {
   await runQuiz(page);
   await expect(page.locator("#r-card")).toContainText("58%");
-  await expect(page.locator("#r-card")).toContainText("Penggerak");
+  await expect(page.locator("#r-card")).toContainText("Istiqamah");
   await expect(page.locator("#r-bcount")).toHaveText("2 dari 8");
   await expect(page.locator("#r-gains li")).toHaveCount(4);
   await expect(page.locator("#r-guess")).toContainText("lebih syariah");
@@ -106,7 +106,7 @@ test("English mode translates lander, quiz and result", async ({ page }) => {
   await page.locator('#q-opts button[data-v="15"]').click();
   await expect(page.locator("#v-result")).toBeVisible({ timeout: 10_000 });
   await expect(page.locator("#r-bcount")).toHaveText("2 of 8");
-  await expect(page.locator("#r-card")).toContainText("Mover");
+  await expect(page.locator("#r-card")).toContainText("Istiqamah");
   await page.locator("#r-unlock").click();
   await expect(page.locator("#pw-sub")).toContainText("From 58% to about");
 });

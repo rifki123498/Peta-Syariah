@@ -25,7 +25,7 @@ Benefit
 9. "Cicilan rumah yang nggak naik sampai lunas. Namanya murabahah."
 10. "Mau pindah ke syariah tapi bingung mulai dari mana? Mulai dari angka."
 Pride / identity
-11. "Level keuangan syariahmu: Perintis, Penjelajah, Penggerak, atau Penjaga Amanah?"
+11. "Keuanganmu di tahap mana: Niat, Hijrah, Istiqamah, atau Amanah?"
 12. "Aku punya 5 dari 8 lencana keuangan syariah. Kamu?"
 13. "Ternyata aku sudah jauh lebih syariah dari yang kukira."
 14. "Bukan soal semuanya pindah sekaligus. Satu lencana dulu."
@@ -66,7 +66,7 @@ Do not use: "Uangmu masih riba?", "Bank konvensional haram", "Dosa besar", or an
 |---|---|---|
 | 1 | Reel A | Tebak persen |
 | 2 | Carousel B | Fakta tak terduga |
-| 3 | Reel | Level: Perintis → Penjaga Amanah |
+| 3 | Reel | Tahap: Niat → Hijrah → Istiqamah → Amanah |
 | 4 | Carousel | 4 akad dasar dalam bahasa sehari-hari |
 | 5 | Reel C | Keuntungan yang belum diambil |
 | 6 | Story poll | "Menurutmu berapa persen keuanganmu syariah?" |

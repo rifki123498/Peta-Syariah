@@ -3,10 +3,10 @@ import { tr } from "./i18n.js";
 /* ===== Kartu share Instagram (Story 9:16, Feed 4:5). Tanpa angka uang pribadi. ===== */
 export const SHARE=(function(){
 const PERSONA_STYLE={
- "Penjaga Amanah":{c:"#D4EE3A",e:"star"},
- "Penggerak":{c:"#F2C14E",e:"book"},
- "Penjelajah":{c:"#7FCB8E",e:"compass"},
- "Perintis":{c:"#FF9E7A",e:"sunrise"}};
+ "Amanah":{c:"#D4EE3A",e:"star"},
+ "Istiqamah":{c:"#F2C14E",e:"book"},
+ "Hijrah":{c:"#7FCB8E",e:"compass"},
+ "Niat":{c:"#FF9E7A",e:"sunrise"}};
 const F='"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif', M='"JetBrains Mono",ui-monospace,Menlo,monospace';
 function wrap(ctx,t,maxW){ const w=String(t).split(" "),L=[]; let s=""; w.forEach(x=>{ const tt=s?s+" "+x:x; if(ctx.measureText(tt).width>maxW&&s){L.push(s);s=x;} else s=tt; }); if(s)L.push(s); return L; }
 function text(ctx,t,x,y,font,color,maxW,lh,ls){ t=tr(t); ctx.font=font; ctx.fillStyle=color; try{ctx.letterSpacing=ls||"0px";}catch(_){} const L=maxW?wrap(ctx,t,maxW):[t]; L.forEach((l,i)=>ctx.fillText(l,x,y+i*(lh||0))); try{ctx.letterSpacing="0px";}catch(_){} return y+(L.length-1)*(lh||0); }
@@ -33,7 +33,7 @@ function chip(ctx,x,y,k,v,c){ k=tr(k); v=tr(v); ctx.font=`600 28px ${F}`; const 
 /* o: {fmt, kind:"type"|"progress", persona, tagline, pillars:[{label,now}], strong, focus, showScores, praktik, paham, inklusi, day, done, total, phases:[[nama,selesai,total]], from, to, toLabel} */
 function draw(cv,o){
   const W=1080,H=o.fmt==="feed"?1350:1920, st=o.fmt!=="feed"; cv.width=W; cv.height=H; const ctx=cv.getContext("2d");
-  const S=PERSONA_STYLE[o.persona]||PERSONA_STYLE["Perintis"], c=S.c, X=90, top=st?240:110;
+  const S=PERSONA_STYLE[o.persona]||PERSONA_STYLE["Niat"], c=S.c, X=90, top=st?240:110;
   bg(ctx,W,H);
   text(ctx,"PETA SYARIAH",X,top,`700 30px ${F}`,"#D4EE3A",0,0,"6px");
   emblem(ctx,S.e,W-X-70,top-10,70,c);

@@ -88,7 +88,7 @@ $("asks").addEventListener("change",e=>{ const k=e.target.dataset.k; if(!k) retu
 
 const MS=[{day:1,done:0,ph:[0,0,0],to:88,toLabel:"Persen syariah → target 90 hari"},{day:30,done:4,ph:[4,0,0],to:null},{day:90,done:10,ph:[4,4,2],to:81,toLabel:"Persen syariah, hari 1 → hari 90"}];
 const SH={m:0,fmt:"story"}; const shCv=document.createElement("canvas");
-function shSpec(){ const m=MS[SH.m]; return {fmt:SH.fmt,kind:"progress",persona:"Penggerak",day:m.day,done:m.done,total:12,phases:[["Fondasi",m.ph[0],4],["Pindah bertahap",m.ph[1],4],["Tumbuh",m.ph[2],4]],showScores:$("sh-scores").checked,from:58,to:m.to,toLabel:m.toLabel}; }
+function shSpec(){ const m=MS[SH.m]; return {fmt:SH.fmt,kind:"progress",persona:"Istiqamah",day:m.day,done:m.done,total:12,phases:[["Fondasi",m.ph[0],4],["Pindah bertahap",m.ph[1],4],["Tumbuh",m.ph[2],4]],showScores:$("sh-scores").checked,from:58,to:m.to,toLabel:m.toLabel}; }
 async function renderShare(){ try{ await document.fonts.ready; }catch(_){} SHARE.draw(shCv,shSpec()); $("sh-img").src=shCv.toDataURL("image/png");
   $("sh-save").hidden=!(await SHARE.hasSave()); $("sh-status").textContent=$("sh-save").hidden?"Tekan lama gambar untuk menyimpannya.":""; }
 const pick=(id,key,attr)=>$(id).querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{ SH[key]=attr==="m"?+b.dataset.m:b.dataset.f; $(id).querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",String(x===b))); renderShare(); }));

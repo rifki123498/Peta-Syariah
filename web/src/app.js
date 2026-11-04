@@ -53,10 +53,10 @@ const STEPS=[
  {id:"darurat",k:"simpan",q:"Kalau penghasilan berhenti, dana daruratmu cukup untuk berapa lama?",o:[["0","Belum ada",10],["3","Kurang dari 3 bulan",40],["6","3 sampai 6 bulan",80],["7","Lebih dari 6 bulan",100]]},
  {id:"bayar",k:"transaksi",q:"Untuk belanja sehari-hari, kamu paling sering bayar pakai apa?",o:[["debit","Debit, QRIS, atau dompet digital",100],["sycard","Kartu pembiayaan syariah (iB)",90],["kk","Kartu kredit",40],["paylater","Paylater",25]]},
  {id:"biaya",k:"pembiayaan",q:"Kamu sedang punya cicilan rumah atau kendaraan?",o:[["none","Tidak ada",100],["syariah","Ada, dengan akad syariah",100],["both","Ada keduanya: syariah dan konvensional",60],["konv","Ada, dengan kredit konvensional",30]]},
- {id:"lindung",k:"lindung",q:"Asuransi kesehatan atau jiwa yang kamu punya?",o:[["syariah","Asuransi syariah",100],["bpjs","BPJS saja",70],["konv","Asuransi konvensional",40],["none","Belum ada",15]]},
- {id:"inv",k:"investasi",multi:true,q:"Uangmu dikembangkan di mana saja?",h:"Pilih semua yang kamu punya, lalu ketuk Lanjut.",o:[["saham","Saham",70],["rdsy","Reksa dana syariah",100],["rdkonv","Reksa dana konvensional",30],["sukuk","Sukuk negara (ST atau SR)",100],["sbn","SBN konvensional (ORI atau SBR)",40],["emas","Emas",80],["belum","Belum berinvestasi",25]]},
+ {id:"lindung",k:"lindung",q:"Asuransi kesehatan atau jiwa apa yang kamu punya?",o:[["syariah","Asuransi syariah",100],["bpjs","BPJS saja",70],["konv","Asuransi konvensional",40],["none","Belum ada",15]]},
+ {id:"inv",k:"investasi",multi:true,q:"Kamu berinvestasi di mana saja?",h:"Pilih semua yang kamu punya, lalu ketuk Lanjut.",o:[["saham","Saham",70],["rdsy","Reksa dana syariah",100],["rdkonv","Reksa dana konvensional",30],["sukuk","Sukuk negara (ST atau SR)",100],["sbn","SBN konvensional (ORI atau SBR)",40],["emas","Emas",80],["belum","Belum berinvestasi",25]]},
  {id:"zakat",k:"zakat",q:"Bagaimana kebiasaan zakatmu selain zakat fitrah?",o:[["resmi","Rutin, lewat BAZNAS atau LAZ resmi",100],["langsung","Rutin, langsung ke penerima",85],["kadang","Kadang-kadang",60],["fitrah","Baru zakat fitrah",35],["belum","Belum tahu cara menghitungnya",20]]},
- {id:"inc",k:"about",q:"Kira-kira penghasilan bulananmu?",h:"Hanya untuk kalkulator zakat dan target dana darurat. Tidak dikirim ke mana pun.",o:[["4","Di bawah Rp5 juta"],["8","Rp5–10 juta"],["15","Rp10–25 juta"],["35","Di atas Rp25 juta"]]}
+ {id:"inc",k:"about",q:"Kira-kira berapa penghasilan bulananmu?",h:"Hanya untuk kalkulator zakat dan target dana darurat. Tidak dikirim ke mana pun.",o:[["4","Di bawah Rp5 juta"],["8","Rp5–10 juta"],["15","Rp10–25 juta"],["35","Di atas Rp25 juta"]]}
 ];
 const KNOW=STEPS.filter(s=>s.k==="know");
 /* Istilah untuk orang awam. */
@@ -181,10 +181,11 @@ function scores(a){
 }
 function persona(s){
   const x=s.praktik;
-  if(x>=80) return ["Penjaga Amanah","Hampir semua keuanganmu sudah syariah. Tinggal menjaga dan merapikan sisanya."];
-  if(x>=55) return ["Penggerak","Lebih dari separuh keuanganmu sudah syariah. Sisanya bisa dipindah satu per satu."];
-  if(x>=30) return ["Penjelajah","Kamu sudah mulai. Beberapa langkah lagi, separuh keuanganmu syariah."];
-  return ["Perintis","Langkah pertamamu dimulai di sini. Pilih satu hal kecil minggu ini."];
+  /* Levels follow the hijrah journey: Niat (intention) → Hijrah (moving) → Istiqamah (steady) → Amanah (trust). They describe money habits, never faith. */
+  if(x>=80) return ["Amanah","Hampir semua keuanganmu sudah syariah. Sekarang tinggal menjaganya tetap begitu."];
+  if(x>=55) return ["Istiqamah","Lebih dari separuh keuanganmu sudah syariah, dan kebiasaanmu sudah konsisten."];
+  if(x>=30) return ["Hijrah","Kamu sedang hijrah. Sebagian keuanganmu sudah syariah, sisanya tinggal dipindah satu per satu."];
+  return ["Niat","Niatnya sudah ada, dan itu langkah pertama. Mulai dari satu hal kecil minggu ini."];
 }
 function radarSVG(s,proj){
   const keys=Object.keys(PILLARS), cx=90, cy=86, R=54, n=keys.length;
@@ -270,7 +271,7 @@ function renderResult(){
     <div class="natrow"><span>Memakai produk syariah (nasional)</span><b class="num">13,41%</b><div class="natbar"><i style="width:13.41%"></i></div></div>
     <p class="small">${SC.inklusi?`Kamu sudah termasuk kelompok yang <b>memakai produk syariah</b>, sekitar 1 dari 7 penduduk.`:`Kamu belum termasuk kelompok yang memakai produk syariah. Itu juga kondisi sebagian besar penduduk.`}</p>`;
   $("r-pname").textContent=p[0]; $("r-ntask").textContent=T.length+" "; $("r-ngain").textContent=G.length+" keuntungan";
-  $("pw-n").textContent=T.length; $("pw-sub").innerHTML=`<b>Dari ${SC.praktik}% ke sekitar ${PJ.praktik}% syariah dalam 90 hari.</b> <span class="muted">Untuk level ${p[0]}, dimulai dari ${PILLARS[weakest]}. ${G.length?G.length+" keuntungan yang belum kamu ambil dihitung dalam rupiah. ":""}Potensi adalah perkiraan bila semua langkah dijalankan.</span>`;
+  $("pw-n").textContent=T.length; $("pw-sub").innerHTML=`<b>Dari ${SC.praktik}% ke sekitar ${PJ.praktik}% syariah dalam 90 hari.</b> <span class="muted">Rencanamu dimulai dari ${PILLARS[weakest].toLowerCase()}. ${G.length?`Ada ${G.length} keuntungan yang belum kamu ambil, lengkap dengan hitungan rupiahnya. `:""}Angka potensi adalah perkiraan kalau semua langkah dijalankan.</span>`;
   track("result_view",{pct:SC.praktik,badges:SC.badges,guess:g?g.v:null}); renderShare();
   if(WAITLIST_WA){ const fb=isEN?`Hi, feedback for Peta Syariah. My result: ${SC.praktik}% sharia, level ${tr(p[0])}.\n\nMost useful: \nConfusing: \nDid the result feel right? `:`Halo, masukan untuk Peta Syariah. Hasil saya: ${SC.praktik}% syariah, level ${p[0]}.\n\nYang paling berguna: \nYang membingungkan: \nApakah hasilnya terasa pas? `; $("r-fb").href="https://wa.me/"+WAITLIST_WA+"?text="+encodeURIComponent(fb); $("r-fb").hidden=false; }
 }
@@ -348,7 +349,7 @@ function mapSVG(T){
 }
 function renderRoad(){
   const T=tasks(S.ans);
-  $("road").innerHTML=`<div><p class="eyebrow">Rencana untuk ${persona(SC)[0]}</p><h2>${T.length} langkah dalam 90 hari</h2><p class="muted" style="margin-top:6px">Urutannya disengaja: fondasi dulu (tabungan, dana darurat, zakat), baru memindahkan produk besar, lalu menumbuhkan. Tidak ada yang harus dipindahkan sekaligus.</p></div><div class="panel" id="road-map">${mapSVG(T)}</div>`+
+  $("road").innerHTML=`<div><p class="eyebrow">Rencana tahap ${persona(SC)[0]}</p><h2>${T.length} langkah dalam 90 hari</h2><p class="muted" style="margin-top:6px">Urutannya disengaja: fondasi dulu (tabungan, dana darurat, zakat), baru memindahkan produk besar, lalu menumbuhkan. Tidak ada yang harus dipindahkan sekaligus.</p></div><div class="panel" id="road-map">${mapSVG(T)}</div>`+
   [1,2,3].map(ph=>{ const L=T.filter(t=>t.ph===ph); if(!L.length) return "";
     return `<div class="phase"><div class="phase-h"><h3>Fase ${ph} · ${PH[ph][0]}</h3><span>${PH[ph][1]}</span></div>`+L.map(t=>`<div class="task${S.done[t.id]?" done":""}" data-id="${t.id}"><input type="checkbox" id="ck-${t.id}" ${S.done[t.id]?"checked":""}><div><h3><label for="ck-${t.id}" style="font:inherit;margin:0;display:inline">${t.t}</label></h3><p class="small muted" style="margin-top:4px">${t.w}</p><div class="meta"><span class="chip p">${PILLARS[t.p]}</span><span class="chip">${t.d}</span>${t.src.length?`<span class="chip f">${t.src.length} rujukan</span>`:""}</div><details><summary>Cara melakukannya</summary><ul>${t.how.map(h=>`<li>${h}</li>`).join("")}</ul>${t.watch?`<div class="watch"><b>Perlu diwaspadai:</b> ${t.watch}</div>`:""}${t.ask?`<p class="small" style="margin-top:8px"><b>Tanyakan ke penyedia, lalu centang:</b></p><ul class="asklist">${t.ask.map((q,i)=>{ const id=t.id+"-q"+i, on=!!(S.qc&&S.qc[id]); return `<li><label><input type="checkbox" data-q="${id}" ${on?"checked":""}><span class="${on?"done-q":""}">${q}</span></label></li>`; }).join("")}</ul><p class="small muted" style="margin-top:4px">${t.ask.filter((q,i)=>S.qc&&S.qc[t.id+"-q"+i]).length} dari ${t.ask.length} terjawab</p>`:""}${t.src.length?`<p class="cite" style="margin-top:8px">${t.src.map(f).join("<br>")}</p>`:""}</details></div></div>`).join("")+`</div>`; }).join("");
   $("road").querySelectorAll("input[data-q]").forEach(cb=>cb.addEventListener("change",()=>{ S.qc=S.qc||{}; S.qc[cb.dataset.q]=cb.checked; save(); cb.nextElementSibling.classList.toggle("done-q",cb.checked); const ul=cb.closest(".asklist"); const n=[...ul.querySelectorAll("input")].filter(x=>x.checked).length; ul.nextElementSibling.textContent=n+" dari "+ul.querySelectorAll("input").length+" terjawab"; track("ask_toggle",{q:cb.dataset.q,on:cb.checked}); }));

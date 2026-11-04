@@ -20,7 +20,7 @@ npx wrangler dev --local        # http://127.0.0.1:8787
 Untuk mengubah tampilan dengan hot reload: `npm run dev` (Vite, proxy `/api` ke Worker di 8787).
 
 ## Tes
-`npm test` = unit test (hitungan pajak) + build + e2e Playwright terhadap Worker lokal (kuis profil contoh → 58%, level Penggerak, 2/8 lencana; checkout fallback; pesanan lunas membuka peta lengkap; contoh laporan).
+`npm test` = unit test (hitungan pajak) + build + e2e Playwright terhadap Worker lokal (kuis profil contoh → 58%, level Istiqamah, 2/8 lencana; checkout fallback; pesanan lunas membuka peta lengkap; contoh laporan).
 
 ## Deploy otomatis
 Setiap push ke `main`: tes → deploy ke Cloudflare (D1 dibuat otomatis, migrasi dijalankan, secret disinkronkan). Deploy dilewati dengan aman sampai secret Cloudflare diisi.
