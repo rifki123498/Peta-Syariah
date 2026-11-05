@@ -16,7 +16,7 @@ Only facts listed here may appear in the product. Re-check items marked **refres
 | Nisab zakat penghasilan 2026 Rp7.640.144/bulan | SK Ketua BAZNAS No. 15 Tahun 2026 (via Suara Surabaya, 25 Feb 2026) | **refresh** yearly |
 | Literasi keuangan syariah 43,42%, inklusi 13,41% | SNLIK 2025, OJK–BPS (via Kontan, 4 Mei 2025) | |
 
-## "Banyak orang seperti kamu sudah mulai" (retail/individual facts, used on lander and in Premium)
+## "Syariah lebih dekat dari yang kamu kira" — retail/individual facts (zakat and hajj rows kept as sources but not shown, to keep the section less religious)
 | Fact | Source | Note |
 |---|---|---|
 | SR025: 93.548 investor, terbanyak sepanjang sejarah SBSN ritel; penjualan Rp29,77 T; 56,66% investor perempuan; 49,11% milenial | DJPPR Kemenkeu via Bareksa, 23 Sep 2026: https://www.bareksa.com/berita/sbn/2026-09-23/penjualan-sr025-rekor-rp2977-triliun-ini-artinya-bagi-investor-sbn-sbr015 | refresh with the next SR series |
@@ -26,7 +26,7 @@ Only facts listed here may appear in the product. Re-check items marked **refres
 | 2024: 28,46 juta muzaki; ZIS nasional Rp40,53 T (Ketua BAZNAS, Rakornas 26 Agu 2025) | JawaPos, 27 Agu 2025: https://www.jawapos.com/nasional/2508270311/penghimpunan-zakat-nasional-naik-signifikan-lima-tahun-terakhir-capai-rp-4053-triliun-sepanjang-2024 | |
 | BPS BPIH = Bank Umum Syariah dan/atau UUS yang ditunjuk BPKH; setoran BPIH dibayar ke rekening atas nama BPKH melalui BPS BPIH | UU 34/2014 Pasal 1 angka 7 dan Pasal 6 ayat (2): https://jdih.kemenkeu.go.id/api/download/fulltext/2014/34TAHUN2014UU.htm | |
 
-## Corporate / market facts (not used in product copy since 5 Nov 2026; owner wants consumer examples)
+## Corporate / market / global facts (used again from 5 Nov 2026, mixed with the retail facts above so the section is not only religious)
 | Fact | Source | Note |
 |---|---|---|
 | 631 saham syariah; 56,8% kapitalisasi pasar BEI (per 18 Feb 2026) | Bloomberg via Bisnis.com, 19 Feb 2026: https://market.bisnis.com/read/20260219/7/1954009/ada-600-an-saham-syariah-di-bei-kapitalisasi-pasar-berkontribusi-568 | **refresh** each DES period |

@@ -25,7 +25,7 @@ async function runQuiz(page) {
 test("lander shows verified facts, consent bar and price arm", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#consent")).toBeVisible();
-  await expect(page.locator("#l-facts .fact")).toHaveCount(5);
+  await expect(page.locator("#l-facts .fact")).toHaveCount(6);
   await expect(page.locator(".px").first()).toHaveText("Rp89.000");
   await expect(page.locator(".px-was").first()).toHaveText("Rp149.000");
   await expect(page.locator(".tag-promo").first()).toHaveText("Harga spesial · hemat 40%");
@@ -140,10 +140,17 @@ test("legal pages switch to English", async ({ page }) => {
   await expect(page.locator("h1:visible")).toHaveText("Syarat penggunaan");
 });
 
-test("sample report renders with share card", async ({ page }) => {
+test("sample report is the real Premium view for the example profile and leaves own state alone", async ({ page }) => {
   await page.goto("/contoh-laporan.html");
-  await expect(page.locator("h1")).toContainText("58% syariah");
-  await expect(page.locator("#untung")).toContainText("1.755.000");
-  const src = await page.locator("#sh-img").getAttribute("src");
-  expect(src).toMatch(/^data:image\/png/);
+  await expect(page).toHaveURL(/\?contoh/);
+  await expect(page.locator("#demo-bar")).toBeVisible();
+  await expect(page.locator("#lap-sum")).toContainText("58% →");
+  await expect(page.locator("#lap-nat .nat-big")).toContainText("13 dari 100");
+  expect(await page.evaluate(() => localStorage.getItem("petasyariah.v2"))).toBeNull();
+});
+
+test("tapping a blurred preview opens the paywall", async ({ page }) => {
+  await runQuiz(page);
+  await page.locator('.tease[data-tease="first"]').click();
+  await expect(page.locator("#paywall")).toBeVisible();
 });

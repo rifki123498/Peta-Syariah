@@ -37,6 +37,7 @@ const EVENT_NAMES = new Set([
   "lp_view", "quiz_start", "q_answer", "quiz_complete", "result_view", "share_save", "share_caption",
   "paywall_view", "checkout_start", "purchase_return", "consent", "wa_click", "feedback_click",
   "task_toggle", "ask_toggle", "catalog_filter", "scenario_tab", "owner_preview",
+  "tease_click", "tab_view", "sample_view",
 ]);
 /* Our event name → Meta standard event for the Conversions API. */
 const CAPI_MAP: Record<string, string> = {

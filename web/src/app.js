@@ -8,7 +8,10 @@ const $=id=>document.getElementById(id);
 function track(e,p){ ptrack(e,p); }
 const KEY="petasyariah.v2";
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"null"); }catch(_){ return null; } }
-function save(){ try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(_){} }
+/* Sample report: /?contoh renders the real Premium view for an example profile ("Dinda"), never touching the visitor's own saved state. */
+const DEMO=new URLSearchParams(location.search).has("contoh");
+const DEMO_ANS={goal:"rumah",guess:"37",rek:"keduanya",tab:"konv",darurat:"3",bayar:"kk",biaya:"none",lindung:"bpjs",inv:"saham,rdkonv,emas",zakat:"fitrah",inc:"15"};
+function save(){ if(DEMO) return; try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(_){} }
 const rp=n=>"Rp"+Math.round(n).toLocaleString("id-ID");
 function rpS(n){ const a=Math.abs(n),s=n<0?"−":""; if(a>=1e9) return s+"Rp"+(a/1e9).toLocaleString("id-ID",{maximumFractionDigits:2})+" M"; if(a>=1e6) return s+"Rp"+(a/1e6).toLocaleString("id-ID",{maximumFractionDigits:1})+" jt"; if(a>=1e3) return s+"Rp"+Math.round(a/1e3).toLocaleString("id-ID")+" rb"; return s+rp(a); }
 const pct=(n,d)=>n.toLocaleString("id-ID",{maximumFractionDigits:d==null?1:d})+"%";
@@ -91,7 +94,7 @@ STEPS.sort((a,b)=>(a.k==="know")-(b.k==="know"));
 const PRE=STEPS.filter(s=>s.k!=="know"), FIRSTK=STEPS.findIndex(s=>s.k==="know");
 // Isi dengan nomor WhatsApp bisnis (format 62812...), kosongkan untuk mode salin pesan saja.
 const WAITLIST_WA=import.meta.env.VITE_WAITLIST_WA||"";
-const S=Object.assign({ans:{},know1:{},step:0,unlocked:false,done:{},tab:"lap",lab:"rumah"},load()||{});
+const S=Object.assign({ans:{},know1:{},step:0,unlocked:false,done:{},tab:"lap",lab:"rumah"},DEMO?{ans:DEMO_ANS,unlocked:true,lapSeen:true}:(load()||{}));
 if(!S.know1) S.know1={};
 const OWNER_PREVIEW=(location.hash||"").replace("#","")==="pratinjau";
 let answered=false;
@@ -163,13 +166,14 @@ const GAINS=[
  ["Sahammu mungkin sudah syariah","Lebih dari separuh nilai pasar saham di BEI adalah saham syariah. Premium mengecek sahammu dengan aturan 2026.",false,"Bloomberg via Bisnis.com, 19 Feb 2026; POJK 8/2025",a=>hasInv(a,"saham")],
  ["Biaya kartu yang disepakati di awal","Kartu syariah memakai akad kafalah, qardh, dan ijarah, dengan biaya yang disepakati di depan.",false,"Fatwa DSN-MUI No. 54/DSN-MUI/X/2006",a=>a.bayar==="kk"||a.bayar==="paylater"]];
 const gainsFor=a=>GAINS.filter(x=>x[4](a)).slice(0,4);
-/* Retail / individual facts only (owner: target consumers). Sources in docs/facts-and-sources.md. */
+/* Mixed on purpose: everyday companies and markets next to ordinary investors, so the section speaks to non-religious readers too. Sources in docs/facts-and-sources.md. */
 const FACTS=[
+ ["56,8%","nilai pasar saham di Bursa Efek Indonesia berasal dari saham syariah: 631 saham per 18 Februari 2026.","Bloomberg via Bisnis.com, 19 Feb 2026"],
  ["93.548","orang membeli sukuk ritel SR025 pada 2026, terbanyak sepanjang sejarah sukuk ritel. Pembelian mulai Rp1 juta.","DJPPR Kemenkeu via Bareksa, 23 Sep 2026; OCBC, 19 Agu 2026"],
- ["56,66%","pembeli sukuk ritel SR025 adalah perempuan, dan 49,11% generasi milenial.","DJPPR Kemenkeu via Bareksa, 23 Sep 2026"],
+ ["10 tahun","Telkom, Indofood CBP, Kalbe Farma, dan Unilever Indonesia bertahan di indeks saham syariah JII selama 10 tahun.","IDX Channel, 20 Okt 2022"],
  ["217.157","investor saham syariah tercatat per Desember 2025, naik 28% dalam setahun.","BEI via Fortune Indonesia, 27 Feb 2026"],
- ["28,46 juta","orang membayar zakat pada 2024. Zakat, infak, dan sedekah yang terkumpul secara nasional mencapai Rp40,53 triliun.","Ketua BAZNAS via JawaPos, 27 Agu 2025"],
- ["Haji","Kalau kamu sudah mendaftar haji, setoranmu diterima lewat bank syariah atau unit usaha syariah yang ditunjuk BPKH.","UU 34/2014 Pasal 1 angka 7 dan Pasal 6"]];
+ ["4.246","proyek infrastruktur dibiayai sukuk negara, termasuk rel ganda di selatan Jawa dan Jembatan Youtefa di Jayapura.","Kemenkeu via Fortune Indonesia, 10 Mar 2022"],
+ ["£200 jt","Inggris jadi negara pertama di luar dunia Islam yang menerbitkan sukuk negara, pada 2014. Pesanannya sekitar £2,3 miliar.","GOV.UK, 25 Jun 2014"]];
 const factHTML=x=>`<article class="fact"><b class="num">${x[0]}</b><p>${x[1]}</p><span class="cite">${x[2]}</span></article>`;
 function scores(a){
   const val=id=>{ const st=STEPS.find(x=>x.id===id); const o=st.o.find(x=>x[0]===a[id]); return o?o[2]:50; };
@@ -273,9 +277,10 @@ function renderResult(){
   renderResultTail();
 }
 function firstTask(T){ const w=weakestP(SC); return T.find(t=>t.p===w&&t.ph===1)||T.find(t=>t.ph===1)||T[0]; }
-function natHTML(){ return `<div class="natrow"><span>Melek keuangan syariah (nasional)</span><b class="num">43,42%</b><div class="natbar"><i style="width:43.42%"></i></div></div>
-    <div class="natrow"><span>Memakai produk syariah (nasional)</span><b class="num">13,41%</b><div class="natbar"><i style="width:13.41%"></i></div></div>
-    <p class="small">${SC.inklusi?`Kamu sudah termasuk kelompok yang <b>memakai produk syariah</b>, sekitar 1 dari 7 penduduk.`:`Kamu belum termasuk kelompok yang memakai produk syariah. Itu juga kondisi sebagian besar penduduk.`}</p>`; }
+function natHTML(){ return `<p class="nat-big">${SC.inklusi?`Kamu termasuk <span class="hl">13 dari 100</span> orang Indonesia yang sudah memakai produk syariah.`:`Baru <span class="hl">13 dari 100</span> orang Indonesia yang memakai produk syariah. Kamu bisa jadi salah satunya.`}</p>
+    <div class="natrow"><span>Paham keuangan syariah</span><b class="num">43,42%</b><div class="natbar"><i style="width:43.42%"></i></div></div>
+    <div class="natrow"><span>Sudah memakai produknya</span><b class="num">13,41%</b><div class="natbar"><i style="width:13.41%"></i></div></div>
+    <p class="small muted">Banyak yang paham, tapi baru sedikit yang mulai.</p>`; }
 function renderResultTail(){ const T=tasks(S.ans), G=gainsFor(S.ans), p=persona(SC), PJ=project(SC,S.ans), weakest=weakestP(SC), g=guessOf(S.ans);
   $("r-ntask").textContent=T.length; $("r-ngain").textContent=G.length?`Ada ${G.length} keuntungan yang belum kamu ambil`:"Keuntungan yang sudah kamu ambil";
   $("pw-n").textContent=T.length; $("pw-sub").innerHTML=`<b>Dari ${SC.praktik}% ke sekitar ${PJ.praktik}% syariah dalam 90 hari.</b> <span class="muted">Rencanamu dimulai dari ${PILLARS[weakest].toLowerCase()}. ${G.length?`Ada ${G.length} keuntungan yang belum kamu ambil, lengkap dengan hitungan rupiahnya. `:""}Angka potensi adalah perkiraan kalau semua langkah dijalankan.</span>`;
@@ -307,7 +312,10 @@ armRestart($("r-redo")); armRestart($("f-redo"));
 let opener=null;
 function sheet(id,open){ const el=$(id); if(open){ if(el.hidden) opener=document.activeElement; el.hidden=false; const h=el.querySelector("h2"); if(h) h.focus(); } else if(!el.hidden){ el.hidden=true; if(opener&&document.contains(opener)) opener.focus(); opener=null; } }
 $("l-method").addEventListener("click",()=>sheet("method",true)); $("m-close").addEventListener("click",()=>sheet("method",false));
-$("r-unlock").addEventListener("click",()=>{ track("paywall_view"); $("pw-demo").hidden=true; sheet("paywall",true); });
+function openPaywall(from){ track("paywall_view",{from}); $("pw-demo").hidden=true; sheet("paywall",true); }
+$("r-unlock").addEventListener("click",()=>openPaywall("button"));
+/* every blurred preview is a door to the paywall; which one gets tapped tells us what people want to pay for */
+document.querySelectorAll(".tease[data-tease]").forEach(el=>{ el.addEventListener("click",()=>{ track("tease_click",{item:el.dataset.tease}); openPaywall(el.dataset.tease); }); el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); el.click(); } }); });
 $("pw-close").addEventListener("click",()=>sheet("paywall",false));
 ["paywall","method"].forEach(id=>$(id).addEventListener("click",e=>{ if(e.target.id===id) sheet(id,false); }));
 document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ sheet("paywall",false); sheet("method",false); } });
@@ -356,7 +364,7 @@ function renderLap(){
   document.querySelectorAll("#v-full .go-untung").forEach(b=>b.onclick=()=>{ selectTab("untung"); window.scrollTo(0,0); });
   document.querySelectorAll("#v-full .go-road").forEach(b=>b.onclick=()=>{ selectTab("road"); window.scrollTo(0,0); });
 }
-function selectTab(t){ S.tab=t; save(); document.querySelectorAll("[data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===t))); document.querySelectorAll(".tab").forEach(p=>p.hidden=(p.dataset.panel!==t)); }
+function selectTab(t){ if(S.tab!==t||!selectTab.n) track("tab_view",{tab:t,demo:DEMO}); selectTab.n=1; S.tab=t; save(); document.querySelectorAll("[data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===t))); document.querySelectorAll(".tab").forEach(p=>p.hidden=(p.dataset.panel!==t)); }
 document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>selectTab(b.dataset.tab)));
 const PH={1:["Fondasi","Hari 1–30"],2:["Pindahkan bertahap","Hari 31–60"],3:["Tumbuhkan","Hari 61–90"]};
 function mapSVG(T){
@@ -611,6 +619,6 @@ initConsent();
     if(r.status==="paid"){ S.unlocked=true; S.orderId=oid; save(); track("purchase_return",{orderId:oid}); history.replaceState(null,"",location.pathname); if(Object.keys(S.ans).length>=STEPS.length) openFull(); return; }
     if(r.status==="expired"||r.status==="failed"||r.status==="unknown") return;
     await new Promise(res=>setTimeout(res,3000)); } })();
-track("lp_view");
-if(S.unlocked && Object.keys(S.ans).length>=STEPS.length) openFull();
+if(DEMO){ track("sample_view"); openFull(); $("demo-bar").hidden=false; const m=document.querySelector("#v-full .meter"); if(m) m.hidden=true; }
+else { track("lp_view"); if(S.unlocked && Object.keys(S.ans).length>=STEPS.length) openFull(); }
 })();
