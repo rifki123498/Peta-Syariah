@@ -28,7 +28,7 @@ function limited(key: string, max: number, windowMs: number) {
 app.use("/api/*", async (c, next) => {
   const ip = c.req.header("cf-connecting-ip") || "local";
   const path = new URL(c.req.url).pathname;
-  const rule = path === "/api/checkout" ? [10, 60_000] : path === "/api/events" ? [120, 60_000] : null;
+  const rule = path === "/api/checkout" ? [10, 60_000] : path === "/api/events" ? [120, 60_000] : path.startsWith("/api/order/") ? [30, 60_000] : null;
   if (rule && limited(path + "|" + ip, rule[0], rule[1])) return c.json({ error: "rate_limited" }, 429);
   await next();
 });
@@ -37,7 +37,7 @@ const EVENT_NAMES = new Set([
   "lp_view", "quiz_start", "q_answer", "quiz_complete", "result_view", "share_save", "share_caption",
   "paywall_view", "checkout_start", "purchase_return", "consent", "wa_click", "feedback_click",
   "task_toggle", "ask_toggle", "catalog_filter", "scenario_tab", "owner_preview",
-  "tease_click", "tab_view", "sample_view",
+  "tease_click", "tab_view", "sample_view", "restore",
 ]);
 /* Our event name → Meta standard event for the Conversions API. */
 const CAPI_MAP: Record<string, string> = {

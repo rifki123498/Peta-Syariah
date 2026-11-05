@@ -1,4 +1,4 @@
-import { track as ptrack, initConsent, PRICE, ANCHOR, fmtRp, checkout, orderStatus, SHARE_URL } from "./platform.js";
+import { track as ptrack, initConsent, PRICE, ANCHOR, fmtRp, checkout, orderStatus, SHARE_URL, CONFIG } from "./platform.js";
 import { SHARE } from "./sharecard.js";
 import { initI18n, isEN, tr } from "./i18n.js";
 import { zakatTaxSaving, annualPkp, marginalRate, sukukVsDeposito } from "./finance.js";
@@ -143,7 +143,7 @@ function finish(){
   track("quiz_complete"); $("q-box").hidden=true; $("q-loading").hidden=false;
   const li=[...document.querySelectorAll("#q-checks li")]; li.forEach(x=>x.classList.remove("on"));
   li.forEach((x,i)=>setTimeout(()=>x.classList.add("on"),350*(i+1)));
-  setTimeout(()=>{ $("q-box").hidden=false; $("q-loading").hidden=true; renderResult(); show("v-result"); },350*li.length+500);
+  setTimeout(()=>{ $("q-box").hidden=false; $("q-loading").hidden=true; if(S.unlocked&&!DEMO){ openFull(); return; } renderResult(); show("v-result"); },350*li.length+500);
 }
 
 /* ================= SCORING ================= */
@@ -278,6 +278,8 @@ function renderResult(){
   $("r-nat").innerHTML=natHTML();
   renderResultTail();
 }
+/* Rough zakat→tax saving from the income bucket, single/no dependants assumed. Shown as the one unblurred number. */
+function hookZakat(){ if(S.ans.zakat==="resmi") return 0; const g=({4:4,8:8,15:15,35:35}[S.ans.inc]||0)*1e6; if(g<7640144) return 0; return Math.round(zakatTaxSaving(g,"TK/0",g*.025)/1000)*1000; }
 function firstTask(T){ const w=weakestP(SC); return T.find(t=>t.p===w&&t.ph===1)||T.find(t=>t.ph===1)||T[0]; }
 function natHTML(){ return `<p class="nat-big">${SC.inklusi?`Kamu termasuk <span class="hl">13 dari 100</span> orang Indonesia yang sudah memakai produk syariah.`:`Baru <span class="hl">13 dari 100</span> orang Indonesia yang memakai produk syariah. Kamu bisa jadi salah satunya.`}</p>
     <div class="natrow"><span>Paham keuangan syariah</span><b class="num">43,42%</b><div class="natbar"><i style="width:43.42%"></i></div></div>
@@ -285,9 +287,9 @@ function natHTML(){ return `<p class="nat-big">${SC.inklusi?`Kamu termasuk <span
     <p class="small muted">Banyak yang paham, tapi baru sedikit yang mulai.</p>`; }
 function renderResultTail(){ const T=tasks(S.ans), G=gainsFor(S.ans), p=persona(SC), PJ=project(SC,S.ans), weakest=weakestP(SC), g=guessOf(S.ans);
   $("r-ntask").textContent=T.length; $("r-ngain").textContent=G.length?`Ada ${G.length} keuntungan yang belum kamu ambil`:"Keuntungan yang sudah kamu ambil";
+  const h=hookZakat(); $("r-hook").innerHTML=h?`Satu di antaranya saja, zakat lewat lembaga resmi, bisa menghemat pajakmu sekitar <b>${rpS(h)} setahun</b>. Sisanya ada di Premium.`:""; $("r-hook").hidden=!h;
   $("pw-n").textContent=T.length; $("pw-sub").innerHTML=`<b>Dari ${SC.praktik}% ke sekitar ${PJ.praktik}% syariah dalam 90 hari.</b> <span class="muted">Rencanamu dimulai dari ${PILLARS[weakest].toLowerCase()}. ${G.length?`Ada ${G.length} keuntungan yang belum kamu ambil, lengkap dengan hitungan rupiahnya. `:""}Angka potensi adalah perkiraan kalau semua langkah dijalankan.</span>`;
   track("result_view",{pct:SC.praktik,badges:SC.badges,guess:g?g.v:null}); renderShare();
-  if(WAITLIST_WA){ const fb=isEN?`Hi, feedback for Peta Syariah. My result: ${SC.praktik}% sharia, level ${tr(p[0])}.\n\nMost useful: \nConfusing: \nDid the result feel right? `:`Halo, masukan untuk Peta Syariah. Hasil saya: ${SC.praktik}% syariah, level ${p[0]}.\n\nYang paling berguna: \nYang membingungkan: \nApakah hasilnya terasa pas? `; $("r-fb").href="https://wa.me/"+WAITLIST_WA+"?text="+encodeURIComponent(fb); $("r-fb").hidden=false; }
 }
 
 
@@ -320,7 +322,7 @@ $("r-unlock").addEventListener("click",()=>openPaywall("button"));
 document.querySelectorAll(".tease[data-tease]").forEach(el=>{ el.addEventListener("click",()=>{ track("tease_click",{item:el.dataset.tease}); openPaywall(el.dataset.tease); }); el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); el.click(); } }); });
 $("pw-close").addEventListener("click",()=>sheet("paywall",false));
 ["paywall","method"].forEach(id=>$(id).addEventListener("click",e=>{ if(e.target.id===id) sheet(id,false); }));
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ sheet("paywall",false); sheet("method",false); } });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ sheet("paywall",false); sheet("method",false); sheet("restore",false); } });
 /* paywall: one optional email field, then pay. Paying = accepting Syarat & Privasi (stated under the button). */
 const EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 if(S.buyer&&S.buyer.email) $("b-email").value=S.buyer.email;
@@ -337,21 +339,14 @@ $("pw-form").addEventListener("submit",async(e)=>{
   const co=await checkout({buyer:{email,consent:true}});
   if(co&&co.error==="bad_buyer"){ $("pw-pay").disabled=false; $("pw-pay").textContent=payLabel(); $("buy-err").textContent="Cek lagi alamat emailmu, atau kosongkan saja."; $("buy-err").hidden=false; return; }
   if(co&&co.mode==="redirect"&&co.url){ S.orderId=co.orderId; save(); location.href=co.url; return; }
-  $("pw-pay").textContent=payLabel();
-  const ord=co&&co.orderId?co.orderId:"";
-  const msg=isEN?`Hi, I'd like Peta Syariah Premium (${fmtRp(PRICE)}).${ord?` Order number: ${ord}.`:""} Please let me know when it can be bought.`:`Halo, saya mau Peta Syariah Premium (${fmtRp(PRICE)}).${ord?` Nomor pesanan: ${ord}.`:""} Kabari saya saat sudah bisa dibeli.`;
-  $("fd-msg").textContent=msg;
-  if(WAITLIST_WA){ $("fd-wa").href="https://wa.me/"+WAITLIST_WA+"?text="+encodeURIComponent(msg); $("fd-wa").hidden=false; }
-  $("pw-demo-go").hidden=!OWNER_PREVIEW; $("pw-form").hidden=true; $("pw-demo").hidden=false;
+  $("pw-pay").disabled=false; $("pw-pay").textContent=payLabel();
+  $("fd-msg").textContent=email?`Kami kabari ke ${email} begitu pembayaran dibuka.`:"Isi emailmu di atas supaya kami bisa mengabarimu begitu pembayaran dibuka.";
+  $("pw-demo-go").hidden=!OWNER_PREVIEW; if(email) $("pw-form").hidden=true; $("pw-demo").hidden=false;
 });
-$("fd-wa").addEventListener("click",()=>track("wa_click"));
-$("r-fb").addEventListener("click",()=>track("feedback_click"));
-$("fd-copy").addEventListener("click",()=>{ const t=$("fd-msg").textContent; const ok=()=>{ $("fd-copy").textContent="Tersalin"; };
-  try{ navigator.clipboard.writeText(t).then(ok,()=>{ const r=document.createRange(); r.selectNodeContents($("fd-msg")); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); $("fd-copy").textContent="Teks dipilih, salin manual"; }); }catch(_){} });
 $("pw-demo-go").addEventListener("click",()=>{ track("owner_preview",{price:PRICE}); S.unlocked=true; save(); sheet("paywall",false); openFull(); });
 
 /* ================= FULL ================= */
-function openFull(){ SC=scores(S.ans); show("v-full"); $("f-card").innerHTML=cardHTML(SC,false,project(SC,S.ans)); renderLap(); renderRoad(); initLab(); renderKat(); renderAkad(); renderSrc(); initUntung(); if(!S.lapSeen){ S.tab="lap"; S.lapSeen=true; } selectTab(S.tab&&document.querySelector(`[data-tab="${S.tab}"]`)?S.tab:"lap"); }
+function openFull(){ SC=scores(S.ans); show("v-full"); $("f-order").hidden=!S.orderId||DEMO; if(S.orderId) $("f-oid").textContent=S.orderId; $("f-card").innerHTML=cardHTML(SC,false,project(SC,S.ans)); renderLap(); renderRoad(); initLab(); renderKat(); renderAkad(); renderSrc(); initUntung(); if(!S.lapSeen){ S.tab="lap"; S.lapSeen=true; } selectTab(S.tab&&document.querySelector(`[data-tab="${S.tab}"]`)?S.tab:"lap"); }
 /* Premium report: everything the free result locks, plus a per-pillar breakdown. Short lines, actions as buttons. */
 function renderLap(){
   const T=tasks(S.ans), G=gainsFor(S.ans), PJ=project(SC,S.ans), p=persona(SC), first=firstTask(T);
@@ -533,7 +528,7 @@ function calcAlok(){
   give("invest", T.invest.c*I-T.invest.a, "sisa uang paling baik diarahkan ke sini");
   give("infak", T.infak.c*I-T.infak.a, "investasi sudah penuh");
   if(R>0){ T.sisa.a=R; led.push(`${rpS(R)} → Sisa: semua pos sudah penuh, jadi tidak dikembalikan ke belanja.`); R=0; }
-  const st=k=>{ const t=T[k]; if(t.f===null) return k==="wajib"?(t.a>.35*I?["over","lebih dari 35%, cek lagi"]:["actual","sesuai angkamu"]):["actual","kamu yang putuskan"]; const p=t.a/I; return p<t.f-1e-9?["under","kurang dari saran"]:p>t.c+1e-9?["over","lebih dari saran"]:["within","pas"]; };
+  const st=k=>{ const t=T[k]; if(t.f===null) return k==="wajib"?(t.a>.35*I?["over","lebih dari 35%, cek lagi"]:["actual","Sesuai"]):["actual","kamu yang putuskan"]; const p=t.a/I; const spend=k==="nafkah"||k==="gaya"; return p<t.f-1e-9?["under","Underperformed"]:p>t.c+1e-9?(spend?["over","Di atas saran"]:["within","Excellent"]):["within","Sesuai"]; };
   $("w-out").innerHTML=Object.keys(T).filter(k=>k!=="sisa"||T.sisa.a>0).map(k=>{ const t=T[k], p=t.a/I*100, [sc,sl]=st(k);
     const band=t.f!==null&&t.c!==null?`<span class="band" style="left:${t.f*100}%;width:${(t.c-t.f)*100}%"></span>`:"";
     return `<div class="wfrow"><div class="nm"><b>${t.n} <span class="chipst ${sc}">${sl}</span></b><span>${t.d}${t.f!==null&&t.c!==null?` · saran ${pct(t.f*100)}–${pct(t.c*100,0)}`:""}</span></div><div class="amt">${rpS(t.a)}<small>${pct(p)}</small></div><div class="wfbar" aria-hidden="true"><i style="width:${Math.min(100,p)}%"></i>${band}</div></div>`; }).join("")+
@@ -617,6 +612,30 @@ function calcUntung(){
   $("u-sres").innerHTML=`<p class="h">Deposito ke sukuk tabungan: ${sv.gain>=0?"+":"−"}${rp(Math.abs(sv.gain))} / tahun</p><p class="small">Bersih setahun: deposito ${rp(sv.deposito)} (pajak 20%) dan sukuk ${rp(sv.sukuk)} (pajak 10%). Sukuk tabungan hanya dijual di masa penawaran dan punya aturan pencairan sendiri.</p>`;
 }
 
+/* ---------- restore access on another device, no chat needed ---------- */
+function openRestore(){ $("rs-err").hidden=true; sheet("restore",true); }
+document.querySelectorAll(".go-restore").forEach(b=>b.addEventListener("click",e=>{ e.preventDefault(); sheet("paywall",false); openRestore(); }));
+$("rs-form").addEventListener("submit",async e=>{ e.preventDefault();
+  const id=$("rs-id").value.trim().toUpperCase(); const bad=m=>{ $("rs-err").textContent=m; $("rs-err").hidden=false; };
+  if(!/^PS-[A-F0-9]{8,14}$/.test(id)) return bad("Nomor pesanan diawali PS-, misalnya PS-1A2B3C4D5E6F. Cek email bukti bayarmu.");
+  $("rs-go").disabled=true; const r=await orderStatus(id); $("rs-go").disabled=false;
+  if(r.status!=="paid") return bad(r.status==="unknown"?"Nomor pesanan tidak ditemukan. Cek lagi penulisannya.":"Pesanan ini belum lunas.");
+  S.unlocked=true; S.orderId=id; save(); track("restore",{ok:true}); sheet("restore",false);
+  if(Object.keys(S.ans).length>=STEPS.length) openFull(); else { S.step=0; S.ans={}; show("v-quiz"); renderIntro1(); }
+});
+$("restore").addEventListener("click",e=>{ if(e.target.id==="restore") sheet("restore",false); });
+$("rs-close").addEventListener("click",()=>sheet("restore",false));
+
+/* ---------- sample report: show enough to want it, cut the rest ---------- */
+const DEMO_CUT={lap:["Ini laporan Dinda. Laporanmu disusun dari jawabanmu sendiri.",1150],untung:["Profil contoh ini bisa menghemat sekitar {U} setahun. Punyamu berapa?",620],road:["Dinda punya {N} langkah. Rencanamu berbeda, tergantung jawabanmu.",700],lab:["5 kalkulator. Di Premium, isi dengan angkamu sendiri.",620],kat:["14 produk, dengan tanda yang cocok untukmu.",760],akad:["9 akad, plus yang perlu dicek sebelum tanda tangan.",420]};
+function demoCuts(){ const own=load(); const done=own&&own.ans&&Object.keys(own.ans).length>=STEPS.length;
+  const cta=done?`<a class="btn gold" href="/?hasil&beli">Buka laporanku · ${fmtRp(PRICE)}</a>`:`<a class="btn gold" href="/">Cek punyamu gratis, 3 menit</a>`;
+  const U=$("u-total").textContent.replace(/^±\s*/,"").replace(/\s*\/\s*tahun.*/,"");
+  document.querySelectorAll("#v-full .tab").forEach(p=>{ const c=DEMO_CUT[p.dataset.panel]; if(!c||p.querySelector(".cut-cta")) return;
+    p.classList.add("demo-cut"); p.style.maxHeight=c[1]+"px";
+    p.insertAdjacentHTML("beforeend",`<div class="cut-cta"><p>${c[0].replace("{U}",U||"jutaan rupiah").replace("{N}",tasks(S.ans).length)}</p>${cta}</div>`); });
+  $("demo-cta").outerHTML=cta.replace('class="btn gold"','class="btn gold" id="demo-cta"'); }
+
 /* ---------- boot ---------- */
 document.querySelectorAll(".px").forEach(el=>el.textContent=fmtRp(PRICE));
 document.querySelectorAll(".px-was").forEach(el=>el.textContent=ANCHOR>PRICE?fmtRp(ANCHOR):"");
@@ -636,6 +655,9 @@ function lockDemo(){ const v=$("v-full"); v.classList.add("demo"); $("demo-bar")
   v.querySelectorAll("#w-mode button").forEach(b=>{ b.disabled=true; });
   v.querySelectorAll(".panel").forEach(p=>{ if(p.querySelector("input,select")&&!p.querySelector(".demo-lock")) p.insertAdjacentHTML("afterbegin",`<p class="demo-lock"><svg class='ic' viewBox='0 0 24 24' width='22' height='22' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V8a4 4 0 0 1 8 0v3'/></svg><span>Contoh. Di Premium, angka ini kamu ganti dengan angkamu sendiri.</span></p>`); });
   const road=$("road"); if(road&&!road.querySelector(".demo-lock")) road.insertAdjacentHTML("afterbegin",`<p class="demo-lock"><svg class='ic' viewBox='0 0 24 24' width='22' height='22' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V8a4 4 0 0 1 8 0v3'/></svg><span>Contoh. Di Premium, kamu bisa mencentang langkah yang sudah selesai.</span></p>`); }
-if(DEMO){ track("sample_view"); openFull(); lockDemo(); }
-else { track("lp_view"); if(S.unlocked && Object.keys(S.ans).length>=STEPS.length) openFull(); }
+if(DEMO){ track("sample_view"); openFull(); lockDemo(); demoCuts(); }
+else { const q=new URLSearchParams(location.search); track("lp_view");
+  if(S.unlocked && Object.keys(S.ans).length>=STEPS.length) openFull();
+  else if(q.has("hasil") && Object.keys(S.ans).length>=STEPS.length){ renderResult(); show("v-result"); if(q.has("beli")) openPaywall("sample"); }
+  else if(q.has("pulihkan")) openRestore(); }
 })();

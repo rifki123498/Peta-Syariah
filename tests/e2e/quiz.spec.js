@@ -39,6 +39,7 @@ test("Dinda profile scores 58%, level Istiqamah, 2 of 8 badges", async ({ page }
   await expect(page.locator("#r-bcount")).toHaveText("2 dari 8");
   await expect(page.locator("#r-gains li")).toHaveCount(4);
   await expect(page.locator("#r-gains")).toHaveClass(/blur/);
+  await expect(page.locator("#r-hook")).toContainText("setahun");
   await expect(page.locator("#r-ngain")).toHaveText("Ada 4 keuntungan yang belum kamu ambil");
   await expect(page.locator("#r-badges .badge span").first()).toBeHidden();
   await expect(page.locator("#r-guess")).toContainText("lebih syariah");
@@ -59,7 +60,8 @@ test("paywall needs no data; optional email is validated and stored", async ({ p
   await page.fill("#b-email", "dinda.e2e@example.com");
   await page.locator("#pw-pay").click();
   await expect(page.locator("#pw-demo")).toBeVisible();
-  await expect(page.locator("#fd-msg")).toContainText("Rp89.000");
+  await expect(page.locator("#fd-msg")).toContainText("Kami kabari ke dinda.e2e@example.com");
+  await expect(page.locator("#fd-wa")).toHaveCount(0);
   const rows = await (await request.get("/api/admin/orders?days=1", { headers: { authorization: "Bearer test-admin" } })).json();
   const mine = rows.orders.find((o) => o.buyer_email === "dinda.e2e@example.com");
   expect(mine).toBeTruthy();
@@ -71,6 +73,22 @@ test("paying without an email works", async ({ page }) => {
   await page.locator("#r-unlock").click();
   await page.locator("#pw-pay").click();
   await expect(page.locator("#pw-demo")).toBeVisible();
+  await expect(page.locator("#fd-msg")).toContainText("Isi emailmu");
+});
+
+test("restore access with an order number, no chat", async ({ page, request }) => {
+  const co = await (await request.post("/api/checkout", { data: { anonId: "e2e-r", price: 89000, arm: 0, buyer: BUYER } })).json();
+  await request.post("/api/webhooks/xendit", { headers: { "x-callback-token": "test-callback" }, data: { external_id: co.orderId, status: "PAID" } });
+  await page.goto("/?pulihkan");
+  await page.locator('#consent [data-c="no"]').click();
+  await expect(page.locator("#restore")).toBeVisible();
+  await page.fill("#rs-id", "PS-000");
+  await page.locator("#rs-go").click();
+  await expect(page.locator("#rs-err")).toContainText("diawali PS-");
+  await page.fill("#rs-id", co.orderId.toLowerCase());
+  await page.locator("#rs-go").click();
+  await expect(page.locator("#v-quiz")).toBeVisible();
+  expect(await page.evaluate(() => JSON.parse(localStorage.getItem("petasyariah.v2")).unlocked)).toBe(true);
 });
 
 test("checkout API rejects a bad email and a price outside the arms", async ({ request }) => {
@@ -146,6 +164,8 @@ test("sample report is the real Premium view for the example profile and leaves 
   await expect(page.locator("#demo-bar")).toBeVisible();
   await expect(page.locator("#lap-sum")).toContainText("58% →");
   await expect(page.locator("#lap-nat .nat-big")).toContainText("13 dari 100");
+  await expect(page.locator('[data-panel="lap"] .cut-cta')).toBeVisible();
+  await expect(page.locator('[data-panel="lap"] .cut-cta a')).toHaveText("Cek punyamu gratis, 3 menit");
   expect(await page.evaluate(() => localStorage.getItem("petasyariah.v2"))).toBeNull();
   await page.locator('[data-tab="untung"]').click();
   await expect(page.locator("#u-gross")).toBeDisabled();

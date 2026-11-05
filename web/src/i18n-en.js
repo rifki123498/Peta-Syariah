@@ -1,6 +1,16 @@
 /* Indonesian → English dictionary. Keys are exact visible text nodes (whitespace-collapsed, trimmed).
    Add an entry here whenever user-facing Indonesian copy changes; tests/e2e checks the EN lander for leftovers. */
 export const EN = {
+  "Sudah bayar di HP lain? Pulihkan akses": "Paid on another phone? Restore access",
+  "Pulihkan akses": "Restore access",
+  "Pulihkan akses Premium": "Restore Premium access",
+  "Masukkan nomor pesanan dari email bukti bayarmu. Akses langsung terbuka di HP ini.": "Enter the order number from your payment receipt email. Access opens on this phone right away.",
+  "Nomor pesanan": "Order number",
+  "Nomor pesanan diawali PS-, misalnya PS-1A2B3C4D5E6F. Cek email bukti bayarmu.": "Order numbers start with PS-, e.g. PS-1A2B3C4D5E6F. Check your receipt email.",
+  "Nomor pesanan tidak ditemukan. Cek lagi penulisannya.": "Order number not found. Check the spelling.",
+  "Pesanan ini belum lunas.": "This order hasn't been paid yet.",
+  "Isi emailmu di atas supaya kami bisa mengabarimu begitu pembayaran dibuka.": "Enter your email above so we can let you know when payments open.",
+  "Sisanya ada di Premium.": "The rest is in Premium.",
   "Apa yang kamu dapat?": "What do you get?",
   "Skor syariahmu (0–100%) dan levelmu": "Your sharia score (0–100%) and level",
   "Seberapa tepat tebakanmu": "How close your guess was",
