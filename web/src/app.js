@@ -91,7 +91,7 @@ STEPS.sort((a,b)=>(a.k==="know")-(b.k==="know"));
 const PRE=STEPS.filter(s=>s.k!=="know"), FIRSTK=STEPS.findIndex(s=>s.k==="know");
 // Isi dengan nomor WhatsApp bisnis (format 62812...), kosongkan untuk mode salin pesan saja.
 const WAITLIST_WA=import.meta.env.VITE_WAITLIST_WA||"";
-const S=Object.assign({ans:{},know1:{},step:0,unlocked:false,done:{},tab:"untung",lab:"rumah"},load()||{});
+const S=Object.assign({ans:{},know1:{},step:0,unlocked:false,done:{},tab:"lap",lab:"rumah"},load()||{});
 if(!S.know1) S.know1={};
 const OWNER_PREVIEW=(location.hash||"").replace("#","")==="pratinjau";
 let answered=false;
@@ -128,7 +128,7 @@ function renderIntro1(){ answered=true; S.step=0;
   const tag=$("q-tag"); tag.className="qtag"; tag.textContent="11 pertanyaan · sekitar 3 menit";
   $("q-text").textContent="Berapa persen keuanganmu yang sudah syariah?";
   $("q-hint").textContent="Semua pertanyaannya tentang kebiasaan keuanganmu sekarang. Tidak ada jawaban benar atau salah.";
-  $("q-terms").innerHTML='<span class="k">Yang kamu dapat di akhir, gratis</span><p>Persentase keuanganmu yang sudah syariah, dan levelmu</p><p>Lencana yang ternyata sudah kamu punya</p><p>Keuntungan yang belum kamu ambil</p><p>Satu langkah pertama untuk minggu ini</p><p class="muted">Tanpa login. Jawabanmu hanya disimpan di perangkat ini.</p>'; $("q-terms").hidden=false;
+  $("q-terms").innerHTML='<span class="k">Yang kamu dapat di akhir, gratis</span><p>Persentase keuanganmu yang sudah syariah, dan levelmu</p><p>Lencana yang ternyata sudah kamu punya</p><p>Perbandingan dengan tebakanmu</p><p>Kartu hasil untuk Instagram</p><p class="muted">Tanpa login. Jawabanmu hanya disimpan di perangkat ini.</p>'; $("q-terms").hidden=false;
   $("q-exp").hidden=true; $("q-next").hidden=true;
   $("q-opts").innerHTML='<button id="q-intro1go">Mulai →</button>';
   $("q-intro1go").addEventListener("click",()=>{ renderQ(); window.scrollTo(0,0); });
@@ -160,15 +160,16 @@ const GAINS=[
  ["Pajak setengah dari deposito","Imbal hasil sukuk negara ritel (ST dan SR) kena pajak final 10%, sedangkan bunga deposito 20%.",true,"PP 91/2021 (SBN); pajak deposito 20%",a=>a.tab==="konv"||a.tab==="campur"],
  ["Cicilan yang tidak berubah","Di murabahah, harga jual disepakati di awal, jadi cicilan tetap sampai lunas. Denda keterlambatan disalurkan untuk sosial, bukan jadi pendapatan bank.",false,"Fatwa DSN-MUI No. 04/DSN-MUI/IV/2000; No. 17/DSN-MUI/IX/2000",a=>a.goal==="rumah"||a.biaya==="konv"||a.biaya==="both"],
  ["Dana bersama milik peserta","Di asuransi syariah, dana tabarru' milik peserta bersama. Perusahaan mengelolanya dengan imbalan (ujrah) yang disebutkan di polis.",false,"Fatwa DSN-MUI No. 21/DSN-MUI/X/2001; No. 52/DSN-MUI/III/2006",a=>a.lindung!=="syariah"],
- ["Sahammu mungkin sudah syariah","Lebih dari separuh nilai pasar saham di BEI adalah saham syariah. Peta lengkap mengecek sahammu dengan aturan 2026.",false,"Bloomberg via Bisnis.com, 19 Feb 2026; POJK 8/2025",a=>hasInv(a,"saham")],
+ ["Sahammu mungkin sudah syariah","Lebih dari separuh nilai pasar saham di BEI adalah saham syariah. Premium mengecek sahammu dengan aturan 2026.",false,"Bloomberg via Bisnis.com, 19 Feb 2026; POJK 8/2025",a=>hasInv(a,"saham")],
  ["Biaya kartu yang disepakati di awal","Kartu syariah memakai akad kafalah, qardh, dan ijarah, dengan biaya yang disepakati di depan.",false,"Fatwa DSN-MUI No. 54/DSN-MUI/X/2006",a=>a.bayar==="kk"||a.bayar==="paylater"]];
 const gainsFor=a=>GAINS.filter(x=>x[4](a)).slice(0,4);
+/* Retail / individual facts only (owner: target consumers). Sources in docs/facts-and-sources.md. */
 const FACTS=[
- ["56,8%","nilai pasar saham di BEI berasal dari saham syariah: 631 saham per 18 Februari 2026.","Bloomberg via Bisnis.com, 19 Feb 2026"],
- ["10 tahun","Telkom, Indofood CBP, Kalbe Farma, dan Unilever Indonesia bertahan di indeks saham syariah JII selama 10 tahun.","IDX Channel, 20 Okt 2022"],
- ["4.246","proyek infrastruktur dibiayai sukuk negara, termasuk rel ganda di selatan Jawa dan Jembatan Youtefa di Jayapura.","Kemenkeu via Fortune Indonesia, 10 Mar 2022"],
- ["£200 jt","Inggris jadi negara pertama di luar dunia Islam yang menerbitkan sukuk negara, pada 2014. Pesanannya sekitar £2,3 miliar.","GOV.UK, 25 Jun 2014"],
- ["Rp5 T","XL Axiata membuka program sukuk ijarah korporasi pada 2015 untuk modal kerjanya.","Selular.id, 30 Okt 2015"]];
+ ["93.548","orang membeli sukuk ritel SR025 pada 2026, terbanyak sepanjang sejarah sukuk ritel. Pembelian mulai Rp1 juta.","DJPPR Kemenkeu via Bareksa, 23 Sep 2026; OCBC, 19 Agu 2026"],
+ ["56,66%","pembeli sukuk ritel SR025 adalah perempuan, dan 49,11% generasi milenial.","DJPPR Kemenkeu via Bareksa, 23 Sep 2026"],
+ ["217.157","investor saham syariah tercatat per Desember 2025, naik 28% dalam setahun.","BEI via Fortune Indonesia, 27 Feb 2026"],
+ ["28,46 juta","orang membayar zakat pada 2024. Zakat, infak, dan sedekah yang terkumpul secara nasional mencapai Rp40,53 triliun.","Ketua BAZNAS via JawaPos, 27 Agu 2025"],
+ ["Haji","Kalau kamu sudah mendaftar haji, setoranmu diterima lewat bank syariah atau unit usaha syariah yang ditunjuk BPKH.","UU 34/2014 Pasal 1 angka 7 dan Pasal 6"]];
 const factHTML=x=>`<article class="fact"><b class="num">${x[0]}</b><p>${x[1]}</p><span class="cite">${x[2]}</span></article>`;
 function scores(a){
   const val=id=>{ const st=STEPS.find(x=>x.id===id); const o=st.o.find(x=>x[0]===a[id]); return o?o[2]:50; };
@@ -250,27 +251,33 @@ function tasks(a){
 }
 
 /* ================= RESULT ================= */
+function badgesHTML(){ return BADGES.map(b=>{ const on=b[2](S.ans); return `<div class="badge${on?"":" off"}"><b>${on?"✓":"○"} ${b[0]}</b><span>${on?b[1]:"Belum terbuka"}</span></div>`; }).join(""); }
+function gainsHTML(G,paid){ return G.map(x=>`<li><div><b>${x[0]}</b><p class="small muted">${x[1]}</p><p class="cite">${x[3]}</p></div>${paid?(x[2]?`<button class="lockchip go-untung" type="button">Hitung rupiahnya →</button>`:""):`<span class="lockchip">${x[2]?"Rp ••• / tahun":"Premium"}</span>`}</li>`).join("")||`<li><div><b>Hampir semua keuntungan utama sudah kamu ambil.</b><p class="small muted">Premium membantu menjaga dan merapikan sisanya.</p></div></li>`; }
 let SC=null;
 function renderResult(){
   SC=scores(S.ans); const T=tasks(S.ans); const p=persona(SC);
   const PJ=project(SC,S.ans); $("r-card").innerHTML=cardHTML(SC,false,PJ);
-  const GL={simpan:"Uang yang siap dipakai: rekening, tabungan, dana darurat",transaksi:"Cara kamu membayar kebutuhan sehari-hari",pembiayaan:"Cicilan rumah atau kendaraan dan akadnya",lindung:"Asuransi kesehatan dan jiwa",investasi:"Ke mana uangmu dikembangkan",zakat:"Zakat, infak, sedekah, dan wakaf"};
-  $("r-gloss").innerHTML=Object.keys(PILLARS).map(k=>`<li><b>${PILLARS[k]}</b>${GL[k]}</li>`).join(""); const c=$("r-card"); c.classList.remove("reveal"); void c.offsetWidth; c.classList.add("reveal");
+  const c=$("r-card"); c.classList.remove("reveal"); void c.offsetWidth; c.classList.add("reveal");
   const g=guessOf(S.ans);
   if(g){ const d=SC.praktik-g.v; $("r-guess").innerHTML=`<span class="k">Tebakanmu vs hasil hitungan</span><div class="vs"><div><b class="num">${g.label}</b><span>tebakanmu</span></div><div class="hit"><b class="num">${SC.praktik}%</b><span>hasil hitungan</span></div></div><p class="small">${d>=10?"Keuanganmu ternyata <b>lebih syariah</b> dari yang kamu kira. Lencana di bawah menunjukkan bagian mana saja.":d<=-10?"Ada bagian yang ternyata belum syariah. Lihat lencana yang belum terbuka di bawah.":"Tebakanmu cukup tepat. Kamu kenal keuanganmu sendiri."}</p>`; }
   $("r-guess").hidden=!g;
-  $("r-badges").innerHTML=BADGES.map(b=>{ const on=b[2](S.ans); return `<div class="badge${on?"":" off"}"><b>${on?"✓":"○"} ${b[0]}</b><span>${on?b[1]:"Belum terbuka"}</span></div>`; }).join("");
+  $("r-badges").innerHTML=badgesHTML();
   $("r-bcount").textContent=SC.badges+" dari "+BADGES.length;
   const G=gainsFor(S.ans);
-  $("r-gains").innerHTML=G.map(x=>`<li><div><b>${x[0]}</b><p class="small muted">${x[1]}</p><p class="cite">${x[3]}</p></div><span class="lockchip">${x[2]?"Rp ••• / tahun":"dihitung di peta lengkap"}</span></li>`).join("")||`<li><div><b>Hampir semua keuntungan utama sudah kamu ambil.</b><p class="small muted">Peta lengkap membantu menjaga dan merapikan sisanya.</p></div></li>`;
-  $("r-facts").innerHTML=FACTS.map(factHTML).join("");
+  $("r-gains").innerHTML=gainsHTML(G,false);
   const weakest=weakestP(SC);
-  const first=T.find(t=>t.p===weakest&&t.ph===1)||T.find(t=>t.ph===1)||T[0];
-  $("r-first").innerHTML=`<span class="k">Langkah pertamamu minggu ini</span><h3>${first.t}</h3><p class="small muted">${first.w}</p>`;
-  $("r-nat").innerHTML=`<div class="natrow"><span>Melek keuangan syariah (nasional)</span><b class="num">43,42%</b><div class="natbar"><i style="width:43.42%"></i></div></div>
+  const first=firstTask(T);
+  $("r-first").innerHTML=`<h3>${first.t}</h3><p class="small muted">${first.w}</p>`;
+  $("r-road").innerHTML=T.slice(0,3).map(t=>`<p>${t.t}</p>`).join("");
+  $("r-nat").innerHTML=natHTML();
+  renderResultTail();
+}
+function firstTask(T){ const w=weakestP(SC); return T.find(t=>t.p===w&&t.ph===1)||T.find(t=>t.ph===1)||T[0]; }
+function natHTML(){ return `<div class="natrow"><span>Melek keuangan syariah (nasional)</span><b class="num">43,42%</b><div class="natbar"><i style="width:43.42%"></i></div></div>
     <div class="natrow"><span>Memakai produk syariah (nasional)</span><b class="num">13,41%</b><div class="natbar"><i style="width:13.41%"></i></div></div>
-    <p class="small">${SC.inklusi?`Kamu sudah termasuk kelompok yang <b>memakai produk syariah</b>, sekitar 1 dari 7 penduduk.`:`Kamu belum termasuk kelompok yang memakai produk syariah. Itu juga kondisi sebagian besar penduduk.`}</p>`;
-  $("r-pname").textContent=p[0]; $("r-ntask").textContent=T.length+" "; $("r-ngain").textContent=G.length+" keuntungan";
+    <p class="small">${SC.inklusi?`Kamu sudah termasuk kelompok yang <b>memakai produk syariah</b>, sekitar 1 dari 7 penduduk.`:`Kamu belum termasuk kelompok yang memakai produk syariah. Itu juga kondisi sebagian besar penduduk.`}</p>`; }
+function renderResultTail(){ const T=tasks(S.ans), G=gainsFor(S.ans), p=persona(SC), PJ=project(SC,S.ans), weakest=weakestP(SC), g=guessOf(S.ans);
+  $("r-ntask").textContent=T.length; $("r-ngain").textContent=G.length?`Ada ${G.length} keuntungan yang belum kamu ambil`:"Keuntungan yang sudah kamu ambil";
   $("pw-n").textContent=T.length; $("pw-sub").innerHTML=`<b>Dari ${SC.praktik}% ke sekitar ${PJ.praktik}% syariah dalam 90 hari.</b> <span class="muted">Rencanamu dimulai dari ${PILLARS[weakest].toLowerCase()}. ${G.length?`Ada ${G.length} keuntungan yang belum kamu ambil, lengkap dengan hitungan rupiahnya. `:""}Angka potensi adalah perkiraan kalau semua langkah dijalankan.</span>`;
   track("result_view",{pct:SC.praktik,badges:SC.badges,guess:g?g.v:null}); renderShare();
   if(WAITLIST_WA){ const fb=isEN?`Hi, feedback for Peta Syariah. My result: ${SC.praktik}% sharia, level ${tr(p[0])}.\n\nMost useful: \nConfusing: \nDid the result feel right? `:`Halo, masukan untuk Peta Syariah. Hasil saya: ${SC.praktik}% syariah, level ${p[0]}.\n\nYang paling berguna: \nYang membingungkan: \nApakah hasilnya terasa pas? `; $("r-fb").href="https://wa.me/"+WAITLIST_WA+"?text="+encodeURIComponent(fb); $("r-fb").hidden=false; }
@@ -322,7 +329,7 @@ $("pw-form").addEventListener("submit",async(e)=>{
   if(co&&co.mode==="redirect"&&co.url){ S.orderId=co.orderId; save(); location.href=co.url; return; }
   $("pw-pay").textContent=payLabel();
   const ord=co&&co.orderId?co.orderId:"";
-  const msg=isEN?`Hi, I'd like the Peta Syariah full map (${fmtRp(PRICE)}).${ord?` Order number: ${ord}.`:""} Please let me know when it can be bought.`:`Halo, saya mau Peta Syariah lengkap (${fmtRp(PRICE)}).${ord?` Nomor pesanan: ${ord}.`:""} Kabari saya saat sudah bisa dibeli.`;
+  const msg=isEN?`Hi, I'd like Peta Syariah Premium (${fmtRp(PRICE)}).${ord?` Order number: ${ord}.`:""} Please let me know when it can be bought.`:`Halo, saya mau Peta Syariah Premium (${fmtRp(PRICE)}).${ord?` Nomor pesanan: ${ord}.`:""} Kabari saya saat sudah bisa dibeli.`;
   $("fd-msg").textContent=msg;
   if(WAITLIST_WA){ $("fd-wa").href="https://wa.me/"+WAITLIST_WA+"?text="+encodeURIComponent(msg); $("fd-wa").hidden=false; }
   $("pw-demo-go").hidden=!OWNER_PREVIEW; $("pw-form").hidden=true; $("pw-demo").hidden=false;
@@ -334,7 +341,21 @@ $("fd-copy").addEventListener("click",()=>{ const t=$("fd-msg").textContent; con
 $("pw-demo-go").addEventListener("click",()=>{ track("owner_preview",{price:PRICE}); S.unlocked=true; save(); sheet("paywall",false); openFull(); });
 
 /* ================= FULL ================= */
-function openFull(){ SC=scores(S.ans); show("v-full"); $("f-card").innerHTML=cardHTML(SC,false,project(SC,S.ans)); renderRoad(); initLab(); renderKat(); renderAkad(); renderSrc(); initUntung(); selectTab(S.tab||"untung"); }
+function openFull(){ SC=scores(S.ans); show("v-full"); $("f-card").innerHTML=cardHTML(SC,false,project(SC,S.ans)); renderLap(); renderRoad(); initLab(); renderKat(); renderAkad(); renderSrc(); initUntung(); if(!S.lapSeen){ S.tab="lap"; S.lapSeen=true; } selectTab(S.tab&&document.querySelector(`[data-tab="${S.tab}"]`)?S.tab:"lap"); }
+/* Premium report: everything the free result locks, plus a per-pillar breakdown. Short lines, actions as buttons. */
+function renderLap(){
+  const T=tasks(S.ans), G=gainsFor(S.ans), PJ=project(SC,S.ans), p=persona(SC), first=firstTask(T);
+  const next=k=>{ const t=T.find(x=>x.p===k); return t?t.t:"Sudah baik. Tinggal dijaga."; };
+  $("lap-sum").innerHTML=`<div class="stat"><span>Sekarang → potensi</span><b class="num">${SC.praktik}% → ${PJ.praktik}%</b></div><div class="stat"><span>Level</span><b>${p[0]}</b></div><div class="stat"><span>Lencana</span><b class="num">${SC.badges}/8</b></div><div class="stat"><span>Keuntungan belum diambil</span><b class="num">${G.length}</b></div>`;
+  $("lap-pillars").innerHTML=Object.keys(PILLARS).map(k=>`<div class="lp"><div class="lp-t"><b>${PILLARS[k]}</b><span class="num">${SC[k]}${PJ[k]>SC[k]?" → "+PJ[k]:""}</span></div><div class="bar"><i style="width:${SC[k]}%"></i><i class="pot" style="left:${SC[k]}%;width:${Math.max(0,PJ[k]-SC[k])}%"></i></div><p class="small muted">${next(k)}</p></div>`).join("");
+  $("lap-badges").innerHTML=badgesHTML();
+  $("lap-gains").innerHTML=gainsHTML(G,true);
+  $("lap-first").innerHTML=`<h3>${first.t}</h3><p class="small muted">${first.w}</p>`;
+  $("lap-nat").innerHTML=natHTML();
+  $("lap-facts").innerHTML=FACTS.map(factHTML).join("");
+  document.querySelectorAll("#v-full .go-untung").forEach(b=>b.onclick=()=>{ selectTab("untung"); window.scrollTo(0,0); });
+  document.querySelectorAll("#v-full .go-road").forEach(b=>b.onclick=()=>{ selectTab("road"); window.scrollTo(0,0); });
+}
 function selectTab(t){ S.tab=t; save(); document.querySelectorAll("[data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b.dataset.tab===t))); document.querySelectorAll(".tab").forEach(p=>p.hidden=(p.dataset.panel!==t)); }
 document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>selectTab(b.dataset.tab)));
 const PH={1:["Fondasi","Hari 1–30"],2:["Pindahkan bertahap","Hari 31–60"],3:["Tumbuhkan","Hari 61–90"]};
@@ -349,7 +370,7 @@ function mapSVG(T){
 }
 function renderRoad(){
   const T=tasks(S.ans);
-  $("road").innerHTML=`<div><p class="eyebrow">Rencana tahap ${persona(SC)[0]}</p><h2>${T.length} langkah dalam 90 hari</h2><p class="muted" style="margin-top:6px">Urutannya disengaja: fondasi dulu (tabungan, dana darurat, zakat), baru memindahkan produk besar, lalu menumbuhkan. Tidak ada yang harus dipindahkan sekaligus.</p></div><div class="panel" id="road-map">${mapSVG(T)}</div>`+
+  $("road").innerHTML=`<div><p class="eyebrow">Rencana tahap ${persona(SC)[0]}</p><h2>${T.length} langkah dalam 90 hari</h2><p class="muted" style="margin-top:6px">Fondasi dulu, lalu pindahkan produk besar, lalu tumbuhkan. Tidak ada yang harus pindah sekaligus.</p></div><div class="panel" id="road-map">${mapSVG(T)}</div>`+
   [1,2,3].map(ph=>{ const L=T.filter(t=>t.ph===ph); if(!L.length) return "";
     return `<div class="phase"><div class="phase-h"><h3>Fase ${ph} · ${PH[ph][0]}</h3><span>${PH[ph][1]}</span></div>`+L.map(t=>`<div class="task${S.done[t.id]?" done":""}" data-id="${t.id}"><input type="checkbox" id="ck-${t.id}" ${S.done[t.id]?"checked":""}><div><h3><label for="ck-${t.id}" style="font:inherit;margin:0;display:inline">${t.t}</label></h3><p class="small muted" style="margin-top:4px">${t.w}</p><div class="meta"><span class="chip p">${PILLARS[t.p]}</span><span class="chip">${t.d}</span>${t.src.length?`<span class="chip f">${t.src.length} rujukan</span>`:""}</div><details><summary>Cara melakukannya</summary><ul>${t.how.map(h=>`<li>${h}</li>`).join("")}</ul>${t.watch?`<div class="watch"><b>Perlu diwaspadai:</b> ${t.watch}</div>`:""}${t.ask?`<p class="small" style="margin-top:8px"><b>Tanyakan ke penyedia, lalu centang:</b></p><ul class="asklist">${t.ask.map((q,i)=>{ const id=t.id+"-q"+i, on=!!(S.qc&&S.qc[id]); return `<li><label><input type="checkbox" data-q="${id}" ${on?"checked":""}><span class="${on?"done-q":""}">${q}</span></label></li>`; }).join("")}</ul><p class="small muted" style="margin-top:4px">${t.ask.filter((q,i)=>S.qc&&S.qc[t.id+"-q"+i]).length} dari ${t.ask.length} terjawab</p>`:""}${t.src.length?`<p class="cite" style="margin-top:8px">${t.src.map(f).join("<br>")}</p>`:""}</details></div></div>`).join("")+`</div>`; }).join("");
   $("road").querySelectorAll("input[data-q]").forEach(cb=>cb.addEventListener("change",()=>{ S.qc=S.qc||{}; S.qc[cb.dataset.q]=cb.checked; save(); cb.nextElementSibling.classList.toggle("done-q",cb.checked); const ul=cb.closest(".asklist"); const n=[...ul.querySelectorAll("input")].filter(x=>x.checked).length; ul.nextElementSibling.textContent=n+" dari "+ul.querySelectorAll("input").length+" terjawab"; track("ask_toggle",{q:cb.dataset.q,on:cb.checked}); }));
@@ -555,7 +576,7 @@ const AKAD=[
  ["Kafalah","كفالة","Penjaminan","Pihak ketiga menjamin kewajiban pihak lain.","Dipakai di kartu syariah: bank menjamin pembayaranmu ke merchant.","11",["Imbalan penjaminan disebutkan jelas","Denda keterlambatan disalurkan ke dana sosial"]],
  ["Tabarru'","تبرع","Hibah tolong-menolong","Kontribusi peserta ke dana bersama untuk saling menanggung risiko.","Dana tabarru' milik peserta bersama, bukan milik perusahaan asuransi.","21",["Dana tabarru' terpisah dari dana investasi","Besaran ujrah disebutkan","Aturan pembagian surplus tertulis","Penanggungnya benar perusahaan atau unit syariah berizin"]]];
 $("l-facts").innerHTML=FACTS.map(factHTML).join("");
-function renderAkad(){ $("akad-list").innerHTML=AKAD.map(a=>`<article><span class="ar" lang="ar" dir="rtl">${a[1]}</span><h3>${a[0]} <span class="muted small" style="font-weight:500">· ${a[2]}</span></h3><p class="small">${a[3]}</p><p class="myth"><b>Salah kaprah:</b> ${a[4]}</p>${a[6]?`<details><summary class="small" style="color:var(--teal);font-weight:700;cursor:pointer">Cek di akadmu sebelum tanda tangan</summary><ul class="akcheck">${a[6].map(x=>`<li>${x}</li>`).join("")}</ul></details>`:""}<p class="cite">${f(a[5])}</p></article>`).join(""); }
+function renderAkad(){ $("akad-list").innerHTML=AKAD.map(a=>`<details class="akd"><summary><span class="ar" lang="ar" dir="rtl">${a[1]}</span><span><b>${a[0]}</b><span class="muted small"> · ${a[2]}</span></span></summary><p class="small">${a[3]}</p><p class="myth"><b>Salah kaprah:</b> ${a[4]}</p>${a[6]?`<p class="small"><b>Cek di akadmu sebelum tanda tangan</b></p><ul class="akcheck">${a[6].map(x=>`<li>${x}</li>`).join("")}</ul>`:""}${a[5]?`<p class="cite">${f(a[5])}</p>`:""}</details>`).join(""); }
 function renderSrc(){ const keys=Object.keys(FT); $("src-list").innerHTML=keys.map(k=>`<li>${f(k)}</li>`).join("")+OTHER.map(o=>`<li><a href="${o[1]}" target="_blank" rel="noopener">${o[0]}</a></li>`).join(""); }
 
 /* ================= VIEWS ================= */
@@ -573,7 +594,7 @@ function initUntung(){
 function calcUntung(){
   const g=num("u-gross",15)*1e6, st=$("u-ptkp").value, z=num("u-zakat",0)*1e6, d=num("u-dep",0)*1e6, dr=num("u-deprate",4.5), sr=num("u-sukrate",6.4);
   const zs=zakatTaxSaving(g,st,z), pkp=annualPkp(g,st), mr=marginalRate(pkp), sv=sukukVsDeposito(d,dr,sr), tot=Math.max(0,zs)+Math.max(0,sv.gain);
-  $("u-total").innerHTML=`<p class="h num">± ${rp(tot)} / tahun</p><p class="small">Perkiraan keuntungan dari dua langkah di bawah, sekitar ${Math.max(0,Math.round(tot/PRICE))}× harga peta lengkap.</p>`;
+  $("u-total").innerHTML=`<p class="h num">± ${rp(tot)} / tahun</p><p class="small">Perkiraan keuntungan dari dua langkah di bawah, sekitar ${Math.max(0,Math.round(tot/PRICE))}× harga Premium.</p>`;
   $("u-zres").innerHTML=`<p class="h">Zakat lewat lembaga resmi: ± ${rp(zs)} / tahun</p><p class="small">Zakat ${rp(z*12)} setahun mengurangi penghasilan kena pajakmu (perkiraan ${rpS(pkp)} setahun, tarif tertinggi ${pct(mr*100,0)}). Syaratnya dibayar lewat BAZNAS atau LAZ resmi dengan bukti setor ber-NPWP.</p>`;
   $("u-sres").innerHTML=`<p class="h">Deposito ke sukuk tabungan: ${sv.gain>=0?"+":"−"}${rp(Math.abs(sv.gain))} / tahun</p><p class="small">Bersih setahun: deposito ${rp(sv.deposito)} (pajak 20%) dan sukuk ${rp(sv.sukuk)} (pajak 10%). Sukuk tabungan hanya dijual di masa penawaran dan punya aturan pencairan sendiri.</p>`;
 }
@@ -581,7 +602,7 @@ function calcUntung(){
 /* ---------- boot ---------- */
 document.querySelectorAll(".px").forEach(el=>el.textContent=fmtRp(PRICE));
 document.querySelectorAll(".px-was").forEach(el=>el.textContent=ANCHOR>PRICE?fmtRp(ANCHOR):"");
-document.querySelectorAll(".px-save").forEach(el=>el.textContent=fmtRp(ANCHOR-PRICE));
+document.querySelectorAll(".px-save").forEach(el=>el.textContent=Math.floor((ANCHOR-PRICE)/ANCHOR*100)+"%");
 if(!(ANCHOR>PRICE)) document.querySelectorAll(".tag-promo").forEach(el=>el.hidden=true);
 initI18n();
 initConsent();

@@ -28,7 +28,7 @@ test("lander shows verified facts, consent bar and price arm", async ({ page }) 
   await expect(page.locator("#l-facts .fact")).toHaveCount(5);
   await expect(page.locator(".px").first()).toHaveText("Rp89.000");
   await expect(page.locator(".px-was").first()).toHaveText("Rp149.000");
-  await expect(page.locator(".tag-promo").first()).toHaveText("Harga spesial · hemat Rp60.000");
+  await expect(page.locator(".tag-promo").first()).toHaveText("Harga spesial · hemat 40%");
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize().width);
 });
 
@@ -38,6 +38,9 @@ test("Dinda profile scores 58%, level Istiqamah, 2 of 8 badges", async ({ page }
   await expect(page.locator("#r-card")).toContainText("Istiqamah");
   await expect(page.locator("#r-bcount")).toHaveText("2 dari 8");
   await expect(page.locator("#r-gains li")).toHaveCount(4);
+  await expect(page.locator("#r-gains")).toHaveClass(/blur/);
+  await expect(page.locator("#r-ngain")).toHaveText("Ada 4 keuntungan yang belum kamu ambil");
+  await expect(page.locator("#r-badges .badge span").first()).toBeHidden();
   await expect(page.locator("#r-guess")).toContainText("lebih syariah");
   const src = await page.locator("#sh-img").getAttribute("src");
   expect(src).toMatch(/^data:image\/png/);
@@ -111,13 +114,19 @@ test("English mode translates lander, quiz and result", async ({ page }) => {
   await expect(page.locator("#pw-sub")).toContainText("From 58% to about");
 });
 
-test("paid order unlocks the full map with the Keuntungan tab", async ({ page, request }) => {
+test("paid order opens the Premium report, then the Keuntungan tab", async ({ page, request }) => {
   await runQuiz(page);
   const co = await (await request.post("/api/checkout", { data: { anonId: "e2e", price: 89000, arm: 0, buyer: BUYER } })).json();
   const hook = await request.post("/api/webhooks/xendit", { headers: { "x-callback-token": "test-callback" }, data: { external_id: co.orderId, status: "PAID" } });
   expect(hook.ok()).toBeTruthy();
   await page.goto("/?order=" + co.orderId);
   await expect(page.locator("#v-full")).toBeVisible({ timeout: 15_000 });
+  await expect(page.locator('[data-panel="lap"]')).toBeVisible();
+  await expect(page.locator("#lap-sum")).toContainText("58% →");
+  await expect(page.locator("#lap-gains li")).toHaveCount(4);
+  await expect(page.locator("#lap-badges .badge span").first()).toBeVisible();
+  await page.locator("#lap-gains .go-untung").first().click();
+  await expect(page.locator('[data-panel="untung"]')).toBeVisible();
   await expect(page.locator("#u-total")).toContainText("/ tahun");
   await page.fill("#u-gross", "16");
   await page.fill("#u-zakat", "0.375");

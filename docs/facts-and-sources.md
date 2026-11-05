@@ -16,7 +16,17 @@ Only facts listed here may appear in the product. Re-check items marked **refres
 | Nisab zakat penghasilan 2026 Rp7.640.144/bulan | SK Ketua BAZNAS No. 15 Tahun 2026 (via Suara Surabaya, 25 Feb 2026) | **refresh** yearly |
 | Literasi keuangan syariah 43,42%, inklusi 13,41% | SNLIK 2025, OJK–BPS (via Kontan, 4 Mei 2025) | |
 
-## "Syariah ada di tempat yang nggak kamu sangka"
+## "Banyak orang seperti kamu sudah mulai" (retail/individual facts, used on lander and in Premium)
+| Fact | Source | Note |
+|---|---|---|
+| SR025: 93.548 investor, terbanyak sepanjang sejarah SBSN ritel; penjualan Rp29,77 T; 56,66% investor perempuan; 49,11% milenial | DJPPR Kemenkeu via Bareksa, 23 Sep 2026: https://www.bareksa.com/berita/sbn/2026-09-23/penjualan-sr025-rekor-rp2977-triliun-ini-artinya-bagi-investor-sbn-sbr015 | refresh with the next SR series |
+| SR025 minimum pembelian Rp1 juta | OCBC, 19 Agu 2026: https://www.ocbc.id/id/article/2026/08/19/cara-beli-sr025-online-syarat-minimal-pembelian-dan-langkah-investasinya | |
+| SR023: 43.160 investor; 56,75% perempuan; 45,44% milenial | Investortrust, 18 Sep 2025: https://investortrust.id/macro/79471/penjualan-sukuk-ritel-sr023-capai-rp18-72-triliun-didominasi-generasi-muda-dan-investor-perempuan | backup, not in copy |
+| 217.157 investor saham syariah per Des 2025, naik 28% yoy (data BEI) | Fortune Indonesia, 27 Feb 2026: https://www.fortuneidn.com/sharia/investor-saham-syariah-tembus-217-ribu-tumbuh-28-00-4vfn9-fj7ks1 | refresh yearly |
+| 2024: 28,46 juta muzaki; ZIS nasional Rp40,53 T (Ketua BAZNAS, Rakornas 26 Agu 2025) | JawaPos, 27 Agu 2025: https://www.jawapos.com/nasional/2508270311/penghimpunan-zakat-nasional-naik-signifikan-lima-tahun-terakhir-capai-rp-4053-triliun-sepanjang-2024 | |
+| BPS BPIH = Bank Umum Syariah dan/atau UUS yang ditunjuk BPKH; setoran BPIH dibayar ke rekening atas nama BPKH melalui BPS BPIH | UU 34/2014 Pasal 1 angka 7 dan Pasal 6 ayat (2): https://jdih.kemenkeu.go.id/api/download/fulltext/2014/34TAHUN2014UU.htm | |
+
+## Corporate / market facts (not used in product copy since 5 Nov 2026; owner wants consumer examples)
 | Fact | Source | Note |
 |---|---|---|
 | 631 saham syariah; 56,8% kapitalisasi pasar BEI (per 18 Feb 2026) | Bloomberg via Bisnis.com, 19 Feb 2026: https://market.bisnis.com/read/20260219/7/1954009/ada-600-an-saham-syariah-di-bei-kapitalisasi-pasar-berkontribusi-568 | **refresh** each DES period |

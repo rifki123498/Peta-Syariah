@@ -15,6 +15,7 @@ const rpJt = (s) => s.replace(/Rp([\d.,]+) jt/g, "Rp$1 million");
 const PATTERNS = [
   [/^Pertanyaan (\d+)\/(\d+)$/, (m) => `Question ${m[1]}/${m[2]}`],
   [/^(\d+) dari (\d+)$/, (m) => `${m[1]} of ${m[2]}`],
+  [/^Ada (\d+) keuntungan yang belum kamu ambil$/, (m) => `${m[1]} benefit${m[1] === "1" ? "" : "s"} you haven't claimed yet`],
   [/^(\d+) keuntungan$/, (m) => `${m[1]} benefit${m[1] === "1" ? "" : "s"}`],
   [/^Level (.+)$/, (m) => `Level ${tr(m[1])}`],
   [/^Dari (\d+)% ke sekitar (\d+)% syariah dalam 90 hari\.$/, (m) => `From ${m[1]}% to about ${m[2]}% sharia in 90 days.`],

@@ -405,6 +405,66 @@ body.has-consent{padding-bottom:170px}
 .px-was:empty{display:none}
 .amt .px-was{display:block;font-size:.5em;line-height:1.2}
 .tag-promo{display:inline-block;background:var(--lime);color:var(--on-lime);border:2px solid var(--ink);border-radius:999px;padding:2px 10px;font-size:.74rem;font-weight:800;margin-bottom:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ic{flex:0 0 auto;vertical-align:middle}
+.cmp{border:2px solid var(--ink);border-radius:16px;background:var(--surface);overflow:hidden;max-width:720px;box-shadow:var(--shadow)}
+.cmp-h,.cmp-r{display:grid;grid-template-columns:minmax(0,1fr) 68px 78px;align-items:center}
+.cmp-h{font-weight:800;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid var(--ink)}
+.cmp-h>span,.cmp-r>span{padding:10px 8px}
+.cmp-h>span:nth-child(n+2),.cmp-r>span:nth-child(n+2){text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px}
+.cmp .prem{background:color-mix(in srgb,var(--lime) 22%,transparent)}
+.cmp-r+.cmp-r{border-top:1px solid var(--line)}
+.cmp-r .f{display:flex;gap:10px;align-items:center;font-size:.92rem;font-weight:600}
+.cmp-r .f .ic{color:var(--teal)}
+.cmp-r em{font-style:normal;font-size:.68rem;font-weight:800;color:var(--teal)}
+.ic.ok{color:var(--teal)}.ic.lk{color:var(--muted)}.ic.no{color:var(--line)}
+.cmp-note{display:flex;gap:8px;align-items:center;padding:10px 12px;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);margin:0}
+.ilist{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.ilist li{display:flex;gap:10px;align-items:center}
+.ilist .ic{color:var(--teal)}
+.ilist.dark{color:var(--hero-ink)}.ilist.dark .ic{color:var(--lime)}
+.badges.mini{grid-template-columns:repeat(2,minmax(0,1fr))}
+.badges.mini .badge span{display:none}
+.chip.prem{background:var(--lime);color:var(--on-lime);border:2px solid var(--ink);font-weight:800}
+.tease-wrap{display:grid;gap:12px;border:2px solid var(--ink);border-radius:18px;padding:16px;background:var(--surface);box-shadow:var(--shadow)}
+.tease-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tease-top h3{font-size:1.05rem}
+.tease{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.tease-h{display:flex;gap:10px;align-items:center}
+.tease-h .ic{color:var(--teal)}
+.blur{filter:blur(5px);user-select:none;pointer-events:none;max-height:150px;overflow:hidden}
+.tease-cta{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:12px}
+.tease-price{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0}
+.tease-price .px{font-size:1.4rem}
+#r-unlock{display:inline-flex;gap:8px;align-items:center;justify-content:center}
+.tabs button{display:inline-flex;gap:6px;align-items:center}
+.tabs button .ic{width:18px;height:18px}
+@media (max-width:899px){#f-card{display:none}}
+.lap-sum{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:760px){.lap-sum{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.lap-sum .stat{border:2px solid var(--ink);border-radius:14px;padding:12px;background:var(--surface);display:grid;gap:4px}
+.lap-sum .stat span{font-size:.78rem;color:var(--muted)}
+.lap-sum .stat b{font-size:1.25rem}
+.lap{display:grid;gap:10px;border:1px solid var(--line);border-radius:16px;padding:14px;background:var(--surface)}
+.lap h2{display:flex;gap:10px;align-items:center;font-size:1.05rem}
+.lap h2 .ic{color:var(--teal)}
+.lp-list{display:grid;gap:12px}
+.lp{display:grid;gap:4px}
+.lp-t{display:flex;justify-content:space-between;gap:8px}
+.lp .bar{position:relative;height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.lp .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--teal);border-radius:99px}
+.lp .bar i.pot{background:repeating-linear-gradient(90deg,var(--gold) 0 4px,transparent 4px 7px);border-radius:0}
+.lp p{margin:0}
+.refs summary,.refs-all summary{cursor:pointer;font-size:.82rem;font-weight:700;color:var(--teal)}
+.refs[open] summary{margin-bottom:6px}
+button.lockchip{cursor:pointer;border:0;font:inherit}
+.akad{display:grid;gap:10px}
+details.akd{border:1px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--surface)}
+details.akd summary{display:flex;gap:12px;align-items:center;cursor:pointer;list-style:none}
+details.akd summary::-webkit-details-marker{display:none}
+details.akd summary .ar{font-size:1.3rem;min-width:64px;text-align:center}
+details.akd[open] summary{margin-bottom:8px}
+details.akd>p,details.akd>ul{margin:6px 0 0}
 .faq{display:grid;gap:10px;max-width:720px}
 .faq details{border:2px solid var(--ink);border-radius:var(--r);background:var(--surface);padding:12px 14px}
 .faq summary{font-weight:700;cursor:pointer}
@@ -457,25 +517,32 @@ body.has-consent{padding-bottom:170px}
   <!-- 3 · REFRAME -->
   <section class="sec-l" id="fakta" aria-labelledby="h-fakta">
     <span class="script">kabar baiknya…</span>
-    <h2 id="h-fakta">Syariah ada di tempat yang <span class="hl">nggak kamu sangka.</span></h2>
-    <p class="lead2">Banyak yang sudah berjalan dengan prinsip syariah tanpa label "syariah" di depannya. Bisa jadi kamu juga.</p>
+    <h2 id="h-fakta">Banyak orang seperti kamu <span class="hl">sudah mulai.</span></h2>
+    <p class="lead2">Bukan cuma bank dan perusahaan besar. Jutaan orang sudah berzakat, dan ratusan ribu sudah berinvestasi syariah, ada yang mulai dari Rp1 juta.</p>
     <div class="facts2" id="l-facts"></div>
   </section>
 
   <!-- 4 · SOLUTION -->
   <section class="sec-l" id="cara" aria-labelledby="h-solution">
     <span class="script">cara kerjanya</span>
-    <h2 id="h-solution">Peta Syariah mengubah bingung jadi <span class="hl">langkah yang jelas.</span></h2>
+    <h2 id="h-solution">Peta Syariah mengubah kebingungan jadi <span class="hl">langkah yang jelas.</span></h2>
     <ol class="howto">
       <li><span class="n">1</span><div><h3>Tebak, lalu hitung</h3><p class="small muted">Tebak persenmu, jawab 11 pertanyaan kebiasaan, dan lihat di tahap mana kamu: Niat, Hijrah, Istiqamah, atau Amanah.</p></div></li>
-      <li><span class="n">2</span><div><h3>Temukan yang sudah dan belum</h3><p class="small muted">Lencana yang ternyata sudah kamu punya, dan keuntungan yang belum kamu ambil, seperti zakat yang bisa mengurangi pajak atau sukuk negara yang pajaknya separuh pajak deposito.</p></div></li>
-      <li><span class="n">3</span><div><h3>Pindah satu per satu</h3><p class="small muted">Satu langkah pertama untuk minggu ini, gratis. Rencana 90 hari lengkap dan hitungan rupiahnya ada di peta lengkap.</p></div></li>
+      <li><span class="n">2</span><div><h3>Temukan yang sudah dan belum</h3><p class="small muted">Lencana yang ternyata sudah kamu punya, dan keuntungan yang belum kamu ambil, seperti zakat yang bisa mengurangi pajak.</p></div></li>
+      <li><span class="n">3</span><div><h3>Pindah satu per satu</h3><p class="small muted">Mulai dari satu langkah. Rencana 90 hari dan hitungan rupiahnya ada di Premium.</p></div></li>
     </ol>
-    <div class="benefits">
-      <article class="box"><span class="k">Gratis</span><h3>Persentase syariah dan levelmu</h3><p class="small muted">Dari enam bagian keuanganmu, dibandingkan dengan tebakanmu sendiri.</p></article>
-      <article class="box"><span class="k">Gratis</span><h3>Lencana yang sudah kamu punya</h3><p class="small muted">Delapan kebiasaan syariah, dari rekening sampai zakat rutin.</p></article>
-      <article class="box"><span class="k">Gratis</span><h3>Keuntungan yang belum kamu ambil</h3><p class="small muted">Daftar keuntungan yang berlaku untukmu, lengkap dengan dasar aturannya.</p></article>
-      <article class="box"><span class="k">Gratis</span><h3>Langkah pertama minggu ini</h3><p class="small muted">Satu hal konkret yang paling masuk akal dikerjakan dulu.</p></article>
+    <div class="cmp" role="table" aria-label="Gratis dan Premium">
+      <div class="cmp-h" role="row"><span role="columnheader"><span class="sr">Fitur</span></span><span role="columnheader">Gratis</span><span role="columnheader" class="prem">Premium</span></div>
+      <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="7" r="2.5"/><circle cx="17" cy="17" r="2.5"/><path d="M19 5 5 19"/></svg><span>Persen syariah dan level</span></span><span role="cell"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
+      <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/></svg><span>Tebakanmu vs hasil</span></span><span role="cell"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
+      <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3l3 6M16 3l-3 6"/><circle cx="12" cy="15" r="6"/><path d="M12 12.5v5"/></svg><span>Lencana yang sudah kamu punya</span></span><span role="cell"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
+      <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4M8.2 13.2l7.6 4.4"/></svg><span>Kartu untuk Instagram</span></span><span role="cell"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
+      <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span>Keuntungan yang belum kamu ambil</span></span><span role="cell"><svg class="ic lk" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sr">Terkunci</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span><em>+ rupiah</em></span></div>
+      <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4h11l-2 4 2 4H5"/></svg><span>Langkah pertamamu</span></span><span role="cell"><svg class="ic lk" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span class="sr">Terkunci</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
+      <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Rencana 90 hari</span></span><span role="cell"><svg class="ic no" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h8"/></svg><span class="sr">Tidak termasuk</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
+      <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg><span>5 kalkulator: zakat, KPR, bagi hasil, dll.</span></span><span role="cell"><svg class="ic no" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h8"/></svg><span class="sr">Tidak termasuk</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
+      <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></svg><span>Katalog produk dan 9 akad</span></span><span role="cell"><svg class="ic no" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h8"/></svg><span class="sr">Tidak termasuk</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
+      <p class="cmp-note"><svg class="ic lk" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>Terlihat di hasilmu, tapi dikunci sampai kamu buka Premium.</span></p>
     </div>
     <p class="small muted">Panduan edukasi, bukan fatwa. Rujukan: fatwa DSN-MUI, aturan OJK, dan data resmi yang dicantumkan di setiap hasil.</p>
   </section>
@@ -493,26 +560,25 @@ body.has-consent{padding-bottom:170px}
       <button class="btn gold go-start" style="max-width:360px">Yuk, hitung persen syariahmu →</button>
     </div>
     <div style="display:grid;gap:14px;align-content:start">
-      <h3 style="color:var(--hero-ink)">Mau langsung tahu rupiahnya? <span class="hl">Peta lengkap</span></h3>
-      <ul class="incl dark">
-        <li><span>Keuntungan yang belum kamu ambil, dihitung dalam rupiah dari angkamu</span></li>
-        <li><span>Rencana 90 hari yang disusun dari jawabanmu, tiap langkah dengan rujukan fatwa</span></li>
-        <li><span>Lab kalkulator: zakat, bagi hasil, murabahah vs MMQ, cek saham dengan aturan 2026</span></li>
-        <li><span>Katalog 14 produk syariah bank dan non-bank</span></li>
-        <li><span>Ensiklopedia 9 akad dan salah kaprahnya</span></li>
+      <h3 style="color:var(--hero-ink)">Mau langsung tahu rupiahnya? <span class="hl">Buka Premium</span></h3>
+      <ul class="ilist dark">
+        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span>Keuntungan yang belum kamu ambil, dalam rupiah</span></li>
+        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Rencana 90 hari dari jawabanmu</span></li>
+        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg><span>5 kalkulator: zakat, KPR, bagi hasil, dll.</span></li>
+        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></svg><span>Katalog produk dan 9 akad</span></li>
       </ul>
-      <p style="color:var(--hero-ink)"><span class="tag-promo">Harga spesial · hemat <span class="px-save">Rp60.000</span></span><br><b><s class="px-was">Rp149.000</s> <span class="px">Rp89.000</span>, sekali bayar.</b> <span style="color:var(--hero-muted)">Bukan langganan, dan aksesnya tidak kedaluwarsa. Kuis dan hasilnya tetap gratis.</span></p>
+      <p style="color:var(--hero-ink)"><span class="tag-promo">Harga spesial · hemat <span class="px-save">40%</span></span><br><b><s class="px-was">Rp149.000</s> <span class="px">Rp89.000</span>, sekali bayar.</b> <span style="color:var(--hero-muted)">Bukan langganan, aksesnya tidak kedaluwarsa. Kuis dan skornya tetap gratis.</span></p>
       <p class="cite"><a href="/contoh-laporan.html" style="color:var(--lime)">Lihat contoh laporan</a> · Panduan edukasi, bukan fatwa.</p>
     </div>
   </div></section>
 
   <section class="sec-l" id="faq">
-    <span class="script">yang sering ditanyakan</span>
+    <span class="script">FAQ</span>
     <div class="faq">
-      <details><summary>Kenapa saya perlu mengisi kuis ini?</summary><p>Supaya kamu tahu seberapa syariah keuanganmu sekarang dan apa yang paling masuk akal dikerjakan dulu. Hasilnya gratis: persentase dan levelmu, lencana yang sudah kamu punya, langkah pertama untuk minggu ini, dan keuntungan yang belum kamu ambil.</p></details>
+      <details><summary>Kenapa saya perlu mengisi kuis ini?</summary><p>Supaya kamu tahu seberapa syariah keuanganmu sekarang dan apa yang paling masuk akal dikerjakan dulu. Gratis: persentase syariah, level, lencana, dan perbandingan dengan tebakanmu. Keuntungan yang belum kamu ambil, langkah pertama, dan rencana 90 hari ada di Premium.</p></details>
       <details><summary>Bagaimana persentase syariah dihitung?</summary><p>Dari jawabanmu di enam bagian keuangan: tabungan, cara bayar, cicilan, asuransi, investasi, dan zakat. Bobot tiap jawaban dijelaskan di "Cara kami menilai" di bawah halaman. Angka ini alat bantu refleksi, bukan vonis halal-haram.</p></details>
       <details><summary>Apakah saya harus pindah semuanya sekaligus?</summary><p>Tidak. Rencananya disusun bertahap: fondasi dulu, lalu memindahkan produk besar saat waktunya tepat, misalnya deposito saat jatuh tempo.</p></details>
-      <details><summary>Peta lengkap <span class="px">Rp89.000</span> berlaku berapa lama?</summary><p>Sekali bayar, bukan langganan, dan aksesnya tidak kedaluwarsa. Rencana 90 hari bisa kamu susun ulang kapan saja dengan mengulang kuis.</p></details>
+      <details><summary>Premium berlaku berapa lama?</summary><p>Sekali bayar, bukan langganan, dan aksesnya tidak kedaluwarsa. Rencana 90 hari bisa kamu susun ulang kapan saja dengan mengulang kuis.</p></details>
       <details><summary>Apakah ini fatwa?</summary><p>Bukan. Peta Syariah adalah panduan edukasi. Keputusan akhir tetap ada padamu dan ustadz yang kamu percaya.</p></details>
     </div>
   </section>
@@ -552,9 +618,7 @@ body.has-consent{padding-bottom:170px}
     <p class="eyebrow">Hasil Peta Syariahmu</p>
     <div class="pcard reveal" id="r-card"></div>
     <div class="box" id="r-guess" hidden></div>
-    <div class="box"><span class="k">Lencana yang ternyata sudah kamu punya · <span id="r-bcount"></span></span><div class="badges" id="r-badges"></div></div>
-    <div class="box"><span class="k">Keuntungan yang belum kamu ambil</span><ul class="gains" id="r-gains"></ul><p class="small muted">Jumlah rupiahnya dihitung dari angka keuanganmu di peta lengkap.</p></div>
-    <div class="box"><span class="k">Arti enam pilar</span><ul class="gloss" id="r-gloss"></ul></div>
+    <div class="box"><span class="k">Lencana yang ternyata sudah kamu punya · <span id="r-bcount"></span></span><div class="badges mini" id="r-badges"></div></div>
     <div class="box" id="r-share">
       <span class="k">Bagikan hasilmu ke Instagram</span>
       <p class="small muted">Kartu ini memuat persentase, level, dan bentuk enam pilarmu. Angka penghasilan, tabungan, dan zakat tidak pernah ikut.</p>
@@ -565,21 +629,20 @@ body.has-consent{padding-bottom:170px}
       <button class="btn alt" id="sh-cap">Salin caption</button>
       <p class="small" id="sh-status" role="status" aria-live="polite"></p>
     </div>
-    <a class="btn alt" id="r-fb" href="#" target="_blank" rel="noopener" hidden>Kasih masukan lewat WhatsApp</a>
-    <div class="box" id="r-first"></div>
     <div class="box"><span class="k">Posisimu di antara penduduk Indonesia</span><div class="nat" id="r-nat"></div><p class="cite">SNLIK 2025 (OJK–BPS). Indeks nasional adalah persentase penduduk, bukan skor rata-rata. Kami hanya mencocokkan kelompokmu.</p></div>
-    <div class="box"><span class="k">Syariah ada di tempat yang nggak kamu sangka</span><div class="facts2" id="r-facts"></div></div>
-    <div class="locked">
-      <h3>Di peta lengkap, untuk level <span id="r-pname"></span>:</h3>
-      <div class="lockgrid">
-        <div><b id="r-ntask"></b>langkah 90 hari, berurutan</div>
-        <div><b>4 kalkulator</b>zakat, bagi hasil, pembiayaan rumah, cek saham</div>
-        <div><b>14 produk syariah</b>bank dan non-bank, dipetakan ke tujuanmu</div>
-        <div><b id="r-ngain"></b>dihitung dalam rupiah dari angkamu</div>
+    <section class="tease-wrap" aria-labelledby="r-prem-h">
+      <div class="tease-top"><span class="chip prem">Premium</span><h3 id="r-prem-h">Yang sudah kami siapkan untukmu</h3></div>
+      <div class="tease"><div class="tease-h"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><b><span id="r-ngain"></span></b></div><ul class="gains blur" id="r-gains" aria-hidden="true"></ul></div>
+      <div class="tease"><div class="tease-h"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4h11l-2 4 2 4H5"/></svg><b>Langkah pertamamu minggu ini</b></div><div class="blur" id="r-first" aria-hidden="true"></div></div>
+      <div class="tease"><div class="tease-h"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><b>Rencana 90 hari: <span id="r-ntask"></span> langkah</b></div><div class="blur small" aria-hidden="true" id="r-road"></div></div>
+      <div class="tease"><div class="tease-h"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg><b>5 kalkulator, katalog produk, dan 9 akad</b></div></div>
+      <div class="tease-cta">
+        <p class="tease-price"><span class="tag-promo">Harga spesial · hemat <span class="px-save">40%</span></span> <s class="px-was">Rp149.000</s> <b class="px">Rp89.000</b></p>
+        <button class="btn gold" id="r-unlock"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Buka Premium</button>
+        <p class="small muted">Sekali bayar, bukan langganan. Aksesnya tidak kedaluwarsa.</p>
       </div>
-    </div>
-    <button class="btn gold" id="r-unlock">Buka peta lengkap · <s class="px-was">Rp149.000</s> <span class="px">Rp89.000</span></button>
-    <p class="small muted" style="margin-top:-8px">Sekali bayar, bukan langganan, dan aksesnya tidak kedaluwarsa.</p>
+    </section>
+    <a class="btn alt" id="r-fb" href="#" target="_blank" rel="noopener" hidden>Kasih masukan lewat WhatsApp</a>
   </div>
 </main>
 
@@ -600,15 +663,15 @@ body.has-consent{padding-bottom:170px}
 <!-- ================= PAYWALL ================= -->
 <div class="sheet-back" id="paywall" hidden>
   <div class="sheet stack" role="dialog" aria-modal="true" aria-labelledby="pw-h">
-    <div class="row" style="align-items:center"><h2 id="pw-h" tabindex="-1" style="flex:3 1 200px">Peta Syariah Lengkap</h2><button class="link" id="pw-close" style="flex:0 0 auto">Tutup</button></div>
+    <div class="row" style="align-items:center"><h2 id="pw-h" tabindex="-1" style="flex:3 1 200px">Peta Syariah Premium</h2><button class="link" id="pw-close" style="flex:0 0 auto">Tutup</button></div>
     <p class="pw-out" id="pw-sub"></p>
-    <div class="price"><span class="tag-promo">Harga spesial · hemat <span class="px-save">Rp60.000</span></span><span class="amt num"><s class="px-was">Rp149.000</s> <span class="px">Rp89.000</span></span><span class="muted">sekali bayar · akses tidak kedaluwarsa</span></div>
-    <ul class="incl">
-      <li><span>Keuntungan yang belum kamu ambil, dalam rupiah: potongan pajak dari zakat, selisih pajak sukuk dan deposito, dan lainnya</span></li>
-      <li><span>Rencana 90 hari: <b id="pw-n"></b> langkah, tiap langkah dengan rujukan dan "yang perlu diwaspadai"</span></li>
-      <li><span>Lab kalkulator: zakat, bagi hasil, murabahah vs MMQ, cek saham syariah (aturan 2026)</span></li>
-      <li><span>Katalog 14 produk syariah bank dan non-bank (sukuk negara, reksa dana, emas, asuransi, dana pensiun, wakaf) yang dipetakan ke tujuanmu</span></li>
-      <li><span>Ensiklopedia 9 akad dan salah kaprahnya</span></li>
+    <div class="price"><span class="tag-promo">Harga spesial · hemat <span class="px-save">40%</span></span><span class="amt num"><s class="px-was">Rp149.000</s> <span class="px">Rp89.000</span></span><span class="muted">sekali bayar · akses tidak kedaluwarsa</span></div>
+    <ul class="ilist">
+      <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span>Keuntungan yang belum kamu ambil, dalam rupiah</span></li>
+      <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Langkah pertama dan rencana 90 hari (<b id="pw-n"></b> langkah)</span></li>
+      <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M6 20V10M10 20V6M14 20v-8M18 20V9"/></svg><span>Laporan lengkap: skor per pilar dan semua lencana</span></li>
+      <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg><span>5 kalkulator: zakat, KPR, bagi hasil, saham, alokasi gaji</span></li>
+      <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></svg><span>Katalog produk syariah dan 9 akad</span></li>
     </ul>
     <form id="pw-form" class="buyer stack" novalidate>
       <label for="b-email">Email <span class="muted small">(opsional) · untuk bukti beli dan memulihkan akses kalau ganti HP</span><input id="b-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="120" placeholder="nama@email.com"></label>
@@ -617,7 +680,7 @@ body.has-consent{padding-bottom:170px}
       <p class="small muted">Dengan membayar, kamu setuju dengan <a href="/syarat.html" target="_blank" rel="noopener">Syarat</a> dan <a href="/privasi.html" target="_blank" rel="noopener">Kebijakan privasi</a>.</p>
     </form>
     <div class="demo-note fd" id="pw-demo" hidden role="status" aria-live="polite">
-      <p><b>Terima kasih atas minatmu.</b> Peta lengkap belum bisa dibeli hari ini, jadi <b>tidak ada tagihan</b>. Kalau kamu mengisi email, kami kabari begitu dibuka. Atau kirim pesan di bawah.</p>
+      <p><b>Terima kasih atas minatmu.</b> Premium belum bisa dibeli hari ini, jadi <b>tidak ada tagihan</b>. Kalau kamu mengisi email, kami kabari begitu dibuka. Atau kirim pesan di bawah.</p>
       <p class="small" id="fd-msg" style="background:var(--surface);border-radius:8px;padding:10px"></p>
       <a class="btn" id="fd-wa" href="#" target="_blank" rel="noopener" hidden>Kirim lewat WhatsApp</a>
       <button class="btn alt" id="fd-copy">Salin pesan</button>
@@ -629,7 +692,7 @@ body.has-consent{padding-bottom:170px}
 
 <!-- ================= FULL ================= -->
 <main id="v-full" class="wrap wide" hidden>
-  <header class="bar"><div class="brand">Peta Syariah <span class="chip p">Lengkap</span></div><button class="link" id="f-redo">Ulangi kuis</button></header>
+  <header class="bar"><div class="brand">Peta Syariah <span class="chip prem">Premium</span></div><button class="link" id="f-redo">Ulangi kuis</button></header>
   <div class="layout">
     <aside class="stack sticky">
       <div class="pcard" id="f-card"></div>
@@ -637,16 +700,27 @@ body.has-consent{padding-bottom:170px}
     </aside>
     <div class="stack">
       <nav class="tabs" role="tablist" aria-label="Bagian">
-        <button role="tab" data-tab="untung" aria-selected="true">Keuntungan</button>
-        <button role="tab" data-tab="road" aria-selected="false">Rencana 90 hari</button>
-        <button role="tab" data-tab="lab" aria-selected="false">Lab kalkulator</button>
-        <button role="tab" data-tab="kat" aria-selected="false">Katalog produk</button>
-        <button role="tab" data-tab="akad" aria-selected="false">Ensiklopedia akad</button>
-        <button role="tab" data-tab="src" aria-selected="false">Rujukan</button>
+        <button role="tab" data-tab="lap" aria-selected="true"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M6 20V10M10 20V6M14 20v-8M18 20V9"/></svg><span>Laporanmu</span></button>
+        <button role="tab" data-tab="untung" aria-selected="false"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span>Keuntungan</span></button>
+        <button role="tab" data-tab="road" aria-selected="false"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Rencana 90 hari</span></button>
+        <button role="tab" data-tab="lab" aria-selected="false"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg><span>Kalkulator</span></button>
+        <button role="tab" data-tab="kat" aria-selected="false"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span>Produk</span></button>
+        <button role="tab" data-tab="akad" aria-selected="false"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></svg><span>Akad</span></button>
       </nav>
 
-      <section class="tab stack" data-panel="untung">
-        <div><h2>Keuntungan yang bisa kamu ambil</h2><p class="muted" style="margin-top:6px">Isi angkamu. Hitungan berjalan di perangkat ini dan tidak dikirim ke mana pun.</p></div>
+      <section class="tab stack" data-panel="lap">
+        <div class="lap-sum" id="lap-sum"></div>
+        <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M6 20V10M10 20V6M14 20v-8M18 20V9"/></svg>Per pilar</h2><p class="small muted">Skor sekarang → potensi, dan langkah berikutnya.</p><div class="lp-list" id="lap-pillars"></div></div>
+        <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3l3 6M16 3l-3 6"/><circle cx="12" cy="15" r="6"/><path d="M12 12.5v5"/></svg>Lencanamu</h2><div class="badges" id="lap-badges"></div></div>
+        <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>Keuntungan yang belum kamu ambil</h2><ul class="gains" id="lap-gains"></ul></div>
+        <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>Langkah pertamamu minggu ini</h2><div id="lap-first"></div><button class="btn alt go-road" type="button">Lihat rencana 90 hari →</button></div>
+        <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2A5 5 0 0 1 21 19"/></svg>Posisimu di antara penduduk Indonesia</h2><div class="nat" id="lap-nat"></div><p class="cite">SNLIK 2025 (OJK–BPS). Indeks nasional adalah persentase penduduk, bukan skor rata-rata.</p></div>
+        <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2A5 5 0 0 1 21 19"/></svg>Banyak orang seperti kamu sudah mulai</h2><div class="facts2" id="lap-facts"></div></div>
+        <details class="lap refs-all"><summary>Semua rujukan</summary><ol class="srcs" id="src-list"></ol><p class="small muted">Terakhir ditinjau: 13 Oktober 2026.</p></details>
+      </section>
+
+      <section class="tab stack" data-panel="untung" hidden>
+        <div><h2>Hitung keuntunganmu dalam rupiah</h2><p class="muted" style="margin-top:6px">Isi angkamu. Hitungan berjalan di perangkat ini.</p></div>
         <div class="panel">
           <div class="row">
             <div><label for="u-gross">Penghasilan bruto per bulan</label><div class="unit"><input type="number" id="u-gross" step="0.5" value="15"><span>juta</span></div></div>
@@ -662,7 +736,7 @@ body.has-consent{padding-bottom:170px}
         <div class="res" id="u-total"></div>
         <div class="res neutral" id="u-zres"></div>
         <div class="res neutral" id="u-sres"></div>
-        <p class="cite">UU No. 23 Tahun 2011 Pasal 22; PMK No. 114 Tahun 2025; tarif PPh orang pribadi UU No. 7 Tahun 2021 (HPP); PP No. 91 Tahun 2021 (PPh SBN 10%); pajak bunga deposito 20%. Hitungan ini perkiraan, bukan nasihat pajak. Karyawan yang PPh-nya dipotong kantor melihat selisihnya sebagai lebih bayar di SPT Tahunan.</p>
+        <details class="refs"><summary>Rujukan dan catatan</summary><p class="cite">UU No. 23 Tahun 2011 Pasal 22; PMK No. 114 Tahun 2025; tarif PPh orang pribadi UU No. 7 Tahun 2021 (HPP); PP No. 91 Tahun 2021 (PPh SBN 10%); pajak bunga deposito 20%. Hitungan ini perkiraan, bukan nasihat pajak. Karyawan yang PPh-nya dipotong kantor melihat selisihnya sebagai lebih bayar di SPT Tahunan.</p></details>
       </section>
 
       <section class="tab stack" data-panel="road" id="road" hidden></section>
@@ -678,7 +752,7 @@ body.has-consent{padding-bottom:170px}
 
         <!-- Rumah -->
         <div class="lab stack" data-l="rumah">
-          <div><h2>Murabahah atau Musyarakah Mutanaqishah?</h2><p class="muted" style="margin-top:6px">Dua akad pembiayaan rumah syariah yang paling umum. Bedanya tidak hanya pada cicilan, tetapi juga pada apa yang terjadi saat kamu ingin melunasi lebih cepat.</p></div>
+          <div><h2>Murabahah atau Musyarakah Mutanaqishah?</h2><p class="muted" style="margin-top:6px">Dua akad KPR syariah paling umum. Bandingkan cicilannya, dan apa yang terjadi kalau kamu lunasi lebih cepat.</p></div>
           <div class="panel">
             <div class="row">
               <div><label for="h-harga">Harga rumah</label><div class="unit"><input type="number" id="h-harga" value="800" step="10"><span>juta</span></div></div>
@@ -699,12 +773,12 @@ body.has-consent{padding-bottom:170px}
           <div class="legend"><span><i style="background:var(--gold)"></i>Murabahah</span><span><i style="background:var(--teal)"></i>MMQ (asumsi)</span></div>
           <div class="facts" id="h-facts"></div>
           <div class="res" id="h-insight"></div>
-          <p class="cite">Fatwa DSN-MUI No. 04/DSN-MUI/IV/2000 tentang Murabahah; No. 23/DSN-MUI/III/2002 tentang Potongan Pelunasan dalam Murabahah; No. 73/DSN-MUI/XI/2008 tentang Musyarakah Mutanaqishah. Model ini menyederhanakan: struktur ujrah dan harga pengalihan porsi di tiap bank bisa berbeda.</p>
+          <details class="refs"><summary>Rujukan dan catatan</summary><p class="cite">Fatwa DSN-MUI No. 04/DSN-MUI/IV/2000 tentang Murabahah; No. 23/DSN-MUI/III/2002 tentang Potongan Pelunasan dalam Murabahah; No. 73/DSN-MUI/XI/2008 tentang Musyarakah Mutanaqishah. Model ini menyederhanakan: struktur ujrah dan harga pengalihan porsi di tiap bank bisa berbeda.</p></details>
         </div>
 
         <!-- Saham -->
         <div class="lab stack" data-l="saham" hidden>
-          <div><h2>Cek saham syariah dengan aturan 2026</h2><p class="muted" style="margin-top:6px">POJK 8/2025 memperketat kriteria Daftar Efek Syariah. Ambil angkanya dari laporan keuangan tahunan emiten.</p></div>
+          <div><h2>Cek saham syariah dengan aturan 2026</h2><p class="muted" style="margin-top:6px">Kriteria saham syariah lebih ketat mulai 2026. Ambil angkanya dari laporan keuangan tahunan emiten.</p></div>
           <div class="panel">
             <div class="row">
               <div><label for="s-aset">Total aset</label><div class="unit"><input type="number" id="s-aset" value="100" step="1"><span>miliar</span></div></div>
@@ -718,12 +792,12 @@ body.has-consent{padding-bottom:170px}
           </div>
           <div class="res warn" id="s-err" role="alert" hidden></div>
           <div class="panel" id="s-out"></div>
-          <p class="cite">POJK No. 8 Tahun 2025 tentang Penerbitan Daftar Efek Syariah dan Daftar Efek Syariah Luar Negeri, menggantikan POJK 35/2017. Menurut pemberitaan (IDX Channel, Fortune Indonesia, Juli 2025): batas pendapatan non-halal turun dari 10% ke 5% mulai seleksi 2026, dan batas utang berbasis bunga turun dari 45% ke 33% secara bertahap selama 10 tahun. Cek tahapan tahunan di teks POJK. Daftar resmi tetap DES yang diterbitkan OJK.</p>
+          <details class="refs"><summary>Rujukan dan catatan</summary><p class="cite">POJK No. 8 Tahun 2025 tentang Penerbitan Daftar Efek Syariah dan Daftar Efek Syariah Luar Negeri, menggantikan POJK 35/2017. Menurut pemberitaan (IDX Channel, Fortune Indonesia, Juli 2025): batas pendapatan non-halal turun dari 10% ke 5% mulai seleksi 2026, dan batas utang berbasis bunga turun dari 45% ke 33% secara bertahap selama 10 tahun. Cek tahapan tahunan di teks POJK. Daftar resmi tetap DES yang diterbitkan OJK.</p></details>
         </div>
 
         <!-- Bagi hasil -->
         <div class="lab stack" data-l="bagi" hidden>
-          <div><h2>Membaca bagi hasil</h2><p class="muted" style="margin-top:6px">Di deposito mudharabah yang disepakati adalah <b>nisbah</b>, bukan persentase hasil. Hasilnya mengikuti kinerja dana yang dikelola bank.</p></div>
+          <div><h2>Membaca bagi hasil</h2><p class="muted" style="margin-top:6px">Di deposito mudharabah, yang disepakati adalah porsi bagi hasil (<b>nisbah</b>), bukan persentase hasil.</p></div>
           <div class="panel">
             <div class="row">
               <div><label for="b-dana">Dana</label><div class="unit"><input type="number" id="b-dana" value="100" step="5"><span>juta</span></div></div>
@@ -734,12 +808,12 @@ body.has-consent{padding-bottom:170px}
           <div class="res warn" id="b-err" role="alert" hidden></div>
           <div class="res" id="b-out"></div>
           <svg class="chart" id="b-chart" viewBox="0 0 640 200" role="img" aria-label="Sensitivitas bagi hasil terhadap imbal hasil dana"></svg>
-          <p class="cite">Fatwa DSN-MUI No. 03/DSN-MUI/IV/2000 tentang Deposito; No. 07/DSN-MUI/IV/2000 tentang Pembiayaan Mudharabah (Qiradh). Pajak atas bagi hasil tidak dihitung di sini.</p>
+          <details class="refs"><summary>Rujukan dan catatan</summary><p class="cite">Fatwa DSN-MUI No. 03/DSN-MUI/IV/2000 tentang Deposito; No. 07/DSN-MUI/IV/2000 tentang Pembiayaan Mudharabah (Qiradh). Pajak atas bagi hasil tidak dihitung di sini.</p></details>
         </div>
 
         <!-- Alokasi gaji -->
         <div class="lab stack" data-l="alok" hidden>
-          <div><h2>Alokasi gaji bulanan</h2><p class="muted" style="margin-top:6px">Penghasilan dibagi berurutan menurut prioritas: kewajiban dulu, lalu nafkah, ketahanan, investasi, infak, baru gaya hidup. Sisa dari pos yang penuh dialirkan ke pos berikutnya, tidak kembali ke belanja.</p></div>
+          <div><h2>Alokasi gaji bulanan</h2><p class="muted" style="margin-top:6px">Gaji dibagi menurut prioritas: kewajiban, nafkah, dana darurat, investasi, infak, baru gaya hidup.</p></div>
           <div class="panel">
             <div><label>Siapa yang dihitung?</label><div class="toggle3" id="w-mode"><button data-m="single" aria-pressed="true">Sendiri</button><button data-m="couple" aria-pressed="false">Suami-istri</button></div></div>
             <div class="row">
@@ -761,7 +835,7 @@ body.has-consent{padding-bottom:170px}
           <div class="panel"><div class="row" style="justify-content:space-between;align-items:baseline"><h3>Rencana alokasimu</h3><span class="small muted" id="w-ef-m"></span></div><div class="wf" id="w-out"></div></div>
           <div class="panel"><h3>Aliran sisa dana</h3><ol class="ledger" id="w-ledger"></ol></div>
           <div class="panel" id="w-wife-out" hidden></div>
-          <p class="cite">Rentang per pos adalah <b>heuristik perencanaan, bukan ketentuan fikih</b>, diadaptasi dari sharia-skills (Canggih Puspo Wibowo, lisensi MIT). Kebutuhan nyata rumah tanggamu dan arahan ulama yang kamu pegang lebih diutamakan. Pemisahan harta suami-istri ditampilkan sebagai pendapat mayoritas; kesepakatan lain diperbolehkan bila disepakati bersama.</p>
+          <details class="refs"><summary>Rujukan dan catatan</summary><p class="cite">Rentang per pos adalah <b>heuristik perencanaan, bukan ketentuan fikih</b>, diadaptasi dari sharia-skills (Canggih Puspo Wibowo, lisensi MIT). Kebutuhan nyata rumah tanggamu dan arahan ulama yang kamu pegang lebih diutamakan. Pemisahan harta suami-istri ditampilkan sebagai pendapat mayoritas; kesepakatan lain diperbolehkan bila disepakati bersama.</p></details>
         </div>
         <!-- Zakat -->
         <div class="lab stack" data-l="zakat" hidden>
@@ -786,21 +860,17 @@ body.has-consent{padding-bottom:170px}
       </section>
 
       <section class="tab stack" data-panel="kat" hidden>
-        <div><h2>Katalog produk keuangan syariah</h2><p class="muted" style="margin-top:6px">Bukan hanya bank. Ini jenis produk yang tersedia di Indonesia, dengan pengelola, akad, dan hal yang perlu diwaspadai. Yang bertanda <b>Cocok untukmu</b> dipilih dari tujuan dan jawaban kuismu.</p></div>
+        <div><h2>Produk keuangan syariah</h2><p class="muted" style="margin-top:6px">Bank dan non-bank. Tanda <b>Cocok untukmu</b> dipilih dari jawaban kuismu.</p></div>
         <div class="filters" id="kat-f"></div>
         <div class="catalog" id="kat-list"></div>
-        <p class="cite">Katalog ini menjelaskan jenis produk, bukan rekomendasi penerbit atau merek tertentu. Sebelum membeli, pastikan penyelenggaranya berizin dan diawasi OJK, atau diterbitkan pemerintah (Kemenkeu) untuk sukuk negara.</p>
+        <details class="refs"><summary>Rujukan dan catatan</summary><p class="cite">Katalog ini menjelaskan jenis produk, bukan rekomendasi penerbit atau merek tertentu. Sebelum membeli, pastikan penyelenggaranya berizin dan diawasi OJK, atau diterbitkan pemerintah (Kemenkeu) untuk sukuk negara.</p></details>
       </section>
 
       <section class="tab stack" data-panel="akad" hidden>
-        <p class="muted">Setiap akad dengan satu salah kaprah yang umum, dan rujukannya.</p>
+        <div><h2>9 akad yang paling sering kamu temui</h2><p class="muted" style="margin-top:6px">Ketuk untuk melihat artinya, salah kaprahnya, dan yang perlu dicek.</p></div>
         <div class="akad" id="akad-list"></div>
       </section>
 
-      <section class="tab stack" data-panel="src" hidden>
-        <div class="panel"><h3>Rujukan yang dipakai Peta Syariah</h3><ol class="srcs" id="src-list"></ol>
-          <p class="small muted">Terakhir ditinjau: 13 Oktober 2026. Tanggal ini dicantumkan agar kamu tahu seberapa baru datanya.</p></div>
-      </section>
     </div>
   </div>
   <footer class="fine">Peta Syariah adalah panduan edukasi keuangan, bukan fatwa, dan tidak berafiliasi dengan bank, asuransi, atau manajer investasi mana pun. Untuk keputusan penting, konsultasikan dengan ustadz atau penasihat keuangan syariah yang kamu percaya.</footer>
