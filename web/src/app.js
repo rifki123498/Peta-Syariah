@@ -722,7 +722,7 @@ $("restore").addEventListener("click",e=>{ if(e.target.id==="restore") sheet("re
 $("rs-close").addEventListener("click",()=>sheet("restore",false));
 
 /* ---------- sample report: show enough to want it, cut the rest ---------- */
-const DEMO_CUT={lap:["Ini laporan Dinda. Laporanmu disusun dari jawabanmu sendiri.",1150],untung:["Dengan asumsi di atas, profil contoh ini bisa menghemat sekitar {U} setahun. Punyamu berapa?",620],road:["Dinda punya {N} langkah. Rencanamu berbeda, tergantung jawabanmu.",700],lab:["5 kalkulator. Di Premium, isi dengan angkamu sendiri.",620],kat:["14 produk, dengan tanda yang cocok untukmu.",760],akad:["9 akad, plus yang perlu dicek sebelum tanda tangan.",420]};
+const DEMO_CUT={lap:["Ini laporan Dinda. Laporanmu disusun dari jawabanmu sendiri.",520],untung:["Dengan asumsi di atas, profil contoh ini bisa menghemat sekitar {U} setahun. Punyamu berapa?",380],road:["Dinda punya {N} langkah. Rencanamu berbeda, tergantung jawabanmu.",420],lab:["5 kalkulator. Di Premium, isi dengan angkamu sendiri.",380],kat:["14 produk, dengan tanda yang cocok untukmu.",440],akad:["9 akad, plus yang perlu dicek sebelum tanda tangan.",300]};
 function demoCuts(){ const own=load(); const done=own&&own.ans&&Object.keys(own.ans).length>=STEPS.length;
   const cta=done?`<a class="btn gold" href="/?hasil&beli">Buka laporanku · ${fmtRp(PRICE)}</a>`:`<a class="btn gold" href="/">Cek punyamu gratis, 3 menit</a>`;
   const U=$("u-total").textContent.replace(/^±\s*/,"").replace(/\s*\/\s*tahun.*/,"");
