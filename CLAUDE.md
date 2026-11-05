@@ -8,7 +8,7 @@ Read before any work: `docs/spec.md` (what to build, in what order), `docs/copy-
 - **No halal/haram verdicts** on any product, bank, company or person. The product scores habits and points to questions to ask; the user and their ustadz decide. Disclaimer "Panduan edukasi, bukan fatwa" stays on result, report and paywall.
 - **No invented facts or numbers.** Every fact, fatwa/POJK number, tax rate and statistic comes from `docs/facts-and-sources.md`. A new fact needs a source added there first. Rates used in money calculations (deposito, sukuk, PPh bracket) are inputs or clearly labelled assumptions, never hardcoded as truth.
 - **No borrowed trust.** Sharia Compass is not supervised by OJK or DSN-MUI. Never write "diawasi OJK/DSN-MUI".
-- **Payments:** no refunds (all sales final; failed access is fixed, not refunded). The paywall asks for nothing except an optional email.
+- **Payments:** no refunds (all sales final; failed access is fixed, not refunded). The paywall asks for one required contact (email or WhatsApp) and nothing else. Do not change the DOKU integration without the owner.
 - **No fear or attack framing** against conventional banks. Sell certainty, benefits and pride.
 - **Privacy:** share cards never show income, savings, debt or zakat amounts. Store the minimum; financial inputs are personal data under UU PDP (UU 27/2022) — get explicit consent before storing them server-side.
 - **Language:** all user-facing copy in Bahasa Indonesia, address the user as "kamu". Code, comments and docs in English.

@@ -57,3 +57,10 @@ Only facts listed here may appear in the product. Re-check items marked **refres
 | Gadai syariah | Rahn, Pegadaian Syariah | https://pegadaian.co.id/artikel/inspirasi/mengenal-pegadaian-syariah-solusi-keuangan-sesuai-syariat |
 | Zakat/wakaf | BAZNAS; LAZ Rumah Zakat Indonesia; LAZ Dompet Dhuafa Republika | IDX Channel, 21 Feb 2024: https://www.idxchannel.com/syariah/catat-ini-daftar-170-lembaga-amil-zakat-yang-kantongi-izin-kemenag/all |
 Deposito mudharabah, gadai and others: no named example where no source was found. Re-check every example before each campaign; products and permits change.
+
+## Added 5 Nov 2026 (social-proof refresh: nothing older than 2023 on the lander)
+| Fact | Source |
+|---|---|
+| Sucorinvest: AUM reksa dana syariah Rp16,96 T per Feb 2026 | Bisnis.com, 10 Mar 2026: https://market.bisnis.com/read/20260310/92/1959336/aum-reksa-dana-syariah-sucorinvest-tembus-rp1696-t-per-februari-2026 |
+| Allianz Syariah (PT Asuransi Allianz Life Syariah Indonesia) beroperasi penuh sebagai perusahaan sendiri sejak 1 Nov 2023, diluncurkan 16 Nov 2023 | Kontan, 16 Nov 2023: https://keuangan.kontan.co.id/news/patuhi-aturan-spin-off-allianz-resmi-luncurkan-allianz-syariah |
+Removed from product copy: JII 10 tahun (2022), 4.246 proyek SBSN (2022), UK sukuk (2014).

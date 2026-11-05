@@ -31,7 +31,7 @@ function limited(key: string, max: number, windowMs: number) {
 app.use("/api/*", async (c, next) => {
   const ip = c.req.header("cf-connecting-ip") || "local";
   const path = new URL(c.req.url).pathname;
-  const rule = path === "/api/checkout" ? [10, 60_000] : path === "/api/events" ? [120, 60_000] : path.startsWith("/api/order/") ? [30, 60_000] : null;
+  const rule = path === "/api/checkout" ? [10, 60_000] : path === "/api/events" ? [120, 60_000] : path.startsWith("/api/order/") || path.startsWith("/api/progress/") ? [30, 60_000] : null;
   if (rule && limited(path + "|" + ip, rule[0], rule[1])) return c.json({ error: "rate_limited" }, 429);
   await next();
 });
@@ -41,10 +41,12 @@ const EVENT_NAMES = new Set([
   "paywall_view", "checkout_start", "purchase_return", "consent", "wa_click", "feedback_click",
   "task_toggle", "ask_toggle", "catalog_filter", "scenario_tab", "owner_preview",
   "tease_click", "tab_view", "sample_view", "restore",
+  "landing_view", "guess_selected", "quiz_started", "quiz_completed", "result_viewed", "locked_row_clicked", "contoh_viewed", "premium_dialog_opened",
+  "share_downloaded", "share_caption_copied", "contoh_cta", "product_link_clicked", "progress_sync", "pdf_print",
 ]);
 /* Our event name → Meta standard event for the Conversions API. */
 const CAPI_MAP: Record<string, string> = {
-  lp_view: "PageView", quiz_complete: "CompleteRegistration", paywall_view: "ViewContent", checkout_start: "InitiateCheckout",
+  landing_view: "PageView", quiz_completed: "CompleteRegistration", premium_dialog_opened: "ViewContent", checkout_start: "InitiateCheckout",
 };
 
 const arms = (env: Env) => String(env.PRICE_ARMS || "89000").split(",").map((x) => parseInt(x, 10)).filter((x) => x > 0);
@@ -72,14 +74,16 @@ async function sendCapi(env: Env, req: Request, eventName: string, eventId: stri
 }
 
 /* Version of syarat.html + privasi.html the buyer agreed to. Bump when either page changes materially. */
-const TERMS_VERSION = "2026-11-04.2";
+const TERMS_VERSION = "2026-11-05";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 function parseBuyer(v: any): { name: string | null; email: string | null; wa: string | null } | null {
-  /* Email is optional (Xendit only needs external_id + amount). Pressing pay = accepting Syarat & Privasi. */
+  /* One contact is required (email or WhatsApp) so access can be restored. Pressing pay = accepting Syarat & Privasi. */
   if (!v || typeof v !== "object" || v.consent !== true) return null;
   const email = typeof v.email === "string" ? v.email.trim().toLowerCase().slice(0, 120) : "";
   if (email && !EMAIL_RE.test(email)) return null;
-  return { name: null, email: email || null, wa: null };
+  const wa = typeof v.wa === "string" && /^\+62\d{8,13}$/.test(v.wa) ? v.wa : null;
+  if (!email && !wa) return null;
+  return { name: null, email: email || null, wa };
 }
 
 /* ---------- DOKU Checkout (non-SNAP). Signature: HMACSHA256=base64(hmac(secret, "Client-Id:..\nRequest-Id:..\nRequest-Timestamp:..\nRequest-Target:..[\nDigest:base64(sha256(body))]")) ---------- */
@@ -240,6 +244,27 @@ app.post("/api/webhooks/doku", async (c) => {
   if (status === "SUCCESS" && Number(b?.order?.amount) === row.price) await markPaid(c.env, c.req.raw, c.executionCtx, id);
   else if ((status === "FAILED" || status === "EXPIRED") && row.status === "pending") await c.env.DB.prepare("UPDATE orders SET status=? WHERE id=?").bind(status.toLowerCase(), id).run();
   return c.json({ ok: true });
+});
+
+/* Opt-in server copy of the plan (answers, done steps, own numbers), only for paid orders. */
+app.put("/api/progress/:id", async (c) => {
+  const id = c.req.param("id").slice(0, 40);
+  const row: any = await c.env.DB.prepare("SELECT status FROM orders WHERE id=?").bind(id).first();
+  if (!row || row.status !== "paid") return c.json({ error: "not_paid" }, 403);
+  const raw = await c.req.text(); if (raw.length > 6000) return c.json({ error: "too_large" }, 413);
+  try { JSON.parse(raw); } catch { return c.json({ error: "bad_json" }, 400); }
+  await c.env.DB.prepare("INSERT INTO progress (order_id,data,updated_at) VALUES (?,?,?) ON CONFLICT(order_id) DO UPDATE SET data=excluded.data, updated_at=excluded.updated_at").bind(id, raw, now()).run();
+  return c.json({ ok: true });
+});
+app.delete("/api/progress/:id", async (c) => {
+  await c.env.DB.prepare("DELETE FROM progress WHERE order_id=?").bind(c.req.param("id").slice(0, 40)).run();
+  return c.json({ ok: true });
+});
+app.get("/api/progress/:id", async (c) => {
+  const id = c.req.param("id").slice(0, 40);
+  const row: any = await c.env.DB.prepare("SELECT o.status, p.data FROM orders o LEFT JOIN progress p ON p.order_id=o.id WHERE o.id=?").bind(id).first();
+  if (!row || row.status !== "paid") return c.json({ error: "not_paid" }, 403);
+  return c.json({ data: row.data ? JSON.parse(row.data) : null });
 });
 
 app.get("/api/order/:id", async (c) => {

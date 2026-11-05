@@ -82,7 +82,8 @@ function draw(cv,o){
 async function save(cv,name,statusEl){
   const set=t=>{ if(statusEl) statusEl.textContent=t; };
   const r=await saveImage(cv,name);
-  set(r==="shared"?"Pilih Instagram di menu berbagi, lalu Story atau Feed.":r==="downloaded"?"Gambar tersimpan. Buka Instagram, pilih Story, lalu unggah dari galeri.":r==="cancelled"?"Dibatalkan.":"Tidak bisa menyimpan otomatis. Tekan lama gambar di atas untuk menyimpannya.");
+  const feed=/feed/.test(name);
+  set(r==="shared"?(feed?"Pilih Instagram di menu berbagi, lalu Feed (postingan).":"Pilih Instagram di menu berbagi, lalu Story."):r==="downloaded"?(feed?"Gambar tersimpan. Buka Instagram, buat postingan baru (Feed), lalu pilih gambar dari galeri.":"Gambar tersimpan. Buka Instagram, pilih Story, lalu unggah dari galeri."):r==="cancelled"?"Dibatalkan.":"Tidak bisa menyimpan otomatis. Tekan lama gambar di atas untuk menyimpannya.");
   return r;
 }
 async function hasSave(){ return true; }

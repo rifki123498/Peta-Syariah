@@ -51,7 +51,7 @@ Story 1080×1920 and Feed 1080×1350 PNG, drawn on canvas. Free card: % syariah,
 | Hosting/domain | Cloudflare Pages/Workers + Registrar | |
 
 ### Events (same names in Pixel/CAPI and analytics)
-`lp_view, quiz_start, q_answer{q}, quiz_complete, result_view{pct,level,badges,guess}, share_save{fmt}, share_caption, paywall_view, checkout_start{price}, purchase{price}, data_form_complete, report_view, task_toggle, progress_share{day}, retake`
+`landing_view, guess_selected{guess}, quiz_started{from}, quiz_completed, result_viewed{pct,badges}, locked_row_clicked{row}, contoh_viewed, contoh_cta, premium_dialog_opened{from}, checkout_start{price,contact}, purchase_return, restore, share_downloaded{fmt}, share_caption_copied, tab_view{tab}, product_link_clicked{product,host}, progress_sync{on}, pdf_print` — no PII and no answer values in props (score and badge count only). Meta mapping: landing_view→PageView, quiz_completed→CompleteRegistration, premium_dialog_opened→ViewContent, checkout_start→InitiateCheckout, paid→Purchase (server).
 
 ## 6. Phases
 - **Phase 1 — prove payment (2 weeks):** port lander + quiz + result + share card; real events + Pixel/CAPI; paywall with real QRIS checkout (or fake door if payment account not ready) at two prices (Rp89.000 / Rp179.000, 50/50 split by anonymous id); static Pro report generated from answers + form; privacy policy and consent; deploy to a domain. Exit: metrics in `test-plan.md`.

@@ -33,7 +33,7 @@ export const SHARE_URL = `${location.origin}/?ref=${ANON_ID.slice(0, 8)}`;
 /* ---------- consent + Meta Pixel ---------- */
 let pixelId = import.meta.env.VITE_META_PIXEL_ID || "";
 let pixelLoaded = false;
-const PIXEL_MAP = { lp_view: "PageView", quiz_complete: "CompleteRegistration", paywall_view: "ViewContent", checkout_start: "InitiateCheckout" };
+const PIXEL_MAP = { landing_view: "PageView", quiz_completed: "CompleteRegistration", premium_dialog_opened: "ViewContent", checkout_start: "InitiateCheckout" };
 
 function loadPixel() {
   if (pixelLoaded || !pixelId || LS.get("ps.consent") !== "yes") return;

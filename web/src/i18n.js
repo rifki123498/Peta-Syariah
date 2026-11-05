@@ -27,6 +27,30 @@ const PATTERNS = [
   [/^Satu di antaranya saja, zakat lewat lembaga resmi, bisa menghemat pajakmu sekitar$/, () => "Just one of them, zakat through an official institution, could cut your tax by about"],
   [/^(Rp[\d.,]+ (?:rb|jt)) setahun$/, (m) => `${m[1].replace(" jt"," million").replace(" rb","k")} a year`],
   [/^Kami kabari ke (.+) begitu pembayaran dibuka\.$/, (m) => `We'll let ${m[1]} know when payments open.`],
+  [/^Pertanyaan (\d+)\/(\d+) · (\d+)%$/, (m) => `Question ${m[1]}/${m[2]} · ${m[3]}%`],
+  [/^± (Rp[\d.]+) \/ tahun$/, (m) => `± ${m[1]} / year`],
+  [/^Syarat: (.+)$/, (m) => `Unlocks with: ${tr(m[1])}`],
+  [/^pilar terlemahmu adalah (.+) \(skor (\d+)\), dan langkah ini yang paling cepat menaikkannya\.$/, (m) => `your weakest pillar is ${tr(m[1][0].toUpperCase()+m[1].slice(1)).toLowerCase()} (score ${m[2]}), and this step raises it fastest.`],
+  [/^ini fondasi untuk (.+) \(skor (\d+)\)\. Pilar terlemahmu, (.+) \(skor (\d+)\), dibenahi di langkah berikutnya\.$/, (m) => { const P = (x) => tr(x[0].toUpperCase() + x.slice(1)).toLowerCase(); return `it lays the foundation for ${P(m[1])} (score ${m[2]}). Your weakest pillar, ${P(m[3])} (score ${m[4]}), comes in the next steps.`; }],
+  [/^Skor (\d+)(.*)$/, (m) => `Score ${m[1]}${({
+    "": ".",
+    ": penuh karena kamu tidak punya cicilan (bebas utang), bukan karena akad syariah.": ": full because you have no instalments (debt-free), not because of a sharia contract.",
+    ": penuh karena cicilanmu memakai akad syariah.": ": full because your instalments use a sharia contract.",
+    ": sebagian atau semua cicilanmu masih kredit konvensional.": ": some or all of your instalments are still conventional loans.",
+    ": BPJS dihitung separuh. Ia jaminan sosial wajib, belum asuransi syariah yang kamu pilih sendiri.": ": BPJS counts as half. It is mandatory social protection, not sharia insurance you chose yourself.",
+    ": rata-rata semua instrumen yang kamu pilih. Saham yang belum jelas status syariahnya dihitung 60.": ": the average of every instrument you picked. Stocks of unknown sharia status count as 60.",
+  })[m[2]] ?? m[2]}`],
+  [/^Gabungan rekening utama \(35%\), tabungan \(35%\), dan dana darurat \(30%\)\. Skormu (\d+)\.$/, (m) => `Main account (35%), savings (35%) and emergency fund (30%) combined. Your score: ${m[1]}.`],
+  [/^Estimasi dari penghasilan (.+) \(dihitung Rp(\d+) juta\/bulan\), status lajang tanpa tanggungan, zakat 2,5% lewat lembaga resmi\. Bukan angka pasti\.$/, (m) => `Estimate from income ${m[1].replace("di bawah","under").replace("di atas","over").replace(/juta/g,"million")} (counted as Rp${m[2]} million/month), single with no dependants, zakat 2.5% through an official institution. Not an exact figure.`],
+  [/^Per Rp10 juta dana, asumsi bunga deposito (.+)% dan imbal hasil sukuk (.+)% per tahun, setelah pajak 20% dan 10%\. Bukan angka pasti\.$/, (m) => `Per Rp10 million, assuming ${m[1]}% deposit interest and ${m[2]}% sukuk return per year, after 20% and 10% tax. Not an exact figure.`],
+  [/^Sisihkan sekitar (.+) per bulan \(10% penghasilan\) ke tabungan syariah terpisah$/, (m) => `Set aside about ${m[1].replace(" jt"," million").replace(" rb","k")} a month (10% of income) in a separate sharia savings account`],
+  [/^Langkah yang bergantung pada pihak lain \(misalnya bank tempat kantor membayar gaji\) tidak kami hitung ke potensi\. (.*)$/, () => "Steps that depend on someone else (such as the bank your employer pays salaries into) are not counted in the potential. If your employer can't switch yet, set up an automatic transfer to a sharia account on payday. That step is fully in your hands."],
+  [/^Katalog (\d+) produk$/, (m) => `A catalogue of ${m[1]} products`],
+  [/^dalam (\d+) kategori: (.+)\.$/, (m) => `in ${m[1]} categories: ${m[2]}.`],
+  [/^(\d+) akad:$/, (m) => `${m[1]} contracts:`],
+  [/^Buka (\d+) keuntungan lainnya$/, (m) => `Open ${m[1]} more benefit${m[1] === "1" ? "" : "s"}`],
+  [/^Fase (\d) · (.+) \((.+)\)$/, (m) => `Phase ${m[1]} · ${tr(m[2])} (${m[3].replace("Hari","Days")})`],
+  [/^Kami kabari ke (.+) begitu pembayaran dibuka\.$/, (m) => `We'll let ${m[1]} know when payments open.`],
   [/^Bayar sekarang (Rp.+)$/, (m) => `Pay now ${m[1]}`],
   [/^Tadinya kutebak (cuma )?(.+)\.$/, (m) => `I guessed ${m[1] ? "only " : ""}${tr(m[2])}.`],
   [/^([✓○]) (.+)$/, (m) => `${m[1]} ${tr(m[2])}`],
@@ -78,7 +102,7 @@ export function initI18n() {
   const btn = document.getElementById("lang-toggle");
   if (btn) {
     btn.textContent = isEN ? "ID" : "EN";
-    btn.setAttribute("aria-label", isEN ? "Ganti bahasa ke Indonesia" : "Switch language to English");
+    btn.setAttribute("aria-label", isEN ? "Switch language to Indonesian" : "Switch language to English");
     btn.addEventListener("click", () => {
       const u = new URL(location.href);
       u.searchParams.set("lang", isEN ? "id" : "en");

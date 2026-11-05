@@ -33,3 +33,8 @@ Things only the owner can do. Each unblocks the next. Updated 4 Nov 2026.
 - Phase 1b account system (magic link or WhatsApp OTP) so buyers keep access across devices.
 - Refresh dated facts (JII list, SBSN project count, a recent corporate sukuk).
 - Ad creative files (slideshow images, card animations) from the scripts in `docs/marketing.md`.
+
+## From the 5 Nov 2026 product fixes
+- **Sending the access code by email/WhatsApp** needs a sender: an email API (e.g. Resend) with a verified domain, or the WhatsApp Business API. Until then the code is shown in Premium and the contact is stored for manual help.
+- **Fill the hidden trust blocks** on the lander (reviewer, testimonials, user count): `data-todo` sections in `web/index.html`. Only real data.
+- **Support email** shown on the site is contact.andalanrt@gmail.com; replace if PT Buana Karya Bersama has its own.

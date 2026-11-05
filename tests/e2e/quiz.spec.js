@@ -14,9 +14,9 @@ async function runQuiz(page) {
   await page.locator(".pill-cta").click();
   await page.locator("#q-intro1go").click();
   for (const v of DINDA) await answer(page, v);
-  for (const v of ["saham", "rdkonv", "emas"]) await page.locator(`#q-opts button[data-v="${v}"]`).click();
+  for (const v of ["sahamx", "rdkonv", "emas"]) await page.locator(`#q-opts button[data-v="${v}"]`).click();
   await page.locator("#q-next").click();
-  await expect(page.locator("#q-count")).toHaveText("Pertanyaan 10/11");
+  await expect(page.locator("#q-count")).toHaveText("Pertanyaan 9/10 · 90%");
   await answer(page, "fitrah");
   await page.locator('#q-opts button[data-v="15"]').click();
   await expect(page.locator("#v-result")).toBeVisible({ timeout: 10_000 });
@@ -32,17 +32,23 @@ test("lander shows verified facts, consent bar and price arm", async ({ page }) 
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize().width);
 });
 
-test("Dinda profile scores 58%, level Istiqamah, 2 of 8 badges", async ({ page }) => {
+test("Dinda profile scores 54%, level Hijrah, 1 of 8 badges; first step free, previews per row", async ({ page }) => {
   await runQuiz(page);
-  await expect(page.locator("#r-card")).toContainText("58%");
-  await expect(page.locator("#r-card")).toContainText("Istiqamah");
-  await expect(page.locator("#r-bcount")).toHaveText("2 dari 8");
-  await expect(page.locator("#r-gains li")).toHaveCount(4);
-  await expect(page.locator("#r-gains")).toHaveClass(/blur/);
-  await expect(page.locator("#r-hook")).toContainText("setahun");
+  await expect(page.locator("#r-card")).toContainText("54%");
+  await expect(page.locator("#r-card")).toContainText("Hijrah");
+  await expect(page.locator("#r-bcount")).toHaveText("1 dari 8");
+  await expect(page.locator("#r-first")).toContainText("Kenapa ini dulu");
   await expect(page.locator("#r-ngain")).toHaveText("Ada 4 keuntungan yang belum kamu ambil");
-  await expect(page.locator("#r-badges .badge span").first()).toBeHidden();
+  await page.locator('.tease[data-tease="gains"] summary').click();
+  await expect(page.locator("#r-gains-prev .prev-amt")).toContainText("/ tahun");
+  await expect(page.locator("#r-gains-prev .math")).toContainText("Bukan angka pasti");
+  await expect(page.locator("#r-gains-prev .gains.blur > li")).toHaveCount(3);
+  await page.locator('.tease[data-tease="road"] summary').click();
+  await expect(page.locator("#r-road")).toContainText("Fase 1");
   await expect(page.locator("#r-guess")).toContainText("lebih syariah");
+  await expect(page.locator("#r-contoh")).toBeVisible();
+  await expect(page.locator(".rfoot")).toContainText("Pulihkan akses");
+  await expect(page.locator("#sh-captxt")).toHaveValue(/#ShariaCompass/);
   const src = await page.locator("#sh-img").getAttribute("src");
   expect(src).toMatch(/^data:image\/png/);
   await expect(page.locator("body")).not.toContainText("Perlindungan");
@@ -50,13 +56,15 @@ test("Dinda profile scores 58%, level Istiqamah, 2 of 8 badges", async ({ page }
 
 const BUYER = { email: "dinda@example.com", consent: true };
 
-test("paywall needs no data; optional email is validated and stored", async ({ page, request }) => {
+test("paywall requires one contact (email or WhatsApp), validated and stored", async ({ page, request }) => {
   await runQuiz(page);
   await page.locator("#r-unlock").click();
   await expect(page.locator("#pw-form input")).toHaveCount(1);
+  await page.locator("#pw-pay").click();
+  await expect(page.locator("#buy-err")).toContainText("email atau nomor WhatsApp");
   await page.fill("#b-email", "dinda@contoh");
   await page.locator("#pw-pay").click();
-  await expect(page.locator("#buy-err")).toContainText("Cek lagi alamat emailmu");
+  await expect(page.locator("#buy-err")).toContainText("email atau nomor WhatsApp");
   await page.fill("#b-email", "dinda.e2e@example.com");
   await page.locator("#pw-pay").click();
   await expect(page.locator("#pw-demo")).toBeVisible();
@@ -68,12 +76,50 @@ test("paywall needs no data; optional email is validated and stored", async ({ p
   expect(mine.status).toBe("waitlist");
 });
 
-test("paying without an email works", async ({ page }) => {
+test("a WhatsApp number is accepted as the contact", async ({ page }) => {
   await runQuiz(page);
   await page.locator("#r-unlock").click();
+  await page.fill("#b-email", "0812-3456-7890");
   await page.locator("#pw-pay").click();
   await expect(page.locator("#pw-demo")).toBeVisible();
-  await expect(page.locator("#fd-msg")).toContainText("Isi emailmu");
+  await expect(page.locator("#fd-msg")).toContainText("+6281234567890");
+});
+
+test("evidence persona: 50%, Hijrah, guess on the band edge, no partial badge, zakat estimate shows its math", async ({ page }) => {
+  await page.goto("/");
+  await page.locator('#consent [data-c="no"]').click();
+  await page.locator('.hero .guess-chip[data-guess="62"]').click();
+  await expect(page.locator("#v-lander")).toBeVisible();
+  await page.locator(".guess-go button").first().click();
+  await expect(page.locator("#q-count")).toHaveText("Pertanyaan 1/10 · 10%");
+  for (const v of ["ibadah", "konv", "campur", "0", "debit", "both", "bpjs"]) await answer(page, v);
+  await page.locator('#q-opts button[data-v="belum"]').click();
+  await page.locator("#q-next").click();
+  await answer(page, "kadang");
+  await page.locator('#q-opts button[data-v="8"]').click();
+  await expect(page.locator("#v-result")).toBeVisible({ timeout: 10_000 });
+  await expect(page.locator("#r-card")).toContainText("50%");
+  await expect(page.locator("#r-card")).toContainText("Hijrah");
+  await expect(page.locator("#r-guess")).toContainText("tepat di batasnya");
+  await expect(page.locator("#r-badges")).not.toContainText("✓ Tabungan syariah");
+  await page.locator('#r-badges details.badge:has-text("Tabungan syariah") summary').click();
+  await expect(page.locator('#r-badges details.badge:has-text("Tabungan syariah") .crit')).toContainText("bukan campuran");
+  await expect(page.locator("#r-nat")).toContainText("bukan peringkat pribadimu");
+  await expect(page.locator("#r-pnotes")).toContainText("BPJS");
+  await page.locator('.tease[data-tease="gains"] summary').click();
+  await expect(page.locator("#r-gains-prev .math")).toContainText("Rp5–10 juta");
+  await page.reload();
+  await expect(page.locator("#v-result")).toBeVisible();
+});
+
+test("refresh in the middle of the quiz resumes", async ({ page }) => {
+  await page.goto("/");
+  await page.locator('#consent [data-c="no"]').click();
+  await page.locator(".pill-cta").click();
+  await page.locator("#q-intro1go").click();
+  for (const v of ["rumah", "37", "keduanya"]) await answer(page, v);
+  await page.reload();
+  await expect(page.locator("#q-text")).toHaveText("Tabungan dan depositomu disimpan di mana?");
 });
 
 test("restore access with an order number, no chat", async ({ page, request }) => {
@@ -97,16 +143,19 @@ test("checkout API rejects a bad email and a price outside the arms", async ({ r
   expect((await r.json()).error).toBe("bad_price");
 });
 
-test("guess chip on the lander skips the guess question", async ({ page }) => {
+test("guess chip asks for confirmation, then skips the guess question", async ({ page }) => {
   await page.goto("/?harga=89000");
   await page.locator('#consent [data-c="no"]').click();
   await page.locator('.hero .guess-chip[data-guess="37"]').click();
-  await expect(page.locator("#q-count")).toHaveText("Pertanyaan 1/10");
+  await expect(page.locator(".guess-go").first()).toContainText("25–50%");
+  await page.locator('.hero .guess-chip[data-guess="62"]').click();
+  await expect(page.locator(".guess-go").first()).toContainText("50–75%");
+  await page.locator(".guess-go button").first().click();
+  await expect(page.locator("#q-count")).toHaveText("Pertanyaan 1/10 · 10%");
   await answer(page, "rumah");
-  await expect(page.locator("#q-count")).toHaveText("Pertanyaan 2/10");
-  await expect(page.locator("#q-text")).toHaveText("Gajimu atau rekening utamamu ada di mana?");
+  await expect(page.locator("#q-count")).toHaveText("Pertanyaan 2/10 · 20%");
   await page.locator("#q-back").click();
-  await expect(page.locator("#q-count")).toHaveText("Pertanyaan 1/10");
+  await expect(page.locator("#q-count")).toHaveText("Pertanyaan 1/10 · 10%");
 });
 
 test("English mode translates lander, quiz and result", async ({ page }) => {
@@ -118,17 +167,17 @@ test("English mode translates lander, quiz and result", async ({ page }) => {
   expect(lander).not.toMatch(/\b(kamu|yang|nggak|keuanganmu)\b/i);
   await page.locator(".pill-cta").click();
   await page.locator("#q-intro1go").click();
-  await expect(page.locator("#q-count")).toHaveText("Question 1/11");
+  await expect(page.locator("#q-count")).toHaveText("Question 1/10 · 10%");
   for (const v of DINDA) await answer(page, v);
-  for (const v of ["saham", "rdkonv", "emas"]) await page.locator(`#q-opts button[data-v="${v}"]`).click();
+  for (const v of ["sahamx", "rdkonv", "emas"]) await page.locator(`#q-opts button[data-v="${v}"]`).click();
   await page.locator("#q-next").click();
   await answer(page, "fitrah");
   await page.locator('#q-opts button[data-v="15"]').click();
   await expect(page.locator("#v-result")).toBeVisible({ timeout: 10_000 });
-  await expect(page.locator("#r-bcount")).toHaveText("2 of 8");
-  await expect(page.locator("#r-card")).toContainText("Istiqamah");
+  await expect(page.locator("#r-bcount")).toHaveText("1 of 8");
+  await expect(page.locator("#r-card")).toContainText("Hijrah");
   await page.locator("#r-unlock").click();
-  await expect(page.locator("#pw-sub")).toContainText("From 58% to about");
+  await expect(page.locator("#pw-sub")).toContainText("From 54% to about");
 });
 
 test("paid order opens the Premium report, then the Keuntungan tab", async ({ page, request }) => {
@@ -139,9 +188,16 @@ test("paid order opens the Premium report, then the Keuntungan tab", async ({ pa
   await page.goto("/?order=" + co.orderId);
   await expect(page.locator("#v-full")).toBeVisible({ timeout: 15_000 });
   await expect(page.locator('[data-panel="lap"]')).toBeVisible();
-  await expect(page.locator("#lap-sum")).toContainText("58% →");
+  await expect(page.locator("#lap-sum")).toContainText("54% →");
   await expect(page.locator("#lap-gains > li")).toHaveCount(4);
-  await expect(page.locator("#lap-badges .badge span").first()).toBeVisible();
+  await expect(page.locator("#lap-gains .pchip").first()).toBeVisible();
+  await page.fill("#m-sav", "50");
+  await expect(page.locator("#lap-gains")).toContainText("DATA KAMU");
+  await expect(page.locator("#f-oid")).toHaveText(co.orderId);
+  await page.locator("#f-sync").check();
+  await page.waitForTimeout(1200);
+  const pr = await (await request.get("/api/progress/" + co.orderId)).json();
+  expect(pr.data.ans.goal).toBe("rumah");
   await page.locator("#lap-gains .go-untung").first().click();
   await expect(page.locator('[data-panel="untung"]')).toBeVisible();
   await expect(page.locator("#u-total")).toContainText("/ tahun");
@@ -161,7 +217,7 @@ test("sample report is the real Premium view for the example profile and leaves 
   await page.goto("/contoh-laporan.html");
   await expect(page).toHaveURL(/\?contoh/);
   await expect(page.locator("#demo-bar")).toBeVisible();
-  await expect(page.locator("#lap-sum")).toContainText("58% →");
+  await expect(page.locator("#lap-sum")).toContainText("54% →");
   await expect(page.locator("#lap-nat .nat-big")).toContainText("13 dari 100");
   await expect(page.locator('[data-panel="lap"] .cut-cta')).toBeVisible();
   await expect(page.locator('[data-panel="lap"] .cut-cta a')).toHaveText("Cek punyamu gratis, 3 menit");
@@ -173,8 +229,11 @@ test("sample report is the real Premium view for the example profile and leaves 
   await expect(page.locator("#kat-list .ex").first()).toContainText("bukan rekomendasi");
 });
 
-test("tapping a blurred preview opens the paywall", async ({ page }) => {
+test("a locked row opens its own preview, whose button opens the paywall", async ({ page }) => {
   await runQuiz(page);
-  await page.locator('.tease[data-tease="first"]').click();
+  await page.locator('.tease[data-tease="tools"] summary').click();
+  await expect(page.locator("#r-tools")).toContainText("5 kalkulator");
+  await page.locator('#r-tools [data-open-pw]').click();
   await expect(page.locator("#paywall")).toBeVisible();
+  await expect(page.locator("#paywall")).toContainText("tanpa refund");
 });
