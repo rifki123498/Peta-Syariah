@@ -80,7 +80,6 @@ test("restore access with an order number, no chat", async ({ page, request }) =
   const co = await (await request.post("/api/checkout", { data: { anonId: "e2e-r", price: 89000, arm: 0, buyer: BUYER } })).json();
   await request.post("/api/webhooks/xendit", { headers: { "x-callback-token": "test-callback" }, data: { external_id: co.orderId, status: "PAID" } });
   await page.goto("/?pulihkan");
-  await page.locator('#consent [data-c="no"]').click();
   await expect(page.locator("#restore")).toBeVisible();
   await page.fill("#rs-id", "PS-000");
   await page.locator("#rs-go").click();
