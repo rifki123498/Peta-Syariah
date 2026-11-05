@@ -123,7 +123,7 @@ test("paid order opens the Premium report, then the Keuntungan tab", async ({ pa
   await expect(page.locator("#v-full")).toBeVisible({ timeout: 15_000 });
   await expect(page.locator('[data-panel="lap"]')).toBeVisible();
   await expect(page.locator("#lap-sum")).toContainText("58% →");
-  await expect(page.locator("#lap-gains li")).toHaveCount(4);
+  await expect(page.locator("#lap-gains > li")).toHaveCount(4);
   await expect(page.locator("#lap-badges .badge span").first()).toBeVisible();
   await page.locator("#lap-gains .go-untung").first().click();
   await expect(page.locator('[data-panel="untung"]')).toBeVisible();
@@ -147,6 +147,11 @@ test("sample report is the real Premium view for the example profile and leaves 
   await expect(page.locator("#lap-sum")).toContainText("58% →");
   await expect(page.locator("#lap-nat .nat-big")).toContainText("13 dari 100");
   expect(await page.evaluate(() => localStorage.getItem("petasyariah.v2"))).toBeNull();
+  await page.locator('[data-tab="untung"]').click();
+  await expect(page.locator("#u-gross")).toBeDisabled();
+  await expect(page.locator('[data-panel="untung"] .demo-lock')).toBeVisible();
+  await page.locator('[data-tab="kat"]').click();
+  await expect(page.locator("#kat-list .ex").first()).toContainText("bukan rekomendasi");
 });
 
 test("tapping a blurred preview opens the paywall", async ({ page }) => {

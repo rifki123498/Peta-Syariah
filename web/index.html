@@ -188,7 +188,8 @@ input[type=number]{width:100%;font-family:var(--mono);font-size:1rem;padding:10p
 .facts div{background:var(--surface);padding:12px}.facts b{display:block;font-family:var(--mono);font-weight:500;font-size:1rem}
 .facts span{font-size:.8rem;color:var(--muted)}
 .chart{width:100%;height:auto;display:block}
-.chart text{font-family:var(--mono);font-size:14px;fill:var(--muted)}
+.chart text{font-family:var(--mono);font-size:12px;fill:var(--muted)}
+.chart{max-width:620px}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}
 .legend i{display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:middle;border-radius:2px}
 .ratio{display:grid;gap:6px}
@@ -472,6 +473,17 @@ details.akd>p,details.akd>ul{margin:6px 0 0}
 .demo-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;border:2px solid var(--ink);border-radius:14px;padding:12px 14px;background:var(--lime);color:var(--on-lime);margin:0 0 12px}
 .demo-bar p{margin:0;flex:1 1 220px;font-size:.9rem}
 .nat-big{font-family:var(--display);font-size:clamp(1.35rem,5.5vw,1.7rem);line-height:1.2;font-weight:800;letter-spacing:-.02em;margin:0}
+.chart .ct{font-weight:700;fill:var(--muted)}
+ul.bl{margin:4px 0 0;padding-left:1.1em;display:grid;gap:3px}
+ul.bl li::marker{color:var(--teal)}
+.watch ul.bl{margin-top:2px}
+.myth{display:grid;gap:2px}
+.ex{border:1px dashed var(--line);border-radius:10px;padding:8px 10px;display:grid;gap:2px}
+.ex-k{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--teal)}
+.ex p{margin:0}
+.ex-n{font-size:.74rem;color:var(--muted)}
+.demo-lock{display:flex;gap:8px;align-items:center;margin:0 0 6px;padding:8px 10px;border-radius:10px;background:var(--lime);color:var(--on-lime);font-size:.84rem;font-weight:700}
+#v-full.demo input:disabled,#v-full.demo select:disabled{opacity:1;color:var(--ink);background:var(--sunk);cursor:not-allowed}
 .faq{display:grid;gap:10px;max-width:720px}
 .faq details{border:2px solid var(--ink);border-radius:var(--r);background:var(--surface);padding:12px 14px}
 .faq summary{font-weight:700;cursor:pointer}
@@ -779,8 +791,7 @@ details.akd>p,details.akd>ul{margin:6px 0 0}
           </div>
           <div class="res warn" id="h-err" role="alert" hidden></div>
           <svg class="chart" id="h-chart" viewBox="0 0 640 240" role="img" aria-label="Cicilan murabahah dan MMQ per bulan"></svg>
-          <div class="legend"><span><i style="background:var(--gold)"></i>Murabahah</span><span><i style="background:var(--teal)"></i>MMQ (asumsi)</span></div>
-          <div class="facts" id="h-facts"></div>
+                    <div class="facts" id="h-facts"></div>
           <div class="res" id="h-insight"></div>
           <details class="refs"><summary>Rujukan dan catatan</summary><p class="cite">Fatwa DSN-MUI No. 04/DSN-MUI/IV/2000 tentang Murabahah; No. 23/DSN-MUI/III/2002 tentang Potongan Pelunasan dalam Murabahah; No. 73/DSN-MUI/XI/2008 tentang Musyarakah Mutanaqishah. Model ini menyederhanakan: struktur ujrah dan harga pengalihan porsi di tiap bank bisa berbeda.</p></details>
         </div>
@@ -816,7 +827,7 @@ details.akd>p,details.akd>ul{margin:6px 0 0}
           </div>
           <div class="res warn" id="b-err" role="alert" hidden></div>
           <div class="res" id="b-out"></div>
-          <svg class="chart" id="b-chart" viewBox="0 0 640 200" role="img" aria-label="Sensitivitas bagi hasil terhadap imbal hasil dana"></svg>
+          <svg class="chart" id="b-chart" viewBox="0 0 640 230" role="img" aria-label="Bagi hasil untukmu menurut hasil dana yang dikelola bank"></svg>
           <details class="refs"><summary>Rujukan dan catatan</summary><p class="cite">Fatwa DSN-MUI No. 03/DSN-MUI/IV/2000 tentang Deposito; No. 07/DSN-MUI/IV/2000 tentang Pembiayaan Mudharabah (Qiradh). Pajak atas bagi hasil tidak dihitung di sini.</p></details>
         </div>
 
@@ -831,20 +842,20 @@ details.akd>p,details.akd>ul{margin:6px 0 0}
             </div>
             <div class="row">
               <div><label for="w-zak">Zakat per bulan</label><div class="unit"><input type="number" id="w-zak" step="0.05" value="0.375"><span>juta</span></div><p class="hint">Dari Lab → Zakat.</p></div>
-              <div><label for="w-debt">Cicilan halal</label><div class="unit"><input type="number" id="w-debt" step="0.1" value="0"><span>juta</span></div></div>
+              <div><label for="w-debt">Cicilan per bulan</label><div class="unit"><input type="number" id="w-debt" step="0.1" value="0"><span>juta</span></div></div>
               <div><label for="w-par">Dukungan orang tua</label><div class="unit"><input type="number" id="w-par" step="0.1" value="1"><span>juta</span></div></div>
             </div>
             <div class="row">
-              <div><label for="w-naf">Kebutuhan rumah tangga (nafkah)</label><div class="unit"><input type="number" id="w-naf" step="0.1" value="7"><span>juta</span></div><p class="hint">Tempat tinggal, makan, pakaian, kesehatan, pendidikan.</p></div>
+              <div><label for="w-naf">Kebutuhan rumah tangga</label><div class="unit"><input type="number" id="w-naf" step="0.1" value="7"><span>juta</span></div><p class="hint">Tempat tinggal, makan, pakaian, kesehatan, pendidikan.</p></div>
               <div><label for="w-ef">Dana darurat yang sudah ada</label><div class="unit"><input type="number" id="w-ef" step="1" value="20"><span>juta</span></div></div>
               <div><label for="w-life">Gaya hidup yang kamu inginkan</label><div class="unit"><input type="number" id="w-life" step="0.1" value="2"><span>juta</span></div></div>
             </div>
           </div>
           <div class="res warn" id="w-err" role="alert" hidden></div>
           <div class="panel"><div class="row" style="justify-content:space-between;align-items:baseline"><h3>Rencana alokasimu</h3><span class="small muted" id="w-ef-m"></span></div><div class="wf" id="w-out"></div></div>
-          <div class="panel"><h3>Aliran sisa dana</h3><ol class="ledger" id="w-ledger"></ol></div>
+          <div class="panel"><h3>Ke mana sisa uangmu mengalir</h3><ol class="ledger" id="w-ledger"></ol></div>
           <div class="panel" id="w-wife-out" hidden></div>
-          <details class="refs"><summary>Rujukan dan catatan</summary><p class="cite">Rentang per pos adalah <b>heuristik perencanaan, bukan ketentuan fikih</b>, diadaptasi dari sharia-skills (Canggih Puspo Wibowo, lisensi MIT). Kebutuhan nyata rumah tanggamu dan arahan ulama yang kamu pegang lebih diutamakan. Pemisahan harta suami-istri ditampilkan sebagai pendapat mayoritas; kesepakatan lain diperbolehkan bila disepakati bersama.</p></details>
+          <details class="refs"><summary>Rujukan dan catatan</summary><p class="cite">Porsi yang disarankan adalah <b>pedoman perencanaan, bukan ketentuan fikih</b>, diadaptasi dari sharia-skills (Canggih Puspo Wibowo, lisensi MIT). Kalau kebutuhan rumah tanggamu atau arahan ustadzmu berbeda, ikuti itu. Pemisahan harta suami-istri ditampilkan sebagai pendapat mayoritas; kesepakatan lain diperbolehkan bila disepakati bersama.</p></details>
         </div>
         <!-- Zakat -->
         <div class="lab stack" data-l="zakat" hidden>

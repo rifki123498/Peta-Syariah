@@ -39,3 +39,21 @@ Only facts listed here may appear in the product. Re-check items marked **refres
 - Riba anxiety: Reuters 2021 via The Halal Times (XBank community ~500k IG followers; candidates refusing conventional-bank jobs).
 - Willingness to pay: syariah cashflow class Rp125.000/session (Investasiku, Dec 2025); QM syariah planning certification Rp2,5–3,5 jt.
 - Comparable apps: Zoya est. <$10K–20K/month (AppGoblin, Adapty; sources conflict).
+
+## Product examples in the Premium catalogue ("Contoh di pasar, bukan rekomendasi beli")
+| Type | Example shown | Source |
+|---|---|---|
+| Tabungan syariah | BSI Tabungan Easy Wadiah | Republika, 8 Agu 2022: https://ekonomi.republika.co.id/berita/rgaomy457/bsi-dorong-casa-melalui-tabungan-wadiah |
+| Tabungan haji | Tabungan Haji BSI | Kontan: https://keuangan.kontan.co.id/news/bsi-targetkan-kelola-lebih-dari-7-juta-rekening-tabungan-haji-hingga-akhir-2025 |
+| Sukuk Tabungan | ST016 (Mei 2026) | Bisnis.com, 8 Mei 2026: https://market.bisnis.com/read/20260508/92/1972453/st016-resmi-meluncur-kemenkeu-target-penjualan-rp15-triliun |
+| Sukuk Ritel | SR025 | see SR025 rows above |
+| Sukuk Wakaf Ritel | SWR007 | EmitenNews: https://emitennews.com/news/pemerintah-rilis-sukuk-wakaf-swr007-imbalan-minimal-670 |
+| Reksa dana syariah | Principal Sukuk Syariah 2 | Principal FFS Jun 2026: https://www.principal.co.id/sites/default/files/fund-documents/Indonesia%20Site/id_FFS_Principal%20Sukuk%20Syariah%202%28SUKS2%29_IND_0626.pdf |
+| Saham syariah | TLKM, ICBP, KLBF, UNVR (JII 10 tahun) | IDX Channel, 20 Okt 2022 (refresh) |
+| Tabungan emas | Tabungan Emas Pegadaian, mulai 0,01 gram | Bisnis.com, 13 Jan 2024: https://finansial.bisnis.com/read/20240113/55/1731996/siapkan-pendidikan-anak-dengan-nabung-emas-mulai-001-gram-di-pegadaian |
+| Asuransi syariah | Prudential Syariah; Allianz Syariah | Kontan: https://keuangan.kontan.co.id/news/patuhi-aturan-spin-off-allianz-resmi-luncurkan-allianz-syariah ; https://keuangan.kontan.co.id/news/prudential-syariah-sebut-aturan-spin-off-uus-bawa-dampak-positif-bagi-industri |
+| DPLK syariah | DPLK Syariah Muamalat | Kontan: https://keuangan.kontan.co.id/news/bank-muamalat-luncurkan-dplk-syariah-pertama-di-indonesia |
+| SCF syariah | Shafiq | Kontan: https://keuangan.kontan.co.id/news/shafiq-digital-jadi-securities-crowdfunding-syariah-berizin-pertama-di-indonesia |
+| Gadai syariah | Rahn, Pegadaian Syariah | https://pegadaian.co.id/artikel/inspirasi/mengenal-pegadaian-syariah-solusi-keuangan-sesuai-syariat |
+| Zakat/wakaf | BAZNAS; LAZ Rumah Zakat Indonesia; LAZ Dompet Dhuafa Republika | IDX Channel, 21 Feb 2024: https://www.idxchannel.com/syariah/catat-ini-daftar-170-lembaga-amil-zakat-yang-kantongi-izin-kemenag/all |
+Deposito mudharabah, gadai and others: no named example where no source was found. Re-check every example before each campaign; products and permits change.

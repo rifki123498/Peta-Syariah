@@ -14,6 +14,8 @@ const DEMO_ANS={goal:"rumah",guess:"37",rek:"keduanya",tab:"konv",darurat:"3",ba
 function save(){ if(DEMO) return; try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(_){} }
 const rp=n=>"Rp"+Math.round(n).toLocaleString("id-ID");
 function rpS(n){ const a=Math.abs(n),s=n<0?"−":""; if(a>=1e9) return s+"Rp"+(a/1e9).toLocaleString("id-ID",{maximumFractionDigits:2})+" M"; if(a>=1e6) return s+"Rp"+(a/1e6).toLocaleString("id-ID",{maximumFractionDigits:1})+" jt"; if(a>=1e3) return s+"Rp"+Math.round(a/1e3).toLocaleString("id-ID")+" rb"; return s+rp(a); }
+/* Long copy → bullets: 2+ sentences become a list, one sentence stays a paragraph. */
+const bl=(t,cls="small")=>{ const parts=String(t).split(/(?<=[.!?])\s+(?=[A-Z0-9"(])/).filter(Boolean); return parts.length>1?`<ul class="bl ${cls}">${parts.map(x=>`<li>${x}</li>`).join("")}</ul>`:`<p class="${cls}">${t}</p>`; };
 const pct=(n,d)=>n.toLocaleString("id-ID",{maximumFractionDigits:d==null?1:d})+"%";
 const num=(id,d)=>{ const v=parseFloat($(id).value); return isFinite(v)?v:d; };
 
@@ -256,7 +258,7 @@ function tasks(a){
 
 /* ================= RESULT ================= */
 function badgesHTML(){ return BADGES.map(b=>{ const on=b[2](S.ans); return `<div class="badge${on?"":" off"}"><b>${on?"✓":"○"} ${b[0]}</b><span>${on?b[1]:"Belum terbuka"}</span></div>`; }).join(""); }
-function gainsHTML(G,paid){ return G.map(x=>`<li><div><b>${x[0]}</b><p class="small muted">${x[1]}</p><p class="cite">${x[3]}</p></div>${paid?(x[2]?`<button class="lockchip go-untung" type="button">Hitung rupiahnya →</button>`:""):`<span class="lockchip">${x[2]?"Rp ••• / tahun":"Premium"}</span>`}</li>`).join("")||`<li><div><b>Hampir semua keuntungan utama sudah kamu ambil.</b><p class="small muted">Premium membantu menjaga dan merapikan sisanya.</p></div></li>`; }
+function gainsHTML(G,paid){ return G.map(x=>`<li><div><b>${x[0]}</b>${paid?bl(x[1],"small muted"):`<p class="small muted">${x[1]}</p>`}<p class="cite">${x[3]}</p></div>${paid?(x[2]?`<button class="lockchip go-untung" type="button">Hitung rupiahnya →</button>`:""):`<span class="lockchip">${x[2]?"Rp ••• / tahun":"Premium"}</span>`}</li>`).join("")||`<li><div><b>Hampir semua keuntungan utama sudah kamu ambil.</b><p class="small muted">Premium membantu menjaga dan merapikan sisanya.</p></div></li>`; }
 let SC=null;
 function renderResult(){
   SC=scores(S.ans); const T=tasks(S.ans); const p=persona(SC);
@@ -358,7 +360,7 @@ function renderLap(){
   $("lap-pillars").innerHTML=Object.keys(PILLARS).map(k=>`<div class="lp"><div class="lp-t"><b>${PILLARS[k]}</b><span class="num">${SC[k]}${PJ[k]>SC[k]?" → "+PJ[k]:""}</span></div><div class="bar"><i style="width:${SC[k]}%"></i><i class="pot" style="left:${SC[k]}%;width:${Math.max(0,PJ[k]-SC[k])}%"></i></div><p class="small muted">${next(k)}</p></div>`).join("");
   $("lap-badges").innerHTML=badgesHTML();
   $("lap-gains").innerHTML=gainsHTML(G,true);
-  $("lap-first").innerHTML=`<h3>${first.t}</h3><p class="small muted">${first.w}</p>`;
+  $("lap-first").innerHTML=`<h3>${first.t}</h3>${bl(first.w,"small muted")}`;
   $("lap-nat").innerHTML=natHTML();
   $("lap-facts").innerHTML=FACTS.map(factHTML).join("");
   document.querySelectorAll("#v-full .go-untung").forEach(b=>b.onclick=()=>{ selectTab("untung"); window.scrollTo(0,0); });
@@ -380,7 +382,7 @@ function renderRoad(){
   const T=tasks(S.ans);
   $("road").innerHTML=`<div><p class="eyebrow">Rencana tahap ${persona(SC)[0]}</p><h2>${T.length} langkah dalam 90 hari</h2><p class="muted" style="margin-top:6px">Fondasi dulu, lalu pindahkan produk besar, lalu tumbuhkan. Tidak ada yang harus pindah sekaligus.</p></div><div class="panel" id="road-map">${mapSVG(T)}</div>`+
   [1,2,3].map(ph=>{ const L=T.filter(t=>t.ph===ph); if(!L.length) return "";
-    return `<div class="phase"><div class="phase-h"><h3>Fase ${ph} · ${PH[ph][0]}</h3><span>${PH[ph][1]}</span></div>`+L.map(t=>`<div class="task${S.done[t.id]?" done":""}" data-id="${t.id}"><input type="checkbox" id="ck-${t.id}" ${S.done[t.id]?"checked":""}><div><h3><label for="ck-${t.id}" style="font:inherit;margin:0;display:inline">${t.t}</label></h3><p class="small muted" style="margin-top:4px">${t.w}</p><div class="meta"><span class="chip p">${PILLARS[t.p]}</span><span class="chip">${t.d}</span>${t.src.length?`<span class="chip f">${t.src.length} rujukan</span>`:""}</div><details><summary>Cara melakukannya</summary><ul>${t.how.map(h=>`<li>${h}</li>`).join("")}</ul>${t.watch?`<div class="watch"><b>Perlu diwaspadai:</b> ${t.watch}</div>`:""}${t.ask?`<p class="small" style="margin-top:8px"><b>Tanyakan ke penyedia, lalu centang:</b></p><ul class="asklist">${t.ask.map((q,i)=>{ const id=t.id+"-q"+i, on=!!(S.qc&&S.qc[id]); return `<li><label><input type="checkbox" data-q="${id}" ${on?"checked":""}><span class="${on?"done-q":""}">${q}</span></label></li>`; }).join("")}</ul><p class="small muted" style="margin-top:4px">${t.ask.filter((q,i)=>S.qc&&S.qc[t.id+"-q"+i]).length} dari ${t.ask.length} terjawab</p>`:""}${t.src.length?`<p class="cite" style="margin-top:8px">${t.src.map(f).join("<br>")}</p>`:""}</details></div></div>`).join("")+`</div>`; }).join("");
+    return `<div class="phase"><div class="phase-h"><h3>Fase ${ph} · ${PH[ph][0]}</h3><span>${PH[ph][1]}</span></div>`+L.map(t=>`<div class="task${S.done[t.id]?" done":""}" data-id="${t.id}"><input type="checkbox" id="ck-${t.id}" ${S.done[t.id]?"checked":""}><div><h3><label for="ck-${t.id}" style="font:inherit;margin:0;display:inline">${t.t}</label></h3>${bl(t.w,"small muted")}<div class="meta"><span class="chip p">${PILLARS[t.p]}</span><span class="chip">${t.d}</span>${t.src.length?`<span class="chip f">${t.src.length} rujukan</span>`:""}</div><details><summary>Cara melakukannya</summary><ul>${t.how.map(h=>`<li>${h}</li>`).join("")}</ul>${t.watch?`<div class="watch"><b>Perlu diwaspadai:</b> ${t.watch}</div>`:""}${t.ask?`<p class="small" style="margin-top:8px"><b>Tanyakan ke penyedia, lalu centang:</b></p><ul class="asklist">${t.ask.map((q,i)=>{ const id=t.id+"-q"+i, on=!!(S.qc&&S.qc[id]); return `<li><label><input type="checkbox" data-q="${id}" ${on?"checked":""}><span class="${on?"done-q":""}">${q}</span></label></li>`; }).join("")}</ul><p class="small muted" style="margin-top:4px">${t.ask.filter((q,i)=>S.qc&&S.qc[t.id+"-q"+i]).length} dari ${t.ask.length} terjawab</p>`:""}${t.src.length?`<p class="cite" style="margin-top:8px">${t.src.map(f).join("<br>")}</p>`:""}</details></div></div>`).join("")+`</div>`; }).join("");
   $("road").querySelectorAll("input[data-q]").forEach(cb=>cb.addEventListener("change",()=>{ S.qc=S.qc||{}; S.qc[cb.dataset.q]=cb.checked; save(); cb.nextElementSibling.classList.toggle("done-q",cb.checked); const ul=cb.closest(".asklist"); const n=[...ul.querySelectorAll("input")].filter(x=>x.checked).length; ul.nextElementSibling.textContent=n+" dari "+ul.querySelectorAll("input").length+" terjawab"; track("ask_toggle",{q:cb.dataset.q,on:cb.checked}); }));
   $("road").querySelectorAll(".task > input[type=checkbox]").forEach(cb=>cb.addEventListener("change",()=>{ const id=cb.closest(".task").dataset.id; S.done[id]=cb.checked; save(); cb.closest(".task").classList.toggle("done",cb.checked); prog(); $("road-map").innerHTML=mapSVG(tasks(S.ans)); track("task_toggle",{id,done:cb.checked}); }));
   prog();
@@ -422,23 +424,28 @@ function calcRumah(){
   for(let t=1;t<=n;t++){ if(t>1&&(t-1)%rev===0){ rate=Math.max(0,rate+chg); P=pmt(bal,rate,n-t+1); }
     const i=bal*rate/1200, pr=Math.min(P-i,bal); bal-=pr; totalM+=i+pr; mmq.push(i+pr); if(t===exitM) balAtExit=bal; }
   const murOwe=Pm*(n-exitM), murEcon=balAfter(B,m,n,exitM);
-  drawLines($("h-chart"),[{vals:new Array(n).fill(Pm),c:"var(--gold)"},{vals:mmq,c:"var(--teal)"}],n,exitM);
+  drawLines($("h-chart"),[{n:"Murabahah",vals:new Array(n).fill(Pm),c:"var(--gold)"},{n:"MMQ (asumsi)",vals:mmq,c:"var(--teal)"}],n,exitM);
   $("h-facts").innerHTML=`<div><span>Cicilan murabahah (tetap)</span><b>${rp(Pm)}</b></div><div><span>Cicilan MMQ awal → akhir</span><b>${rpS(mmq[0])} → ${rpS(mmq[mmq.length-1])}</b></div>
     <div><span>Harga jual murabahah</span><b>${rpS(hargaJual)}</b></div><div><span>Total bayar MMQ (asumsi)</span><b>${rpS(totalM)}</b></div>
     <div><span>Lunas thn ke-${exitM/12|0}: sisa harga jual murabahah</span><b>${rpS(murOwe)}</b></div><div><span>Lunas thn ke-${exitM/12|0}: sisa porsi bank di MMQ</span><b>${rpS(balAtExit)}</b></div>`;
   const gap=murOwe-murEcon;
   $("h-insight").className="res"+(gap>0?"":" neutral");
-  $("h-insight").innerHTML=`<p class="h">Kepastian vs kelenturan</p><p class="small">Murabahah mengunci cicilan ${rp(Pm)} sampai lunas, apa pun kondisi pasar. Tapi kalau kamu melunasi di tahun ke-${exitM/12|0}, kewajibanmu adalah sisa harga jual ${rpS(murOwe)}. Dari angka itu, sekitar <b>${rpS(gap)}</b> adalah sisa margin yang hanya berkurang bila bank memberi potongan pelunasan, dan potongan itu kebijakan bank, bukan hak yang diperjanjikan. Di MMQ, kamu membeli sisa porsi bank (sekitar ${rpS(balAtExit)} dalam model ini), dengan risiko ujrah bisa berubah di setiap peninjauan.</p>`;
+  $("h-insight").innerHTML=`<p class="h">Pasti atau fleksibel?</p><ul class="bl small"><li><b>Murabahah:</b> cicilan tetap ${rp(Pm)} sampai lunas, apa pun kondisi pasar.</li><li>Kalau lunas di tahun ke-${exitM/12|0}, kamu masih harus membayar sisa harga jual ${rpS(murOwe)}.</li><li>Sekitar <b>${rpS(gap)}</b> di dalamnya adalah sisa margin. Potongannya tergantung kebijakan bank, bukan hak yang dijanjikan di akad.</li><li><b>MMQ:</b> kamu cukup membeli sisa porsi bank, sekitar ${rpS(balAtExit)} di simulasi ini, tapi ujrahnya bisa berubah di setiap peninjauan.</li></ul>`;
 }
+/* Line chart with direct labels (no legend hunting): series name + latest value at the line end, values at the "lunas" marker. */
 function drawLines(svg,series,n,mark){
-  const W=640,H=240,ml=78,mr=12,mt=14,mb=30,w=W-ml-mr,h=H-mt-mb;
+  const W=400,H=262,ml=46,mr=100,mt=44,mb=34,w=W-ml-mr,h=H-mt-mb;
   const all=series.flatMap(s=>s.vals); let hi=Math.max(...all)*1.1, lo=Math.min(...all)*0.85; const st=nice((hi-lo)/4); lo=Math.floor(lo/st)*st; hi=Math.ceil(hi/st)*st;
-  const x=i=>ml+w*i/(n-1), y=v=>mt+h-h*(v-lo)/(hi-lo); let g="";
+  const x=i=>ml+w*i/(n-1), y=v=>mt+h-h*(v-lo)/(hi-lo); let g=`<text x="${ml-8}" y="14" text-anchor="start" class="ct">Cicilan per bulan</text>`;
   for(let v=lo;v<=hi+1;v+=st) g+=`<line x1="${ml}" x2="${W-mr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)"/><text x="${ml-8}" y="${y(v)+5}" text-anchor="end">${ax(v)}</text>`;
-  const yrs=n/12, ev=yrs>15?5:yrs>6?3:1; for(let yr=0;yr<=yrs;yr+=ev) g+=`<text x="${ml+w*Math.min(yr*12,n-1)/(n-1)}" y="${H-8}" text-anchor="middle">${yr?"th "+yr:""}</text>`;
-  if(mark) g+=`<line x1="${x(mark)}" x2="${x(mark)}" y1="${mt}" y2="${mt+h}" stroke="var(--ink)" stroke-dasharray="4 4"/><text x="${x(mark)+6}" y="${mt+14}" style="fill:var(--ink)">lunas?</text>`;
-  series.forEach(s=>{ g+=`<path d="${s.vals.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(v).toFixed(1)).join(" ")}" fill="none" stroke="${s.c}" stroke-width="3"/>`; });
-  svg.innerHTML=g;
+  const yrs=n/12, ev=yrs>15?5:yrs>6?5:2; for(let yr=0;yr<=yrs;yr+=ev) g+=`<text x="${ml+w*Math.min(yr*12,n-1)/(n-1)}" y="${H-12}" text-anchor="middle">${yr?"th "+yr:"0"}</text>`;
+  if(mark){ g+=`<line x1="${x(mark)}" x2="${x(mark)}" y1="${mt-6}" y2="${mt+h}" stroke="var(--ink)" stroke-dasharray="4 4"/><text x="${x(mark)}" y="${mt-12}" text-anchor="middle" class="ct">lunas th ${Math.round(mark/12)}?</text>`; }
+  series.forEach(s=>{ g+=`<path d="${s.vals.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+","+y(v).toFixed(1)).join(" ")}" fill="none" stroke="${s.c}" stroke-width="3" stroke-linejoin="round"/>`; });
+  // end labels, nudged apart when the lines finish close together
+  const ends=series.map(s=>({s,yy:y(s.vals[n-1])})).sort((a,b)=>a.yy-b.yy); for(let i=1;i<ends.length;i++) if(ends[i].yy-ends[i-1].yy<36) ends[i].yy=ends[i-1].yy+36;
+  ends.forEach(e=>{ g+=`<circle cx="${x(n-1)}" cy="${y(e.s.vals[n-1])}" r="4" fill="${e.s.c}"/><text x="${x(n-1)+10}" y="${e.yy-2}" style="fill:${e.s.c};font-weight:700">${e.s.n||""}</text><text x="${x(n-1)+10}" y="${e.yy+14}" style="fill:var(--ink)">${ax(e.s.vals[n-1])}/bln</text>`; });
+  if(mark) series.forEach(s=>{ g+=`<circle cx="${x(mark)}" cy="${y(s.vals[mark])}" r="5" fill="var(--surface)" stroke="${s.c}" stroke-width="3"/>`; });
+  svg.setAttribute("viewBox",`0 0 ${W} ${H}`); svg.innerHTML=g;
 }
 function nice(v){ const p=Math.pow(10,Math.floor(Math.log10(Math.max(v,1)))),m=v/p; return (m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*p; }
 function ax(v){ if(v>=1e9) return (v/1e9).toLocaleString("id-ID",{maximumFractionDigits:1})+" M"; if(v>=1e6) return (v/1e6).toLocaleString("id-ID",{maximumFractionDigits:1})+" jt"; if(v>=1e3) return Math.round(v/1e3)+" rb"; return String(Math.round(v)); }
@@ -459,7 +466,7 @@ function calcSaham(){
   else { st="Sesuai secara rasio"; cls="ok"; why="Lolos kedua rasio, termasuk target akhir. Kegiatan usaha belum diperiksa di sini; daftar resmi tetap DES yang diterbitkan OJK."; }
   const row=(t,v,lim,ok,src)=>`<tr><td>${t}</td><td class="num">${pct(v)}</td><td>${lim}</td><td>${ok}</td><td class="small">${src}</td></tr>`;
   const pf=b=>b?"lolos":"tidak lolos";
-  $("s-out").innerHTML=`<p><span class="status ${cls}">${st}</span></p><p class="small">${why}</p>
+  $("s-out").innerHTML=`<p><span class="status ${cls}">${st}</span></p>${bl(why)}
    <div class="scroll"><table><thead><tr><th>Uji</th><th>Nilai</th><th>Batas</th><th>Hasil</th><th>Dasar</th></tr></thead><tbody>
    ${row("Non-halal ÷ total pendapatan",rNH,"≤ 5%",pf(rNH<=5),"Aturan OJK berlaku: POJK 8/2025, seleksi 2026")}
    ${row("Non-halal ÷ total pendapatan",rNH,"≤ 10%",pf(rNH<=10),"Nilai fatwa: DSN-MUI 80/2011")}
@@ -474,14 +481,16 @@ function calcBagi(){
   if(!check("b-err",[["b-dana",0,1e6,"Dana tidak boleh negatif."],["b-nis",0,100,"Nisbah 0–100%."],["b-yield",0,50,"Imbal hasil 0–50% per tahun."]])) return;
   const d=num("b-dana",100)*1e6, ns=num("b-nis",45), y=num("b-yield",9), eq=ns*y/100;
   $("b-out").innerHTML=`<p class="h">Setara ${pct(eq,2)} per tahun</p><p class="small">Nisbah ${pct(ns,0)} × imbal hasil ${pct(y,2)}. Untuk dana ${rpS(d)}, sekitar <b>${rp(d*eq/100/12)}</b> per bulan sebelum pajak, selama imbal hasil dana bank tetap.</p>`;
-  const W=640,H=200,ml=60,mr=14,mt=14,mb=30,w=W-ml-mr,h=H-mt-mb, ys=[]; for(let v=4;v<=14;v+=0.5) ys.push(v);
-  const hi=Math.ceil(ns*14/100), x=v=>ml+w*(v-4)/10, yy=v=>mt+h-h*v/hi; let g="";
+  const W=400,H=240,ml=40,mr=16,mt=30,mb=44,w=W-ml-mr,h=H-mt-mb, ys=[]; for(let v=4;v<=14;v+=0.5) ys.push(v);
+  const hi=Math.max(1,Math.ceil(ns*14/100)), x=v=>ml+w*(v-4)/10, yy=v=>mt+h-h*v/hi; let g=`<text x="${ml-8}" y="14" class="ct">Bagi hasil untukmu / tahun</text>`;
   for(let v=0;v<=hi;v+=hi>8?2:1) g+=`<line x1="${ml}" x2="${W-mr}" y1="${yy(v)}" y2="${yy(v)}" stroke="var(--line)"/><text x="${ml-8}" y="${yy(v)+5}" text-anchor="end">${v}%</text>`;
-  for(let v=4;v<=14;v+=2) g+=`<text x="${x(v)}" y="${H-8}" text-anchor="middle">${v}%</text>`;
+  for(let v=4;v<=14;v+=2) g+=`<text x="${x(v)}" y="${H-24}" text-anchor="middle">${v}%</text>`;
+  g+=`<text x="${ml+w/2}" y="${H-4}" text-anchor="middle" class="ct">Hasil dana yang dikelola bank / tahun</text>`;
   g+=`<path d="${ys.map((v,i)=>(i?"L":"M")+x(v).toFixed(1)+","+yy(ns*v/100).toFixed(1)).join(" ")}" fill="none" stroke="var(--teal)" stroke-width="3"/>`;
-  if(y>=4&&y<=14) g+=`<circle cx="${x(y)}" cy="${yy(eq)}" r="6" fill="var(--gold)"/><text x="${x(y)+10}" y="${yy(eq)-10}" style="fill:var(--ink)">kamu</text>`;
-  g+=`<text x="${W-mr}" y="${mt+12}" text-anchor="end">sumbu x: imbal hasil dana bank</text>`;
-  $("b-chart").innerHTML=g;
+  if(y>=4&&y<=14){ const cx=x(y), cy=yy(eq);
+    g+=`<line x1="${cx}" x2="${cx}" y1="${cy}" y2="${mt+h}" stroke="var(--gold)" stroke-dasharray="4 4"/><line x1="${ml}" x2="${cx}" y1="${cy}" y2="${cy}" stroke="var(--gold)" stroke-dasharray="4 4"/>`;
+    g+=`<circle cx="${cx}" cy="${cy}" r="7" fill="var(--gold)" stroke="var(--ink)" stroke-width="1.5"/><text x="${cx+(cx>W-150?-12:12)}" y="${cy-12}" text-anchor="${cx>W-150?"end":"start"}" style="fill:var(--ink);font-weight:700">Kamu dapat ${pct(eq,2)}</text>`; }
+  $("b-chart").setAttribute("viewBox",`0 0 ${W} ${H}`); $("b-chart").innerHTML=g;
 }
 function calcZakat(){
   const inc=num("z-inc",8)*1e6, nis=num("z-nis",7640144);
@@ -502,13 +511,13 @@ function calcAlok(){
   const J=1e6, I=num("w-inc",15)*J, zak=num("w-zak",0)*J, debt=num("w-debt",0)*J, par=num("w-par",0)*J, naf=num("w-naf",0)*J, ef=num("w-ef",0)*J, lifeW=num("w-life",0)*J;
   const core=naf+debt+par, months=core>0?ef/core:99;
   $("w-ef-m").textContent=core>0?`Dana daruratmu: ${months.toLocaleString("id-ID",{maximumFractionDigits:1})} bulan pengeluaran inti`:"";
-  const T={wajib:{n:"Kewajiban",d:"Wajib · zakat, cicilan halal, orang tua",a:zak+debt+par,f:null,c:null},
-    nafkah:{n:"Nafkah keluarga",d:"Wajib · kebutuhan rumah tangga",a:naf,f:.40,c:.60},
+  const T={wajib:{n:"Kewajiban",d:"Zakat, cicilan, bantuan orang tua",a:zak+debt+par,f:null,c:null},
+    nafkah:{n:"Kebutuhan keluarga",d:"Rumah, makan, sekolah, kesehatan",a:naf,f:.40,c:.60},
     tahan:{n:"Ketahanan",d:"Dana darurat & proteksi",a:0,f:.10,c:.20},
-    invest:{n:"Investasi jangka panjang",d:"Sunnah / hajiyyat",a:0,f:.05,c:.30},
-    infak:{n:"Infak & ibadah",d:"Sunnah · sedekah, kurban, umrah",a:0,f:.025,c:.10},
-    gaya:{n:"Gaya hidup",d:"Mubah · rekreasi",a:0,f:0,c:.30},
-    sisa:{n:"Belum dialokasikan",d:"Putuskan sendiri: pelunasan, dana haji, dll.",a:0,f:null,c:null}};
+    invest:{n:"Investasi jangka panjang",d:"Untuk tujuan beberapa tahun lagi",a:0,f:.05,c:.30},
+    infak:{n:"Berbagi & ibadah",d:"Sedekah, kurban, umrah",a:0,f:.025,c:.10},
+    gaya:{n:"Gaya hidup",d:"Hiburan dan keinginan",a:0,f:0,c:.30},
+    sisa:{n:"Sisa",d:"Kamu yang putuskan: lunasi utang, dana haji, dll.",a:0,f:null,c:null}};
   const led=[]; let R=I-T.wajib.a-T.nafkah.a;
   if(R<0){ $("w-out").innerHTML=`<div class="res warn"><p class="h">Defisit ${rpS(-R)} per bulan</p><p class="small">Kewajiban dan nafkah sudah melebihi penghasilan. Investasi, infak sukarela, dan gaya hidup ditunda dulu. Kewajiban tidak dipangkas untuk menyeimbangkan angka; tinjau ulang cicilan dan kebutuhan rumah tangga, atau tambah penghasilan.</p></div>`; $("w-ledger").innerHTML=""; renderWife(); return; }
   const give=(k,amt,why)=>{ const x=Math.max(0,Math.min(amt,R)); if(x>0){ T[k].a+=x; R-=x; if(why) led.push(`${rpS(x)} → ${T[k].n}: ${why}`); } return x; };
@@ -518,44 +527,44 @@ function calcAlok(){
   give("infak", T.infak.f*I, null);
   // 2) lifestyle the user asked for, hard-capped
   give("gaya", Math.min(lifeW, T.gaya.c*I), null);
-  if(lifeW>T.gaya.c*I) led.push(`Gaya hidup dibatasi ${rpS(T.gaya.c*I)} (30% penghasilan). Melebihinya harus keputusanmu sendiri.`);
+  if(lifeW>T.gaya.c*I) led.push(`Gaya hidup dibatasi ${rpS(T.gaya.c*I)} (30% penghasilan). Kalau mau lebih, itu keputusanmu sendiri.`);
   // 3) spillover
-  if(months<6) give("tahan", T.tahan.c*I-T.tahan.a, months<3?"dana darurat masih di bawah 3 bulan":"dana darurat belum 6 bulan");
-  give("invest", T.invest.c*I-T.invest.a, "tujuan utama limpahan dana");
-  give("infak", T.infak.c*I-T.infak.a, "investasi sudah di batas atas");
-  if(R>0){ T.sisa.a=R; led.push(`${rpS(R)} → Belum dialokasikan: semua pos sudah di batas atas, tidak dikembalikan ke belanja.`); R=0; }
-  const st=k=>{ const t=T[k]; if(t.f===null) return k==="wajib"?(t.a>.35*I?["over","di atas 35%: tinjau"]:["actual","sesuai kebutuhan nyata"]):["actual","perlu keputusan"]; const p=t.a/I; return p<t.f-1e-9?["under","di bawah rentang"]:p>t.c+1e-9?["over","di atas rentang"]:["within","dalam rentang"]; };
+  if(months<6) give("tahan", T.tahan.c*I-T.tahan.a, months<3?"dana darurat belum cukup 3 bulan":"dana darurat belum cukup 6 bulan");
+  give("invest", T.invest.c*I-T.invest.a, "sisa uang paling baik diarahkan ke sini");
+  give("infak", T.infak.c*I-T.infak.a, "investasi sudah penuh");
+  if(R>0){ T.sisa.a=R; led.push(`${rpS(R)} → Sisa: semua pos sudah penuh, jadi tidak dikembalikan ke belanja.`); R=0; }
+  const st=k=>{ const t=T[k]; if(t.f===null) return k==="wajib"?(t.a>.35*I?["over","lebih dari 35%, cek lagi"]:["actual","sesuai angkamu"]):["actual","kamu yang putuskan"]; const p=t.a/I; return p<t.f-1e-9?["under","kurang dari saran"]:p>t.c+1e-9?["over","lebih dari saran"]:["within","pas"]; };
   $("w-out").innerHTML=Object.keys(T).filter(k=>k!=="sisa"||T.sisa.a>0).map(k=>{ const t=T[k], p=t.a/I*100, [sc,sl]=st(k);
     const band=t.f!==null&&t.c!==null?`<span class="band" style="left:${t.f*100}%;width:${(t.c-t.f)*100}%"></span>`:"";
-    return `<div class="wfrow"><div class="nm"><b>${t.n} <span class="chipst ${sc}">${sl}</span></b><span>${t.d}${t.f!==null&&t.c!==null?` · rentang ${pct(t.f*100)}–${pct(t.c*100,0)}`:""}</span></div><div class="amt">${rpS(t.a)}<small>${pct(p)}</small></div><div class="wfbar" aria-hidden="true"><i style="width:${Math.min(100,p)}%"></i>${band}</div></div>`; }).join("")+
-    `<p class="small muted">Garis putus-putus = rentang heuristik. Batang = porsi dari penghasilan ${rpS(I)}.</p>`;
-  $("w-ledger").innerHTML=led.length?led.map(x=>`<li>${x}</li>`).join(""):"<li>Tidak ada limpahan: semua dana terserap di batas bawah dan gaya hidup.</li>";
+    return `<div class="wfrow"><div class="nm"><b>${t.n} <span class="chipst ${sc}">${sl}</span></b><span>${t.d}${t.f!==null&&t.c!==null?` · saran ${pct(t.f*100)}–${pct(t.c*100,0)}`:""}</span></div><div class="amt">${rpS(t.a)}<small>${pct(p)}</small></div><div class="wfbar" aria-hidden="true"><i style="width:${Math.min(100,p)}%"></i>${band}</div></div>`; }).join("")+
+    `<p class="small muted">Batang hijau = porsimu dari penghasilan ${rpS(I)}. Kotak putus-putus = porsi yang disarankan.</p>`;
+  $("w-ledger").innerHTML=led.length?led.map(x=>`<li>${x}</li>`).join(""):"<li>Tidak ada sisa: semua uang sudah terbagi ke pos di atas.</li>";
   renderWife();
 }
 function renderWife(){
   const box=$("w-wife-out"); if(S.wmode!=="couple"){ box.hidden=true; return; }
   const W=num("w-wife",0)*1e6, nis=7640144, z=W>=nis?W*.025:0;
-  box.hidden=false; box.innerHTML=`<h3>Penghasilan istri: ${rpS(W)}</h3><p class="small">Menurut pendapat mayoritas, penghasilan istri sepenuhnya miliknya, dan kewajiban nafkah suami tidak berkurang karena istri bekerja. Kontribusi istri ke rumah tangga bersifat sukarela (i'anah atau sedekah), termasuk boleh nol.</p>
+  box.hidden=false; box.innerHTML=`<h3>Penghasilan istri: ${rpS(W)}</h3><ul class="bl small"><li>Menurut pendapat mayoritas, penghasilan istri sepenuhnya miliknya.</li><li>Kewajiban nafkah suami tidak berkurang karena istri bekerja.</li><li>Kontribusi istri ke rumah tangga bersifat sukarela, termasuk boleh nol.</li></ul>
    <div class="facts"><div><span>Kewajibannya sendiri (zakat)</span><b>${z?rpS(z)+" / bulan":"belum mencapai nisab"}</b></div><div><span>Kontribusi sukarela ke keluarga</span><b>sesuai pilihannya</b></div><div><span>Aset & investasi pribadinya</span><b>sisanya</b></div><div><span>Zakat dihitung</span><b>terpisah per orang</b></div></div>
    <p class="small muted">Kesepakatan lain di antara suami-istri juga diperbolehkan bila disepakati bersama.</p>`;
 }
 /* ---------- catalog ---------- */
 // r: risiko 1-3, l: likuiditas, j: jangka; g: goals it fits
 const PROD=[
- {n:"Tabungan syariah",c:"Simpan",by:"Bank syariah atau unit usaha syariah",ak:"Wadiah atau mudharabah",r:1,l:"Mudah dicairkan",j:"Pendek",g:["darurat","ibadah","tenang"],u:"Dana darurat dan kebutuhan harian.",w:"Bonus wadiah tidak boleh dijanjikan di awal. Cek ketentuan penjaminan LPS.",s:["02"]},
+ {n:"Tabungan syariah",ex:"BSI Tabungan Easy Wadiah",exs:"Republika, 8 Agu 2022",c:"Simpan",by:"Bank syariah atau unit usaha syariah",ak:"Wadiah atau mudharabah",r:1,l:"Mudah dicairkan",j:"Pendek",g:["darurat","ibadah","tenang"],u:"Dana darurat dan kebutuhan harian.",w:"Bonus wadiah tidak boleh dijanjikan di awal. Cek ketentuan penjaminan LPS.",s:["02"]},
  {n:"Deposito mudharabah",c:"Simpan",by:"Bank syariah",ak:"Mudharabah",r:1,l:"Terkunci sampai jatuh tempo",j:"Pendek–menengah",g:["rumah","tenang"],u:"Dana yang tidak dipakai 1–12 bulan.",w:"Yang disepakati nisbah, bukan hasil. Minta data realisasi bagi hasil.",s:["03"]},
- {n:"Tabungan haji",c:"Simpan",by:"Bank syariah penerima setoran haji",ak:"Wadiah atau mudharabah",r:1,l:"Terikat tujuan",j:"Panjang",g:["ibadah"],u:"Mengumpulkan setoran awal untuk mendapat nomor porsi.",w:"Masa tunggu berangkat haji panjang. Tanyakan alur setoran awal dan pendaftaran porsi.",s:["02"]},
- {n:"Sukuk Tabungan (ST)",c:"Investasi",by:"Pemerintah RI (Kemenkeu)",ak:"Akad SBSN sesuai seri",r:1,l:"Tidak diperjualbelikan; cair awal terbatas",j:"Menengah",g:["rumah","keluarga","tenang"],u:"Imbal hasil rutin dengan risiko gagal bayar sangat rendah.",w:"Imbal hasil dikenai PPh final 10%. Pencairan sebelum jatuh tempo mengikuti ketentuan tiap seri.",s:["69"]},
- {n:"Sukuk Ritel (SR)",c:"Investasi",by:"Pemerintah RI (Kemenkeu)",ak:"Akad SBSN sesuai seri",r:1,l:"Bisa dijual di pasar sekunder",j:"Menengah",g:["keluarga","pensiun","tenang"],u:"Imbal hasil tetap dan bisa dijual sebelum jatuh tempo.",w:"Kalau dijual sebelum jatuh tempo, harganya bisa di atas atau di bawah harga beli. PPh final 10%.",s:["69"]},
- {n:"Sukuk Wakaf Ritel (SWR)",c:"Sosial",by:"Pemerintah RI bersama Badan Wakaf Indonesia",ak:"Wakaf uang temporer melalui SBSN",r:1,l:"Pokok kembali saat jatuh tempo",j:"Menengah",g:["tenang"],u:"Berwakaf tanpa melepas pokok: imbal hasilnya disalurkan untuk program sosial.",w:"Kamu tidak menerima imbal hasil. Penawarannya hanya di periode tertentu.",s:["69"]},
- {n:"Reksa dana syariah",c:"Investasi",by:"Manajer investasi berizin OJK",ak:"Wakalah dan mudharabah",r:2,l:"Bisa dicairkan dalam beberapa hari kerja",j:"Pendek s.d. panjang, tergantung jenis",g:["keluarga","pensiun","rumah"],u:"Mulai investasi dengan nominal kecil dan dikelola profesional.",w:"Pilih jenis sesuai jangka waktu: pasar uang untuk pendek, saham untuk panjang. Nilai bisa turun.",s:["20"]},
- {n:"Saham syariah",c:"Investasi",by:"Emiten di Daftar Efek Syariah OJK",ak:"Musyarakah (kepemilikan)",r:3,l:"Diperdagangkan di bursa",j:"Panjang",g:["pensiun","keluarga"],u:"Kepemilikan usaha jangka panjang.",w:"Kriteria DES diperketat mulai 2026 (POJK 8/2025). Cek ulang saham lama, dan bersihkan porsi non-halal dividen.",s:["40","80"]},
- {n:"Tabungan emas",c:"Investasi",by:"Pegadaian atau penyelenggara berizin",ak:"Jual beli (bai')",r:2,l:"Bisa dijual kembali atau dicetak",j:"Menengah–panjang",g:["ibadah","rumah","tenang"],u:"Menabung emas mulai dari gram kecil.",w:"Ada selisih harga beli dan jual. Cicilan emas boleh selama emas tidak menjadi alat tukar.",s:["77"]},
- {n:"Asuransi syariah",c:"Asuransi",by:"Perusahaan atau unit syariah berizin OJK",ak:"Tabarru' dan wakalah bil ujrah",r:1,l:"—",j:"Sesuai polis",g:["keluarga","tenang","darurat"],u:"Asuransi kesehatan dan jiwa berbasis tolong-menolong.",w:"Pisahkan porsi proteksi dan investasi. Tanyakan ujrah dan pembagian surplus.",s:["21","52"]},
- {n:"Dana pensiun syariah",c:"Investasi",by:"Dana Pensiun Lembaga Keuangan (DPLK) syariah",ak:"Sesuai ketentuan program",r:2,l:"Terkunci sampai usia pensiun, dengan pengecualian",j:"Panjang",g:["pensiun"],u:"Menabung pensiun secara disiplin di luar kantor.",w:"Pahami kapan dana bisa diambil dan pajaknya saat pencairan.",s:[]},
- {n:"Urun dana (securities crowdfunding) syariah",c:"Investasi",by:"Platform urun dana berizin OJK",ak:"Musyarakah atau sukuk usaha",r:3,l:"Sulit dicairkan sebelum jatuh tempo",j:"Menengah–panjang",g:["pensiun"],u:"Ikut membiayai UMKM atau proyek dengan akad bagi hasil.",w:"Risiko usaha gagal tinggi. Hanya dana yang siap kamu tanggung risikonya.",s:[]},
- {n:"Gadai syariah (rahn)",c:"Pembiayaan",by:"Pegadaian syariah atau penyelenggara berizin",ak:"Rahn dengan biaya pemeliharaan (ijarah)",r:1,l:"Dana cair cepat",j:"Pendek",g:["darurat"],u:"Kebutuhan dana mendesak dengan jaminan barang, tanpa kartu kredit.",w:"Biaya dihitung dari pemeliharaan barang, bukan dari besar pinjaman. Bandingkan totalnya.",s:["19"]},
- {n:"Zakat dan wakaf uang",c:"Sosial",by:"BAZNAS, LAZ berizin, nazhir terdaftar BWI",ak:"Zakat; wakaf",r:1,l:"—",j:"Rutin",g:["tenang","ibadah"],u:"Menunaikan kewajiban dan berbagi secara terjadwal.",w:"Pastikan lembaganya resmi dan minta bukti setor untuk pengurang penghasilan kena pajak.",s:[]}];
+ {n:"Tabungan haji",ex:"Tabungan Haji di bank syariah penerima setoran, misalnya BSI",exs:"Kontan, 2025 (BSI tabungan haji)",c:"Simpan",by:"Bank syariah penerima setoran haji",ak:"Wadiah atau mudharabah",r:1,l:"Terikat tujuan",j:"Panjang",g:["ibadah"],u:"Mengumpulkan setoran awal untuk mendapat nomor porsi.",w:"Masa tunggu berangkat haji panjang. Tanyakan alur setoran awal dan pendaftaran porsi.",s:["02"]},
+ {n:"Sukuk Tabungan (ST)",ex:"ST016, ditawarkan Mei 2026",exs:"Bisnis.com, 8 Mei 2026",c:"Investasi",by:"Pemerintah RI (Kemenkeu)",ak:"Akad SBSN sesuai seri",r:1,l:"Tidak diperjualbelikan; cair awal terbatas",j:"Menengah",g:["rumah","keluarga","tenang"],u:"Imbal hasil rutin dengan risiko gagal bayar sangat rendah.",w:"Imbal hasil dikenai PPh final 10%. Pencairan sebelum jatuh tempo mengikuti ketentuan tiap seri.",s:["69"]},
+ {n:"Sukuk Ritel (SR)",ex:"SR025, ditawarkan Agustus–September 2026, mulai Rp1 juta",exs:"Bareksa, 23 Sep 2026; OCBC, 19 Agu 2026",c:"Investasi",by:"Pemerintah RI (Kemenkeu)",ak:"Akad SBSN sesuai seri",r:1,l:"Bisa dijual di pasar sekunder",j:"Menengah",g:["keluarga","pensiun","tenang"],u:"Imbal hasil tetap dan bisa dijual sebelum jatuh tempo.",w:"Kalau dijual sebelum jatuh tempo, harganya bisa di atas atau di bawah harga beli. PPh final 10%.",s:["69"]},
+ {n:"Sukuk Wakaf Ritel (SWR)",ex:"SWR007",exs:"EmitenNews (SWR007)",c:"Sosial",by:"Pemerintah RI bersama Badan Wakaf Indonesia",ak:"Wakaf uang temporer melalui SBSN",r:1,l:"Pokok kembali saat jatuh tempo",j:"Menengah",g:["tenang"],u:"Berwakaf tanpa melepas pokok: imbal hasilnya disalurkan untuk program sosial.",w:"Kamu tidak menerima imbal hasil. Penawarannya hanya di periode tertentu.",s:["69"]},
+ {n:"Reksa dana syariah",ex:"Principal Sukuk Syariah 2 (reksa dana sukuk)",exs:"Fund fact sheet Principal, Jun 2026",c:"Investasi",by:"Manajer investasi berizin OJK",ak:"Wakalah dan mudharabah",r:2,l:"Bisa dicairkan dalam beberapa hari kerja",j:"Pendek s.d. panjang, tergantung jenis",g:["keluarga","pensiun","rumah"],u:"Mulai investasi dengan nominal kecil dan dikelola profesional.",w:"Pilih jenis sesuai jangka waktu: pasar uang untuk pendek, saham untuk panjang. Nilai bisa turun.",s:["20"]},
+ {n:"Saham syariah",ex:"TLKM, ICBP, KLBF, UNVR: pernah 10 tahun di indeks JII. Cek DES terbaru",exs:"IDX Channel, 20 Okt 2022",c:"Investasi",by:"Emiten di Daftar Efek Syariah OJK",ak:"Musyarakah (kepemilikan)",r:3,l:"Diperdagangkan di bursa",j:"Panjang",g:["pensiun","keluarga"],u:"Kepemilikan usaha jangka panjang.",w:"Kriteria DES diperketat mulai 2026 (POJK 8/2025). Cek ulang saham lama, dan bersihkan porsi non-halal dividen.",s:["40","80"]},
+ {n:"Tabungan emas",ex:"Tabungan Emas Pegadaian, mulai 0,01 gram",exs:"Bisnis.com, 13 Jan 2024",c:"Investasi",by:"Pegadaian atau penyelenggara berizin",ak:"Jual beli (bai')",r:2,l:"Bisa dijual kembali atau dicetak",j:"Menengah–panjang",g:["ibadah","rumah","tenang"],u:"Menabung emas mulai dari gram kecil.",w:"Ada selisih harga beli dan jual. Cicilan emas boleh selama emas tidak menjadi alat tukar.",s:["77"]},
+ {n:"Asuransi syariah",ex:"Prudential Syariah, Allianz Syariah",exs:"Kontan (Prudential Syariah; Allianz Syariah spin-off)",c:"Asuransi",by:"Perusahaan atau unit syariah berizin OJK",ak:"Tabarru' dan wakalah bil ujrah",r:1,l:"—",j:"Sesuai polis",g:["keluarga","tenang","darurat"],u:"Asuransi kesehatan dan jiwa berbasis tolong-menolong.",w:"Pisahkan porsi proteksi dan investasi. Tanyakan ujrah dan pembagian surplus.",s:["21","52"]},
+ {n:"Dana pensiun syariah",ex:"DPLK Syariah Muamalat",exs:"Kontan (Bank Muamalat luncurkan DPLK syariah)",c:"Investasi",by:"Dana Pensiun Lembaga Keuangan (DPLK) syariah",ak:"Sesuai ketentuan program",r:2,l:"Terkunci sampai usia pensiun, dengan pengecualian",j:"Panjang",g:["pensiun"],u:"Menabung pensiun secara disiplin di luar kantor.",w:"Pahami kapan dana bisa diambil dan pajaknya saat pencairan.",s:[]},
+ {n:"Urun dana (securities crowdfunding) syariah",ex:"Shafiq",exs:"Kontan (Shafiq, SCF syariah berizin pertama)",c:"Investasi",by:"Platform urun dana berizin OJK",ak:"Musyarakah atau sukuk usaha",r:3,l:"Sulit dicairkan sebelum jatuh tempo",j:"Menengah–panjang",g:["pensiun"],u:"Ikut membiayai UMKM atau proyek dengan akad bagi hasil.",w:"Risiko usaha gagal tinggi. Hanya dana yang siap kamu tanggung risikonya.",s:[]},
+ {n:"Gadai syariah (rahn)",ex:"Rahn di Pegadaian Syariah",exs:"pegadaian.co.id",c:"Pembiayaan",by:"Pegadaian syariah atau penyelenggara berizin",ak:"Rahn dengan biaya pemeliharaan (ijarah)",r:1,l:"Dana cair cepat",j:"Pendek",g:["darurat"],u:"Kebutuhan dana mendesak dengan jaminan barang, tanpa kartu kredit.",w:"Biaya dihitung dari pemeliharaan barang, bukan dari besar pinjaman. Bandingkan totalnya.",s:["19"]},
+ {n:"Zakat dan wakaf uang",ex:"BAZNAS, LAZ Rumah Zakat Indonesia, LAZ Dompet Dhuafa Republika",exs:"IDX Channel, 21 Feb 2024 (daftar LAZ berizin Kemenag)",c:"Sosial",by:"BAZNAS, LAZ berizin, nazhir terdaftar BWI",ak:"Zakat; wakaf",r:1,l:"—",j:"Rutin",g:["tenang","ibadah"],u:"Menunaikan kewajiban dan berbagi secara terjadwal.",w:"Pastikan lembaganya resmi dan minta bukti setor untuk pengurang penghasilan kena pajak.",s:[]}];
 const GOALS=[["all","Semua"],["darurat","Dana darurat"],["rumah","Rumah"],["keluarga","Pendidikan keluarga"],["ibadah","Haji & umrah"],["pensiun","Pensiun"],["tenang","Berkah & berbagi"]];
 function renderKat(){
   const sel=S.kat||"all", mine=S.ans.goal;
@@ -566,10 +575,11 @@ function renderKat(){
   $("kat-list").innerHTML=list.map(p=>{ const fit=p.g.includes(mine);
     return `<article class="prod${fit?" fit":""}"><div class="top"><div><span class="eyebrow">${p.c}</span><h3>${p.n}</h3></div>${fit?'<span class="chip p">Cocok untukmu</span>':""}</div>
     <p class="small">${p.u}</p>
+    ${p.ex?`<div class="ex"><span class="ex-k">Contoh di pasar</span><p class="small"><b>${p.ex}</b></p><span class="ex-n">Contoh, bukan rekomendasi beli. Cek izin dan ketentuannya sendiri.</span></div>`:""}
     <div class="attrs"><div>Risiko<b>${dot(p.r)}</b></div><div>Pencairan<b>${p.l}</b></div><div>Jangka<b>${p.j}</b></div></div>
     <p class="small muted"><b>Pengelola:</b> ${p.by} · <b>Akad:</b> ${p.ak}</p>
-    <div class="watch"><b>Perlu diwaspadai:</b> ${p.w}</div>
-    ${p.s.length?`<p class="cite">${p.s.map(f).join("<br>")}</p>`:""}</article>`; }).join("");
+    <div class="watch"><b>Perlu diwaspadai</b>${bl(p.w)}</div>
+    ${p.s.length||p.exs?`<details class="refs"><summary>Rujukan</summary><p class="cite">${p.s.map(f).join("<br>")}${p.exs?(p.s.length?"<br>":"")+"Contoh: "+p.exs:""}</p></details>`:""}</article>`; }).join("");
 }
 
 /* ---------- akad ---------- */
@@ -584,7 +594,7 @@ const AKAD=[
  ["Kafalah","كفالة","Penjaminan","Pihak ketiga menjamin kewajiban pihak lain.","Dipakai di kartu syariah: bank menjamin pembayaranmu ke merchant.","11",["Imbalan penjaminan disebutkan jelas","Denda keterlambatan disalurkan ke dana sosial"]],
  ["Tabarru'","تبرع","Hibah tolong-menolong","Kontribusi peserta ke dana bersama untuk saling menanggung risiko.","Dana tabarru' milik peserta bersama, bukan milik perusahaan asuransi.","21",["Dana tabarru' terpisah dari dana investasi","Besaran ujrah disebutkan","Aturan pembagian surplus tertulis","Penanggungnya benar perusahaan atau unit syariah berizin"]]];
 $("l-facts").innerHTML=FACTS.map(factHTML).join("");
-function renderAkad(){ $("akad-list").innerHTML=AKAD.map(a=>`<details class="akd"><summary><span class="ar" lang="ar" dir="rtl">${a[1]}</span><span><b>${a[0]}</b><span class="muted small"> · ${a[2]}</span></span></summary><p class="small">${a[3]}</p><p class="myth"><b>Salah kaprah:</b> ${a[4]}</p>${a[6]?`<p class="small"><b>Cek di akadmu sebelum tanda tangan</b></p><ul class="akcheck">${a[6].map(x=>`<li>${x}</li>`).join("")}</ul>`:""}${a[5]?`<p class="cite">${f(a[5])}</p>`:""}</details>`).join(""); }
+function renderAkad(){ $("akad-list").innerHTML=AKAD.map(a=>`<details class="akd"><summary><span class="ar" lang="ar" dir="rtl">${a[1]}</span><span><b>${a[0]}</b><span class="muted small"> · ${a[2]}</span></span></summary>${bl(a[3])}<div class="myth"><b>Salah kaprah</b>${bl(a[4])}</div>${a[6]?`<p class="small"><b>Cek di akadmu sebelum tanda tangan</b></p><ul class="akcheck">${a[6].map(x=>`<li>${x}</li>`).join("")}</ul>`:""}${a[5]?`<p class="cite">${f(a[5])}</p>`:""}</details>`).join(""); }
 function renderSrc(){ const keys=Object.keys(FT); $("src-list").innerHTML=keys.map(k=>`<li>${f(k)}</li>`).join("")+OTHER.map(o=>`<li><a href="${o[1]}" target="_blank" rel="noopener">${o[0]}</a></li>`).join(""); }
 
 /* ================= VIEWS ================= */
@@ -619,6 +629,13 @@ initConsent();
     if(r.status==="paid"){ S.unlocked=true; S.orderId=oid; save(); track("purchase_return",{orderId:oid}); history.replaceState(null,"",location.pathname); if(Object.keys(S.ans).length>=STEPS.length) openFull(); return; }
     if(r.status==="expired"||r.status==="failed"||r.status==="unknown") return;
     await new Promise(res=>setTimeout(res,3000)); } })();
-if(DEMO){ track("sample_view"); openFull(); $("demo-bar").hidden=false; const m=document.querySelector("#v-full .meter"); if(m) m.hidden=true; }
+/* Sample report is look-only: numbers stay on the example profile so the real thing is still worth buying. */
+function lockDemo(){ const v=$("v-full"); v.classList.add("demo"); $("demo-bar").hidden=false; $("f-redo").hidden=true;
+  const m=v.querySelector(".meter"); if(m) m.hidden=true;
+  v.querySelectorAll("input,select").forEach(el=>{ el.disabled=true; });
+  v.querySelectorAll("#w-mode button").forEach(b=>{ b.disabled=true; });
+  v.querySelectorAll(".panel").forEach(p=>{ if(p.querySelector("input,select")&&!p.querySelector(".demo-lock")) p.insertAdjacentHTML("afterbegin",`<p class="demo-lock"><svg class='ic' viewBox='0 0 24 24' width='22' height='22' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V8a4 4 0 0 1 8 0v3'/></svg><span>Contoh. Di Premium, angka ini kamu ganti dengan angkamu sendiri.</span></p>`); });
+  const road=$("road"); if(road&&!road.querySelector(".demo-lock")) road.insertAdjacentHTML("afterbegin",`<p class="demo-lock"><svg class='ic' viewBox='0 0 24 24' width='22' height='22' fill='none' stroke='currentColor' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><rect x='5' y='11' width='14' height='10' rx='2'/><path d='M8 11V8a4 4 0 0 1 8 0v3'/></svg><span>Contoh. Di Premium, kamu bisa mencentang langkah yang sudah selesai.</span></p>`); }
+if(DEMO){ track("sample_view"); openFull(); lockDemo(); }
 else { track("lp_view"); if(S.unlocked && Object.keys(S.ans).length>=STEPS.length) openFull(); }
 })();
