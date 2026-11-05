@@ -23,7 +23,7 @@ export const EN = {
   "Supaya kamu tahu seberapa syariah keuanganmu sekarang dan apa yang paling masuk akal dikerjakan dulu. Gratis: persentase syariah, level, lencana, dan perbandingan dengan tebakanmu. Keuntungan yang belum kamu ambil, langkah pertama, dan rencana 90 hari ada di Premium.": "So you know how sharia your finances are today and what makes the most sense to do first. Free: your sharia percentage, level, badges, comparison with your guess, and your first step. The benefits you haven't claimed and the full 90-day plan are in Premium.",
   "tentang kami": "about us",
   "Dibuat oleh SIFA Ventures": "Made by SIFA Ventures",
-  "Sharia Compass adalah produk SIFA Ventures, dikelola PT Buana Karya Bersama (NIB 2704260038441).": "Sharia Compass is a SIFA Ventures product, operated by PT Buana Karya Bersama (NIB 2704260038441).",
+  "Sharia Compass adalah produk SIFA Ventures.": "Sharia Compass is a SIFA Ventures product.",
   "Kami bukan bank, bukan lembaga zakat, dan tidak diawasi OJK atau DSN-MUI. Sharia Compass adalah panduan edukasi, bukan fatwa.": "We are not a bank or a zakat institution, and we are not supervised by OJK or DSN-MUI. Sharia Compass is an educational guide, not a fatwa.",
   "Metode skor belum ditinjau ulama atau lembaga keuangan syariah. Bobotnya terbuka di \"Cara kami menilai\".": "The scoring method has not yet been reviewed by scholars or a sharia financial institution. Its weights are open under \"How we score\".",
   "Bantuan:": "Help:",
