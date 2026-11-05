@@ -13,6 +13,10 @@ export const isEN = LANG === "en";
 
 const rpJt = (s) => s.replace(/Rp([\d.,]+) jt/g, "Rp$1 million");
 const PATTERNS = [
+  [/^Hasilmu (\d+) poin di atas tebakanmu\.$/, (m) => `Your result is ${m[1]} points above your guess.`],
+  [/^Hasilmu (\d+) poin di bawah tebakanmu\. Kabar baiknya, langkahnya jelas\.$/, (m) => `Your result is ${m[1]} points below your guess. The good news: the steps are clear.`],
+  [/^Langkah ke-2 sampai ke-(\d+) ada di rencana 90 hari Premium\.$/, (m) => `Steps 2 to ${m[1]} are in the Premium 90-day plan.`],
+  [/^(\d+)\/(\d+)$/, (m) => m[0]],
   [/^(.+) jadi kekuatanmu sejauh ini\. (.+) yang paling perlu perhatian\.$/, (m) => `${tr(m[1])} is your strength so far. ${tr(m[2])} needs the most attention.`],
   [/^dan (\d+) keuntungan lain menunggumu di laporan\.$/, (m) => `and ${m[1]} more benefit${m[1] === "1" ? "" : "s"} waiting in the report.`],
   [/^Buka Laporan Premium · (Rp[\d.]+)$/, (m) => `Open the Premium report · ${m[1]}`],

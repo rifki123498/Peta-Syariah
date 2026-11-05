@@ -1,5 +1,5 @@
 <!doctype html><html lang="id"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Hitung berapa persen keuanganmu yang sudah syariah, lencana yang sudah kamu punya, dan keuntungan yang belum kamu ambil. Gratis, 3 menit.">
+<meta name="description" content="Hitung berapa persen keuanganmu yang sudah syariah, badge yang sudah kamu punya, dan keuntungan yang belum kamu ambil. Gratis, 3 menit.">
 <meta property="og:title" content="Sharia Compass: berapa persen keuanganmu yang sudah syariah?">
 <meta property="og:description" content="Gratis, 3 menit, tanpa login. Panduan edukasi, bukan fatwa.">
 <meta property="og:type" content="website">
@@ -546,12 +546,12 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
 @media print{body.printing #demo-bar,body.printing .lap.mine{display:none!important}}
 .micro{margin:10px 0 0;font-size:.86rem;color:var(--hero-muted)}
 .trust{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;padding:12px 16px;border-bottom:1px solid var(--line);font-size:.8rem;font-weight:700;color:var(--muted)}
-.trust span::before{content:"✓ ";color:var(--teal)}
+.trust>span{display:inline-flex;align-items:center;gap:6px}.trust .ic{color:var(--teal);flex:0 0 auto}
 .prem-card{display:grid;gap:10px;border:2px solid var(--ink);border-radius:18px;padding:16px;background:var(--surface);box-shadow:var(--shadow);max-width:720px}
 .prem-card ol{margin:0;padding-left:1.2em;display:grid;gap:3px}
 .soon{display:grid;gap:12px}
 @media (min-width:760px){.soon{grid-template-columns:1fr 1fr}}
-.locked-card{opacity:.75}
+.locked-card{display:grid;gap:8px;align-content:start}
 .locked-card .k{display:flex;gap:6px;align-items:center}.locked-card .ic{width:14px;height:14px}
 .sticky-cta{position:fixed;left:0;right:0;bottom:0;z-index:25;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 70%,transparent);display:none}
 .sticky-cta .btn{width:100%}
@@ -560,6 +560,58 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
 .faq details{border:2px solid var(--ink);border-radius:var(--r);background:var(--surface);padding:12px 14px}
 .faq summary{font-weight:700;cursor:pointer}
 .faq details p{margin-top:8px;font-size:.92rem;color:var(--muted)}
+
+/* 5 Nov: icons, contrast, pause screen, waitlist */
+.cmp .prem{background:var(--lime);color:var(--on-lime)}
+.cmp .prem .ic,.cmp .prem em{color:var(--on-lime)}.cmp .prem .ic{stroke-width:2.8}
+.cmp-r>span:nth-child(2){opacity:.55}
+.cmp-tot{font-weight:800;border-top:2px solid var(--ink)!important}.cmp-tot>span{white-space:nowrap;font-size:.78rem}
+.drv li{grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px}
+.drv li>div{display:grid;gap:2px;min-width:0}
+.drv .up{font-style:normal;display:inline-flex;align-items:baseline;gap:3px;background:var(--lime);color:var(--on-lime);border:2px solid var(--ink);border-radius:999px;padding:4px 10px;font-weight:800;font-family:var(--mono,monospace);font-size:1rem;white-space:nowrap}
+.drv .up small{font-size:.64rem;font-weight:700}
+.lockline{display:flex;gap:8px;align-items:center;font-size:.82rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px;margin:10px 0 0}
+.lockline .ic{flex:0 0 auto;color:var(--teal)}
+.verdict{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;align-items:center;border-radius:12px;padding:12px;margin:6px 0 10px;border:2px solid var(--ink)}
+.verdict b{display:block;font-size:1.08rem;line-height:1.25}.verdict span{font-size:.84rem}
+.verdict.up,.verdict.hit,.verdict.edge{background:var(--lime);color:var(--on-lime)}
+.verdict.down{background:var(--sunk)}
+.verdict .vic{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:var(--on-lime);color:var(--lime)}
+.verdict.down .vic{background:var(--lime);color:var(--on-lime)}
+.vs{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center}.vs .vs-arr{color:var(--teal);display:grid}
+.badge summary{display:flex;align-items:center;gap:8px}
+.badge .bic{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--on-lime);color:var(--lime);flex:0 0 auto;font-style:normal}
+.badge.off .bic{background:transparent;color:var(--muted);border:2px dashed var(--line)}
+.opts button:has(.ltr),.opts button:has(.mk){display:flex;align-items:center}
+.opts button .ltr{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:7px;border:2px solid currentColor;font-size:.78rem;font-weight:800;margin-right:12px;flex:0 0 auto;font-family:var(--mono,monospace)}
+.opts button[aria-pressed=true] .ltr{background:var(--on-lime);color:var(--lime);border-color:var(--on-lime)}
+.opts button .mk{display:inline-grid;place-items:center;width:22px;height:22px;flex:0 0 auto;vertical-align:middle}
+.opts button .mk svg{width:14px;height:14px;fill:none;stroke:var(--lime);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.opts button[aria-pressed=true] .mk svg{opacity:1}
+.pause-card{display:grid;gap:14px;border:2px solid var(--ink);border-radius:18px;padding:18px;background:var(--surface);box-shadow:var(--shadow)}
+.pz-ic{display:grid;place-items:center;width:60px;height:60px;border-radius:50%;background:var(--lime);color:var(--on-lime);border:2px solid var(--ink);animation:pz 1.4s ease-in-out infinite alternate}
+@keyframes pz{to{transform:scale(1.08) rotate(10deg)}}
+@media (prefers-reduced-motion:reduce){.pz-ic{animation:none}}
+.pz-prog{display:grid;gap:6px}.pz-prog b{font-size:1.5rem}.pz-prog span{font-size:.84rem;color:var(--muted)}
+.pz-bar{height:10px;border-radius:99px;background:var(--sunk);overflow:hidden}.pz-bar i{display:block;height:100%;background:var(--lime);border-radius:inherit}
+.pz-row{display:grid;gap:8px}
+.pz-chip{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;align-items:center;padding:10px 12px;border-radius:12px;font-size:.8rem}
+.pz-chip .ic{grid-row:span 2}.pz-chip b{font-size:.95rem}
+.pz-chip.good{background:var(--lime);color:var(--on-lime)}.pz-chip.warn{border:2px dashed var(--line)}
+.opts button.refgo{background:var(--lime);color:var(--on-lime);justify-content:center;font-weight:800;text-align:center}
+ol.steps{list-style:none;counter-reset:st;margin:6px 0 0;padding:0;display:grid;gap:8px}
+ol.steps li{counter-increment:st;display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;align-items:start}
+ol.steps li::before{content:counter(st);display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--lime);color:var(--on-lime);font-weight:800;font-size:.78rem;border:2px solid var(--ink)}
+.lc-top{display:flex;justify-content:space-between;align-items:center}
+.lc-ic{display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:var(--lime);color:var(--on-lime);border:2px solid var(--ink);font-style:normal}
+.wl-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.wl-form input{min-width:0;padding:12px;border:2px solid var(--ink);border-radius:var(--r);background:var(--surface);color:var(--ink);font:inherit}
+.wl-msg{grid-column:1/-1;margin:0}.wl-ok{color:var(--teal);font-weight:700}
+#r-guess .vs{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+#r-first ol.steps{grid-template-columns:minmax(0,1fr)}
+#r-unlock,#pw-pay{display:block;text-align:center}#r-unlock .ic,#pw-pay .ic{vertical-align:-5px;margin-right:6px}
+
+.locked-card .lc-ic .ic{width:26px;height:26px}
 </style>
 
 <!-- ================= LANDER ================= -->
@@ -574,12 +626,12 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
     <div>
       <p class="kicker"><span>Untuk yang mau hijrah finansial</span><span>Gratis · 3 menit · tanpa login</span></p>
       <h1 id="h-hook">Keuanganmu mungkin <span class="hl">lebih syariah</span> dari yang kamu kira.</h1>
-      <p class="lead">Coba tebak dulu berapa persennya. Lalu jawab 10 pertanyaan singkat dan lihat angka sebenarnya, lengkap dengan lencana yang ternyata sudah kamu punya.</p>
+      <p class="lead">Coba tebak dulu berapa persennya. Lalu jawab 10 pertanyaan singkat dan lihat angka sebenarnya, lengkap dengan badge yang ternyata sudah kamu punya.</p>
       <div class="guess" role="group" aria-label="Tebak persen keuangan syariahmu">
         <span class="guess-q">Tebakanmu?</span>
         <button class="guess-chip" data-guess="12">&lt; 25%</button><button class="guess-chip" data-guess="37">25–50%</button><button class="guess-chip" data-guess="62">50–75%</button><button class="guess-chip" data-guess="87">&gt; 75%</button>
       </div>
-      <div class="ctas"><button class="btn gold go-start">Hitung persenku →</button><a class="ulink" href="#isi">Apa yang kamu dapat? ↓</a></div>
+      <div class="ctas"><button class="btn gold go-start">Hitung punyaku →</button><a class="ulink" href="#isi">Apa yang kamu dapat? ↓</a></div>
       <p class="micro">Skor dan levelmu gratis. Laporan Premium Rp89.000 kalau kamu mau hitungan rupiah dan rencana 90 hari.</p>
     </div>
     <div style="display:grid;gap:10px">
@@ -589,7 +641,7 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
   </div></section>
 
   <!-- 2 · TRUST STRIP -->
-  <div class="trust" role="list"><span role="listitem">Skor transparan dari 6 pilar</span><span role="listitem">Panduan edukasi, bukan fatwa</span><span role="listitem">Jawaban tetap di perangkatmu</span><span role="listitem">Rujukan: OJK dan DSN-MUI</span><span role="listitem" id="proof" hidden></span></div>
+  <div class="trust" role="list"><span role="listitem"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M2 20h20"/></svg><span>Skor transparan dari 6 pilar</span></span><span role="listitem"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M19 19v2H6"/></svg><span>Panduan edukasi, bukan fatwa</span></span><span role="listitem"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg><span>Jawaban tetap di perangkatmu</span></span><span role="listitem"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6v18h12V7z"/><path d="M14 3v4h4"/><path d="m9 14 2 2 4-4"/></svg><span>Rujukan: OJK dan DSN-MUI</span></span><span role="listitem" id="proof" hidden></span></div>
 
   <!-- 3 · HOW -->
   <section class="sec-l" id="cara" aria-labelledby="h-solution">
@@ -597,7 +649,7 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
     <h2 id="h-solution">Tiga langkah, <span class="hl">3 menit.</span></h2>
     <ol class="howto">
       <li><span class="n">1</span><div><h3>Tebak, lalu hitung</h3><p class="small muted">Tebak persenmu, jawab 10 pertanyaan kebiasaan, dan lihat di tahap mana kamu: Niat, Hijrah, Istiqamah, atau Amanah.</p></div></li>
-      <li><span class="n">2</span><div><h3>Temukan yang sudah dan belum</h3><p class="small muted">Lencana yang ternyata sudah kamu punya, dan keuntungan yang belum kamu ambil, seperti zakat yang bisa mengurangi pajak.</p></div></li>
+      <li><span class="n">2</span><div><h3>Temukan yang sudah dan belum</h3><p class="small muted">Badge yang ternyata sudah kamu punya, dan keuntungan yang belum kamu ambil, seperti zakat yang bisa mengurangi pajak.</p></div></li>
       <li><span class="n">3</span><div><h3>Pindah satu per satu</h3><p class="small muted">Mulai dari satu langkah. Rencana 90 hari dan hitungan rupiahnya ada di Premium.</p></div></li>
     </ol>
   </section>
@@ -605,11 +657,12 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
   <!-- 4 · WHAT YOU GET -->
   <section class="sec-l" id="isi" aria-labelledby="h-get">
     <span class="script">yang kamu dapat</span>
-    <h2 id="h-get">Skor gratis. <span class="hl">Laporan Premium</span> kalau mau rupiahnya.</h2>
+    <h2 id="h-get">Sudah tahu kondisi <span class="hl">keuangan syariahmu?</span></h2>
+    <p class="lead2">Cek skor gratis, lalu dapatkan catatan personal berisi prioritas dan langkah yang bisa kamu mulai.</p>
     <div class="prem-card">
       <div class="tease-top"><span class="chip prem">Premium</span><b>Laporan PDF sekitar 12 halaman</b></div>
       <ol class="small">
-        <li>Ringkasan: skor sekarang → potensi, level, dan lencana</li>
+        <li>Ringkasan: skor sekarang → potensi, level, dan badge</li>
         <li>Keuntungan yang belum kamu ambil, dalam rupiah</li>
         <li>Skor per pilar dan langkah berikutnya</li>
         <li>Rencana 90 hari, urut sesuai tujuanmu</li>
@@ -617,7 +670,7 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
         <li>Katalog produk syariah dan 9 akad</li>
       </ol>
       <p class="tease-price"><span class="tag-promo">Harga spesial · hemat <span class="px-save">40%</span></span> <s class="px-was">Rp149.000</s> <b class="px">Rp89.000</b> <span class="small muted">sekali bayar</span></p>
-      <div class="ctas"><button class="btn gold go-start">Hitung persenku dulu →</button><a class="btn alt" href="/?contoh">Lihat contoh laporan</a></div>
+      <div class="ctas"><button class="btn gold go-start">Hitung punyaku dulu →</button><a class="btn alt" href="/?contoh">Lihat contoh laporan</a></div>
     </div>
     <h3 class="cmp-title">Apa yang kamu dapat?</h3>
     <div class="cmp" role="table" aria-label="Gratis dan Premium">
@@ -631,6 +684,7 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
       <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Rencana pindah bertahap 90 hari</span></span><span role="cell"><svg class="ic no" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h8"/></svg><span class="sr">Tidak termasuk</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
       <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg><span>Kalkulator zakat, KPR syariah, dan lainnya</span></span><span role="cell"><svg class="ic no" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h8"/></svg><span class="sr">Tidak termasuk</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
       <div class="cmp-r" role="row"><span role="rowheader" class="f"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></svg><span>Pilihan produk syariah dan arti istilahnya</span></span><span role="cell"><svg class="ic no" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 12h8"/></svg><span class="sr">Tidak termasuk</span></span><span role="cell" class="prem"><svg class="ic ok" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sr">Termasuk</span></span></div>
+      <div class="cmp-r cmp-tot" role="row"><span role="rowheader" class="f"><span>Yang kamu dapat</span></span><span role="cell">4 dari 9</span><span role="cell" class="prem"><b>9 dari 9</b></span></div>
       <p class="cmp-note"><svg class="ic lk" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>Terkunci: kamu bisa lihat sekilas di hasilmu, isinya dibuka di Premium.</span></p>
     </div>
   </section>
@@ -657,17 +711,21 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
   <!-- PORTFOLIO -->
   <section class="sec-l" id="segera" aria-labelledby="h-soon">
     <span class="script">segera hadir</span>
-    <h2 id="h-soon">Dari tim yang sama</h2>
+    <h2 id="h-soon">Lebih banyak panduan untuk <span class="hl">perjalanan syariahmu</span></h2>
     <div class="soon">
-      <div class="box locked-card"><span class="k"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Segera</span><h3>Zakat Compass</h3><p class="small muted">Hitung dan jadwalkan zakatmu dalam 2 menit.</p></div>
-      <div class="box locked-card"><span class="k"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Segera</span><h3>KPR Syariah Compass</h3><p class="small muted">Bandingkan akad KPR syariah sebelum tanda tangan.</p></div>
+      <div class="box locked-card"><div class="lc-top"><i class="lc-ic"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/></svg></i><span class="k"><svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Segera</span></div><h3>Zakat Made Simple</h3><p class="small muted">Hitung dan jadwalkan zakatmu dalam 2 menit.</p>
+        <button class="btn alt wl-btn" type="button">Join the Waitlist</button>
+        <form class="wl-form" data-p="zakat" hidden><label class="sr" for="wl-zakat">Email</label><input id="wl-zakat" type="email" placeholder="Email kamu" autocomplete="email" required><button class="btn gold" type="submit">Kirim</button><p class="small muted wl-msg" role="status">Hanya untuk kabar peluncuran produk ini.</p></form></div>
+      <div class="box locked-card"><div class="lc-top"><i class="lc-ic"><svg class="ic" viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 12 4l8 7v9H4z"/><path d="M10 20v-5h4v5"/></svg></i><span class="k"><svg class="ic" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Segera</span></div><h3>Refinance to Shariah</h3><p class="small muted">Cari tahu opsi pindah KPR ke skema syariah yang sesuai untukmu.</p>
+        <button class="btn alt wl-btn" type="button">Join the Waitlist</button>
+        <form class="wl-form" data-p="kpr" hidden><label class="sr" for="wl-kpr">Email</label><input id="wl-kpr" type="email" placeholder="Email kamu" autocomplete="email" required><button class="btn gold" type="submit">Kirim</button><p class="small muted wl-msg" role="status">Hanya untuk kabar peluncuran produk ini.</p></form></div>
     </div>
   </section>
 
   <section class="sec-l" id="faq">
     <span class="script">FAQ</span>
     <div class="faq">
-      <details><summary>Kenapa saya perlu mengisi kuis ini?</summary><p>Supaya kamu tahu seberapa syariah keuanganmu sekarang dan apa yang paling masuk akal dikerjakan dulu. Gratis: persentase syariah, level, lencana, dan perbandingan dengan tebakanmu. Keuntungan yang belum kamu ambil, langkah pertama, dan rencana 90 hari ada di Premium.</p></details>
+      <details><summary>Kenapa saya perlu mengisi kuis ini?</summary><p>Supaya kamu tahu seberapa syariah keuanganmu sekarang dan apa yang paling masuk akal dikerjakan dulu. Gratis: persentase syariah, level, badge, dan perbandingan dengan tebakanmu. Keuntungan yang belum kamu ambil, langkah pertama, dan rencana 90 hari ada di Premium.</p></details>
       <details><summary>Bagaimana persentase syariah dihitung?</summary><p>Dari jawabanmu di enam bagian keuangan: tabungan, cara bayar, cicilan, asuransi, investasi, dan zakat. Bobot tiap jawaban dijelaskan di "Cara kami menilai" di bawah halaman. Angka ini alat bantu refleksi, bukan vonis halal-haram.</p></details>
       <details><summary>Apakah saya harus pindah semuanya sekaligus?</summary><p>Tidak. Rencananya disusun bertahap: fondasi dulu, lalu memindahkan produk besar saat waktunya tepat, misalnya deposito saat jatuh tempo.</p></details>
       <details><summary>Premium berlaku berapa lama?</summary><p>Sekali bayar, bukan langganan, dan aksesnya tidak kedaluwarsa. Rencana 90 hari bisa kamu susun ulang kapan saja dengan mengulang kuis.</p></details>
@@ -683,7 +741,7 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
     <div class="box" data-todo="testimonials" hidden><span class="k">Kata pengguna</span><p>[PERLU DATA: testimoni asli dengan izin]</p></div>
     <div class="box" data-todo="users" hidden><span class="k">Sudah dipakai</span><p>[PERLU DATA: jumlah pengguna dari data funnel]</p></div>
   </section>
-  <div class="sticky-cta" id="sticky-cta"><button class="btn gold go-start">Hitung persenku · 3 menit</button></div>
+  <div class="sticky-cta" id="sticky-cta"><button class="btn gold go-start">Hitung punyaku · 3 menit</button></div>
   <footer class="lfoot"><span>Sharia Compass oleh SIFA Ventures · panduan edukasi, bukan fatwa · <a href="/?contoh">Contoh laporan</a> · <a href="/privasi.html">Privasi</a> · <a href="/syarat.html">Syarat penggunaan</a></span><span>Bantuan: <a href="mailto:contact.andalanrt@gmail.com">contact.andalanrt@gmail.com</a> · <a href="/?pulihkan" class="go-restore">Pulihkan akses</a> · <button class="link" id="l-method">Cara kami menilai</button></span></footer>
 </main>
 
@@ -705,7 +763,7 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
     <h2>Menghitung hasilmu</h2>
     <ul class="checks" id="q-checks">
       <li>Menghitung persentase syariah di 6 bagian</li>
-      <li>Membuka lencana yang sudah kamu punya</li>
+      <li>Membuka badge yang sudah kamu punya</li>
       <li>Mencari keuntungan yang belum kamu ambil</li>
       <li>Membandingkan dengan SNLIK 2025</li>
       <li>Memilih langkah pertamamu</li>
@@ -719,10 +777,24 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
   <div class="stack">
     <p class="eyebrow">Hasilmu di Sharia Compass</p>
     <div class="pcard reveal" id="r-card"></div>
-    <div class="box" id="r-drv-box"><span class="k">Yang menaikkan potensimu</span><div id="r-drv"></div><p class="small muted" id="r-drv-note"></p></div>
     <div class="box" id="r-guess" hidden></div>
+    <div class="box" id="r-drv-box"><span class="k">Yang menaikkan potensimu</span><div id="r-drv"></div><p class="small muted" id="r-drv-note"></p><p class="lockline"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>Cara menaikkan tiap poin ini, urut 90 hari dan dalam rupiah, ada di Laporan Premium.</span></p></div>
+    <section class="tease-wrap" aria-labelledby="r-prem-h">
+      <div class="tease-top"><span class="chip prem">Premium</span><h3 id="r-prem-h">Laporan Premium untukmu</h3></div>
+      <div id="r-teaser"></div>
+      <ul class="ilist small">
+        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span><b id="r-ngain"></b> keuntungan yang belum kamu ambil, dalam rupiah</span></li>
+        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Rencana 90 hari: <b id="r-ntask"></b> langkah, urut sesuai tujuanmu</span></li>
+        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg><span>5 kalkulator, katalog produk, dan 9 akad</span></li>
+        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></svg><span>Sekitar 12 halaman PDF, dikirim ke emailmu</span></li>
+      </ul>
+      <div class="tease-cta">
+        <button class="btn gold" id="r-unlock"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Buka Laporan Premium · <span class="px">Rp89.000</span></button>
+        <a class="btn alt" href="/?contoh" id="r-contoh">Lihat contoh laporan</a>
+      </div>
+    </section>
     <div class="box free-first"><span class="k"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4h11l-2 4 2 4H5"/></svg> Langkah pertamamu minggu ini · gratis</span><div id="r-first"></div></div>
-    <div class="box"><span class="k">Lencana yang ternyata sudah kamu punya · <span id="r-bcount"></span></span><p class="small muted">Ketuk lencana untuk melihat syaratnya.</p><div class="badges mini" id="r-badges"></div></div>
+    <div class="box"><span class="k">Badge yang ternyata sudah kamu punya · <span id="r-bcount"></span></span><p class="small muted">Ketuk badge untuk melihat syaratnya.</p><div class="badges mini" id="r-badges"></div></div>
     <div class="box method-box"><span class="k">Cara skor ini dihitung</span>
       <ul class="bl small"><li>Ada 6 pilar. Tiap jawaban diberi nilai 0–100, lalu persen syariahmu adalah <b>rata-rata keenam pilar</b>.</li><li>Level: Niat (di bawah 30%), Hijrah (30–54%), Istiqamah (55–79%), Amanah (80% ke atas).</li></ul>
       <div class="pnotes" id="r-pnotes"></div>
@@ -742,20 +814,6 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
       <p class="small" id="sh-status" role="status" aria-live="polite"></p>
     </div>
     <div class="box"><span class="k">Posisimu dibanding nasional</span><div class="nat" id="r-nat"></div></div>
-    <section class="tease-wrap" aria-labelledby="r-prem-h">
-      <div class="tease-top"><span class="chip prem">Premium</span><h3 id="r-prem-h">Laporan Premium untukmu</h3></div>
-      <div id="r-teaser"></div>
-      <ul class="ilist small">
-        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg><span><b id="r-ngain"></b> keuntungan yang belum kamu ambil, dalam rupiah</span></li>
-        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span>Rencana 90 hari: <b id="r-ntask"></b> langkah, urut sesuai tujuanmu</span></li>
-        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h2M14 12h2M8 16h2M14 16h2"/></svg><span>5 kalkulator, katalog produk, dan 9 akad</span></li>
-        <li><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5zM5 19.5A1.5 1.5 0 0 0 6.5 21H19"/></svg><span>Sekitar 12 halaman PDF, dikirim ke emailmu</span></li>
-      </ul>
-      <div class="tease-cta">
-        <button class="btn gold" id="r-unlock"><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg> Buka Laporan Premium · <span class="px">Rp89.000</span></button>
-        <a class="btn alt" href="/?contoh" id="r-contoh">Lihat contoh laporan</a>
-      </div>
-    </section>
   </div>
   <footer class="lfoot rfoot"><span>Sharia Compass oleh SIFA Ventures · <a href="/privasi.html">Privasi</a> · <a href="/syarat.html">Syarat</a> · <a href="/?pulihkan" class="go-restore">Pulihkan akses</a></span><span>Bantuan: <a href="mailto:contact.andalanrt@gmail.com">contact.andalanrt@gmail.com</a></span></footer>
 </main>
@@ -768,7 +826,7 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
     <div class="scroll"><table><thead><tr><th>Skor</th><th>Cara hitung</th></tr></thead><tbody>
       <tr><td><b>Persentase syariah</b> 0–100%</td><td>Rata-rata enam pilar: <b>Tabungan & dana darurat</b> (rekening 35%, tabungan 35%, dana darurat 30%), <b>Cara bayar</b> (pembayaran sehari-hari), <b>Cicilan & utang</b> (jenis pembiayaan rumah atau kendaraan), <b>Asuransi</b> (asuransi dan BPJS), <b>Investasi</b> (rata-rata semua instrumen yang kamu pilih; saham dihitung 70 karena sebagian besar, tapi tidak semua, saham di BEI syariah), dan <b>Zakat & sedekah</b> (zakat, infak, sedekah, wakaf).</td></tr>
       <tr><td><b>Level</b></td><td>Mengikuti perjalanan hijrah finansial: Niat (di bawah 30%), Hijrah (30–54%), Istiqamah (55–79%), Amanah (80% ke atas). Level menggambarkan kebiasaan keuangan, bukan kadar iman.</td></tr>
-      <tr><td><b>Lencana</b></td><td>Delapan kebiasaan syariah yang terbuka dari jawabanmu, misalnya rekening syariah atau zakat rutin.</td></tr>
+      <tr><td><b>Badge</b></td><td>Delapan kebiasaan syariah yang terbuka dari jawabanmu, misalnya rekening syariah atau zakat rutin.</td></tr>
     </tbody></table></div>
     <p class="small muted">Skor ini alat bantu refleksi, bukan penilaian halal-haram. Bobot tiap jawaban adalah keputusan editorial kami dan <b>belum ditelaah ahli syariah berlisensi</b>. BPJS tetap dihitung positif sebagai lapisan dasar. "Potensi" adalah perkiraan bila semua langkah di rencana dijalankan.</p>
   </div>
@@ -807,7 +865,7 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
     <div class="pw-teaser" id="pw-teaser"></div>
     <div class="pw-inside"><b>Isi laporanmu · sekitar 12 halaman PDF</b>
       <ol class="small">
-        <li>Ringkasan: skor sekarang → potensi, level, dan lencana</li>
+        <li>Ringkasan: skor sekarang → potensi, level, dan badge</li>
         <li>Keuntungan yang belum kamu ambil, dalam rupiah</li>
         <li>Skor per pilar dan langkah berikutnya</li>
         <li>Rencana 90 hari: <b id="pw-n"></b> langkah, urut sesuai tujuanmu</li>
@@ -864,7 +922,7 @@ details.tease>div{margin-top:10px;display:grid;gap:8px}
         </div>
         <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M6 20V10M10 20V6M14 20v-8M18 20V9"/></svg>Yang menaikkan potensimu</h2><p class="small muted">Langkah yang bergantung pada pihak lain tidak dihitung.</p><div id="lap-drv"></div></div>
         <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h16M6 20V10M10 20V6M14 20v-8M18 20V9"/></svg>Per pilar</h2><p class="small muted">Skor sekarang → potensi, dan langkah berikutnya.</p><div class="lp-list" id="lap-pillars"></div></div>
-        <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3l3 6M16 3l-3 6"/><circle cx="12" cy="15" r="6"/><path d="M12 12.5v5"/></svg>Lencanamu</h2><div class="badges" id="lap-badges"></div></div>
+        <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3l3 6M16 3l-3 6"/><circle cx="12" cy="15" r="6"/><path d="M12 12.5v5"/></svg>Badgemu</h2><div class="badges" id="lap-badges"></div></div>
         <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/></svg>Keuntungan yang belum kamu ambil</h2><ul class="gains" id="lap-gains"></ul></div>
         <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 21V4h11l-2 4 2 4H5"/></svg>Langkah pertamamu minggu ini</h2><div id="lap-first"></div><button class="btn alt go-road" type="button">Lihat rencana 90 hari →</button></div>
         <div class="lap"><h2><svg class="ic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2A5 5 0 0 1 21 19"/></svg>Posisimu di antara penduduk Indonesia</h2><div class="nat" id="lap-nat"></div><p class="cite">SNLIK 2025 (OJK–BPS). Indeks nasional adalah persentase penduduk, bukan skor rata-rata.</p></div>

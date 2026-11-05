@@ -101,7 +101,9 @@ if(!S.know1) S.know1={};
 const OWNER_PREVIEW=(location.hash||"").replace("#","")==="pratinjau";
 let answered=false;
 
-function renderQ(){
+const svgI=(p,w)=>`<svg class="ic" viewBox="0 0 24 24" width="${w||22}" height="${w||22}" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const I_LOCK='<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>', I_UP='<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>', I_FLAG='<path d="M5 21V4h11l-2 4 2 4H5"/>', I_STAR='<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.5 2.9 1-6.1L3.2 9.5l6.1-.9z"/>', I_CHECK='<circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/>';
+function renderQ(){ $("q-box").classList.remove("pause");
   while(skipQ(S.step)) S.step++;
   const st=STEPS[S.step]; answered=false;
   const isG=st.id==="guess", pc=Math.round((isG?0:qPos())/qTotal()*100);
@@ -110,7 +112,7 @@ function renderQ(){
   $("q-text").textContent=st.q; $("q-hint").textContent=st.h||""; $("q-exp").hidden=true;
   const tl=termsIn(st.q+" "+st.o.map(o=>o[1]).join(" ")+" "+(st.h||"")); $("q-terms").innerHTML=termsHTML(tl); $("q-terms").hidden=!tl.length; SHOWN=tl.map(g=>g[0]);
   const cur=String(S.ans[st.id]||"").split(",");
-  $("q-opts").innerHTML=st.o.map(o=>`<button data-v="${o[0]}" aria-pressed="${st.multi?cur.includes(o[0]):S.ans[st.id]===o[0]}">${st.multi?'<span class="mk" aria-hidden="true"></span>':""}${o[1]}</button>`).join("");
+  $("q-opts").innerHTML=st.o.map((o,i)=>`<button data-v="${o[0]}" aria-pressed="${st.multi?cur.includes(o[0]):S.ans[st.id]===o[0]}">${st.multi?'<span class="mk" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg></span>':`<span class="ltr" aria-hidden="true">${String.fromCharCode(65+i)}</span>`}${o[1]}</button>`).join("");
   $("q-opts").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>choose(st,b)));
   $("q-next").textContent="Lanjut"; $("q-next").hidden=!(st.multi&&S.ans[st.id]);
   const box=$("q-box"); box.classList.remove("fade"); void box.offsetWidth; box.classList.add("fade");
@@ -134,16 +136,18 @@ function next(){ let n=S.step+1; while(n<STEPS.length&&skipQ(n)) n++;
 /* One pause mid-quiz: the strongest and weakest area so far, to build anticipation. */
 function reflect(){ answered=true; const sc=scores0(S.ans), done=[...new Set(STEPS.slice(0,S.step).map(x=>x.k).filter(k=>PILLARS[k]))];
   const r=done.sort((x,y)=>sc[y]-sc[x]); track("reflection_view");
-  $("q-count").textContent="Jeda sebentar"; $("q-tag").textContent="Sejauh ini";
-  $("q-text").textContent=r.length>1?`${PILLARS[r[0]]} jadi kekuatanmu sejauh ini. ${PILLARS[r[r.length-1]]} yang paling perlu perhatian.`:"Separuh jalan.";
-  $("q-hint").textContent="Lima pertanyaan lagi untuk melihat persen syariahmu, levelmu, dan langkah pertama yang paling masuk akal."; $("q-terms").hidden=true; $("q-next").hidden=true;
-  $("q-opts").innerHTML='<button id="q-refgo">Lanjutkan →</button>'; $("q-refgo").addEventListener("click",()=>{ renderQ(); window.scrollTo(0,0); }); }
+  const n=qPos()-1, tot=qTotal(), pc=Math.round(n/tot*100);
+  $("q-box").classList.add("pause"); $("q-count").textContent="Jeda sebentar"; $("q-bar").style.width=pc+"%"; $("q-tag").textContent="Separuh jalan";
+  $("q-text").textContent="Kerja bagus, kamu sudah separuh jalan!";
+  $("q-hint").textContent="Lima pertanyaan lagi untuk melihat persen syariahmu, levelmu, dan langkah pertama yang paling masuk akal."; $("q-terms").hidden=true; $("q-next").hidden=true; $("q-exp").hidden=true;
+  $("q-opts").innerHTML=`<div class="pause-card"><i class="pz-ic">${svgI(I_STAR,30)}</i><div class="pz-prog"><b class="num">${n}/${tot}</b><span>pertanyaan selesai</span><div class="pz-bar"><i style="width:${pc}%"></i></div></div>${r.length>1?`<div class="pz-row"><div class="pz-chip good">${svgI(I_UP,20)}<span>Kekuatanmu sejauh ini</span><b>${PILLARS[r[0]]}</b></div><div class="pz-chip warn">${svgI(I_FLAG,20)}<span>Paling perlu perhatian</span><b>${PILLARS[r[r.length-1]]}</b></div></div>`:""}</div><button id="q-refgo" class="refgo">Lanjutkan →</button>`;
+  $("q-refgo").addEventListener("click",()=>{ renderQ(); window.scrollTo(0,0); }); }
 function renderIntro1(){ answered=true; S.step=0;
   $("q-count").textContent="Sebelum mulai"; $("q-bar").style.width="2%";
   const tag=$("q-tag"); tag.className="qtag"; tag.textContent="10 pertanyaan · sekitar 3 menit";
   $("q-text").textContent="Berapa persen keuanganmu yang sudah syariah?";
   $("q-hint").textContent="Semua pertanyaannya tentang kebiasaan keuanganmu sekarang. Tidak ada jawaban benar atau salah.";
-  $("q-terms").innerHTML='<span class="k">Yang kamu dapat di akhir, gratis</span><p>Persentase keuanganmu yang sudah syariah, dan levelmu</p><p>Lencana yang ternyata sudah kamu punya</p><p>Perbandingan dengan tebakanmu</p><p>Kartu hasil untuk Instagram</p><p class="muted">Tanpa login. Jawabanmu hanya disimpan di perangkat ini.</p>'; $("q-terms").hidden=false;
+  $("q-terms").innerHTML='<span class="k">Yang kamu dapat di akhir, gratis</span><p>Persentase keuanganmu yang sudah syariah, dan levelmu</p><p>Badge yang ternyata sudah kamu punya</p><p>Perbandingan dengan tebakanmu</p><p>Kartu hasil untuk Instagram</p><p class="muted">Tanpa login. Jawabanmu hanya disimpan di perangkat ini.</p>'; $("q-terms").hidden=false;
   $("q-exp").hidden=true; $("q-next").hidden=true;
   $("q-opts").innerHTML='<button id="q-intro1go">Mulai →</button>';
   $("q-intro1go").addEventListener("click",()=>{ renderQ(); window.scrollTo(0,0); });
@@ -236,20 +240,20 @@ function project(s,a){
 /* Which steps drive the potential: biggest pillar gains first, each with its first controllable step. */
 function drivers(s,a){ const T=tasks(a), P=project(s,a);
   return Object.keys(PILLARS).map(k=>({k,d:P[k]-s[k],t:T.find(t=>t.p===k&&t.id!=="review"&&t.ctl!==false)})).filter(x=>x.d>0&&x.t).sort((x,y)=>y.d-x.d); }
-function driversHTML(s,a,n){ const D=drivers(s,a).slice(0,n||3); if(!D.length) return ""; return `<ul class="drv">${D.map(x=>`<li><b>${PILLARS[x.k]} +${x.d}</b><span>${x.t.t}</span></li>`).join("")}</ul>`; }
+function driversHTML(s,a,n){ const D=drivers(s,a).slice(0,n||3); if(!D.length) return ""; return `<ul class="drv">${D.map(x=>`<li><div><b>${PILLARS[x.k]}</b><span>${x.t.t}</span></div><em class="up" title="Naik ${x.d} poin">+${x.d}<small>poin</small></em></li>`).join("")}</ul>`; }
 /* Guess vs result by band, so a result on the band's edge counts as a hit. */
 const BANDS={12:[0,25],37:[25,50],62:[50,75],87:[75,100]};
 function guessVerdict(g,pct){ const [lo,hi]=BANDS[g.v]||[g.v-12,g.v+13];
   if(pct===lo||pct===hi) return ["edge","Tebakanmu tepat di batasnya. Kamu kenal keuanganmu sendiri."];
   if(pct>lo&&pct<hi) return ["hit","Tebakanmu tepat. Kamu kenal keuanganmu sendiri."];
-  if(pct>hi) return ["up","Keuanganmu ternyata <b>lebih syariah</b> dari yang kamu kira. Lencana di bawah menunjukkan bagian mana saja."];
-  return ["down","Ada bagian yang ternyata belum syariah. Lencana yang belum terbuka di bawah menunjukkan bagian mana."]; }
+  if(pct>hi) return ["up","Keuanganmu ternyata <b>lebih syariah</b> dari yang kamu kira. Badge di bawah menunjukkan bagian mana saja."];
+  return ["down","Ada bagian yang ternyata belum syariah. Badge yang belum terbuka di bawah menunjukkan bagian mana."]; }
 function rankP(s){ const ks=Object.keys(PILLARS); return ks.slice().sort((x,y)=>(s[y]-s[x])||(ks.indexOf(x)-ks.indexOf(y))); }
 function weakestP(s){ const r=rankP(s); return r[r.length-1]; }
 function cardHTML(s,ex,proj){
   const p=persona(s); const sorted=rankP(s);
   return `<div class="head"><div><span class="lbl">${ex?"Contoh · ":""}Level</span><div class="persona">${p[0]}</div><p class="tagline">${p[1]}</p></div><div>${radarSVG(s,proj)}${proj?'<div class="rlegend"><span><i></i>Sekarang</span><span><i class="d"></i>Potensi</span></div>':""}</div></div>
-  <div class="scores"><div><b class="num">${s.praktik}%</b><span>Keuangan yang sudah syariah</span></div><div><b class="num">${s.badges==null?"–":s.badges}/8</b><span>Lencana</span></div></div>${proj?`<div class="potential"><span>Potensi dalam 90 hari</span><span><b class="num">${s.praktik}% → ${proj.praktik}%</b></span></div>`:""}
+  <div class="scores"><div><b class="num">${s.praktik}%</b><span>Keuangan yang sudah syariah</span></div><div><b class="num">${s.badges==null?"–":s.badges}/8</b><span>Badge</span></div></div>${proj?`<div class="potential"><span>Potensi dalam 90 hari</span><span><b class="num">${s.praktik}% → ${proj.praktik}%</b></span></div>`:""}
   <div class="pillars">${Object.keys(PILLARS).map(k=>`<div class="pl"><div class="t"><span>${PILLARS[k]}</span><span>${s[k]}</span></div><div class="bar"><i style="width:${s[k]}%"></i></div></div>`).join("")}</div>
   <div class="foot"><span>Kekuatan utama <b>${PILLARS[sorted[0]]}</b></span><span>Perlu dibenahi dulu <b>${PILLARS[sorted[sorted.length-1]]}</b></span></div>`;
 }
@@ -300,7 +304,8 @@ function scores0(a){ const val=id=>{ const st=STEPS.find(x=>x.id===id); const o=
   return {simpan:Math.round(val("rek")*.35+val("tab")*.35+val("darurat")*.3),transaksi:trx,pembiayaan:val("biaya"),lindung:multiScore(a,"lindung"),investasi:invScore(a),zakat:val("zakat")}; }
 
 /* ================= RESULT ================= */
-function badgesHTML(){ return BADGES.map(b=>{ const on=b[2](S.ans); return `<details class="badge${on?"":" off"}"><summary><b>${on?"✓":"○"} ${b[0]}</b></summary><span>${on?badgeText(b,S.ans):"Belum terbuka."}</span><span class="crit">Syarat: ${b[3]}</span></details>`; }).join(""); }
+const BIC=['<path d="M3 10h18L12 4z"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>','<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M16 13h2M3 10h18"/>','<path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/>','<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h3"/>','<path d="M4 11 12 4l8 7v9H4z"/><path d="M10 20v-5h4v5"/>','<path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v6a2 2 0 0 0 4 0"/>','<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>','<path d="M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z"/>'];
+function badgesHTML(){ return BADGES.map((b,i)=>{ const on=b[2](S.ans); return `<details class="badge${on?"":" off"}"><summary><i class="bic">${svgI(BIC[i],18)}</i><b>${b[0]}</b></summary><span>${on?badgeText(b,S.ans):"Belum terbuka."}</span><span class="crit">Syarat: ${b[3]}</span></details>`; }).join(""); }
 function gainsHTML(G,paid){ return G.map(x=>`<li><div><b>${x[0]}</b>${paid?bl(x[1],"small muted"):`<p class="small muted">${x[1]}</p>`}<p class="cite">${x[3]}</p></div>${paid?(x[2]?`<button class="lockchip go-untung" type="button">Hitung rupiahnya →</button>`:""):`<span class="lockchip">${x[2]?"Rp ••• / tahun":"Premium"}</span>`}</li>`).join("")||`<li><div><b>Hampir semua keuntungan utama sudah kamu ambil.</b><p class="small muted">Premium membantu menjaga dan merapikan sisanya.</p></div></li>`; }
 let SC=null;
 function renderResult(){
@@ -308,14 +313,15 @@ function renderResult(){
   const PJ=project(SC,S.ans); $("r-card").innerHTML=cardHTML(SC,false,PJ);
   const c=$("r-card"); c.classList.remove("reveal"); void c.offsetWidth; c.classList.add("reveal");
   const g=guessOf(S.ans);
-  if(g){ const vd=guessVerdict(g,SC.praktik); $("r-guess").innerHTML=`<span class="k">Tebakanmu vs hasil hitungan</span><div class="vs"><div><b class="num">${g.label}</b><span>tebakanmu</span></div><div class="hit"><b class="num">${SC.praktik}%</b><span>hasil hitungan</span></div></div><p class="small">${vd[1]}</p>`; }
+  if(g){ const vd=guessVerdict(g,SC.praktik); const [lo,hi]=BANDS[g.v]||[g.v-12,g.v+13]; const VH={up:["Kamu lebih syariah dari yang kamu kira!",`Hasilmu ${SC.praktik-hi} poin di atas tebakanmu.`,I_STAR],down:["Masih ada ruang untuk naik",`Hasilmu ${lo-SC.praktik} poin di bawah tebakanmu. Kabar baiknya, langkahnya jelas.`,I_UP],hit:["Tebakanmu tepat!","Kamu kenal keuanganmu sendiri.",I_CHECK],edge:["Tebakanmu tepat!","Kamu kenal keuanganmu sendiri.",I_CHECK]}[vd[0]];
+    $("r-guess").innerHTML=`<span class="k">Tebakanmu vs hasil hitungan</span><div class="verdict ${vd[0]}"><i class="vic">${svgI(VH[2],26)}</i><div><b>${VH[0]}</b><span>${VH[1]}</span></div></div><div class="vs"><div><b class="num">${g.label}</b><span>tebakanmu</span></div><i class="vs-arr">${svgI('<path d="M5 12h14M13 6l6 6-6 6"/>')}</i><div class="hit"><b class="num">${SC.praktik}%</b><span>hasil hitungan</span></div></div><p class="small">${vd[1]}</p>`; }
   $("r-guess").hidden=!g;
   $("r-badges").innerHTML=badgesHTML();
   $("r-bcount").textContent=SC.badges+" dari "+BADGES.length;
   const G=gainsFor(S.ans);
   const weakest=weakestP(SC);
   const first=firstTask(T);
-  $("r-first").innerHTML=firstHTML(first,weakest);
+  $("r-first").innerHTML=firstHTML(first,weakest)+(T.length>1?`<p class="lockline">${svgI(I_LOCK,18)}<span>Langkah ke-2 sampai ke-${T.length} ada di rencana 90 hari Premium.</span></p>`:"");
   $("r-teaser").innerHTML=teaserHTML(G);
   $("r-drv").innerHTML=driversHTML(SC,S.ans,3)||'<p class="small">Semua pilar yang bisa kamu ubah sendiri sudah tinggi.</p>';
   const pr=T.find(t=>t.ctl===false); $("r-drv-note").textContent=pr?"Langkah yang bergantung pada pihak lain (misalnya bank tempat kantor membayar gaji) tidak kami hitung ke potensi. "+pr.alt:"";
@@ -339,7 +345,7 @@ function gainsPreviewHTML(G){ if(!G.length) return `<p class="small">Keuntungan 
   const ix=Math.max(0,G.findIndex(x=>gainEst(x,S.ans))), top=G[ix], rest=G.filter((_,i)=>i!==ix), e=gainEst(top,S.ans);
   return `<div class="prev-amt"><b>${top[0]}</b>${e?`<div class="amt num">± ${rp(e.amt)} / tahun</div><p class="math">${e.math}</p>`:""}${bl(top[1],"small muted")}<p class="cite">${top[3]}</p></div>
    ${rest.length?`<ul class="gains blur" aria-hidden="true">${rest.map(x=>`<li><div><b>${x[0]}</b><p class="small muted">${x[1]}</p></div></li>`).join("")}</ul><button class="btn gold unlock-mini" type="button" data-open-pw="gains">Buka ${rest.length} keuntungan lainnya</button>`:""}`; }
-function firstHTML(t,weak){ return `<h3>${t.t}</h3>${bl(t.w,"small")}<p class="small muted"><b>Kenapa ini dulu:</b> ${t.p===weak?`pilar terlemahmu adalah ${PILLARS[weak].toLowerCase()} (skor ${SC[weak]}), dan langkah ini yang paling cepat menaikkannya.`:`ini fondasi untuk ${PILLARS[t.p].toLowerCase()} (skor ${SC[t.p]}). Pilar terlemahmu, ${PILLARS[weak].toLowerCase()} (skor ${SC[weak]}), dibenahi di langkah berikutnya.`}</p>${t.how?`<ul class="bl small">${t.how.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}`; }
+function firstHTML(t,weak){ return `<h3>${t.t}</h3>${bl(t.w,"small")}<p class="small muted"><b>Kenapa ini dulu:</b> ${t.p===weak?`pilar terlemahmu adalah ${PILLARS[weak].toLowerCase()} (skor ${SC[weak]}), dan langkah ini yang paling cepat menaikkannya.`:`ini fondasi untuk ${PILLARS[t.p].toLowerCase()} (skor ${SC[t.p]}). Pilar terlemahmu, ${PILLARS[weak].toLowerCase()} (skor ${SC[weak]}), dibenahi di langkah berikutnya.`}</p>${t.how?`<p class="small"><b>Cara memulainya:</b></p><ol class="steps small">${t.how.map(x=>`<li><span>${x}</span></li>`).join("")}</ol>`:""}`; }
 function roadPreviewHTML(T,first){ const rest=T.filter(t=>t!==first);
   return [1,2,3].map(ph=>{ const L=rest.filter(t=>t.ph===ph); if(!L.length) return ""; return `<div class="phase-prev"><b>Fase ${ph} · ${PH[ph][0]} (${PH[ph][1]})</b><ol>${L.map(t=>`<li>${t.t}<div class="blurline" aria-hidden="true">Cara menjalankan, yang perlu ditanyakan, dan rujukannya ada di Premium.</div></li>`).join("")}</ol></div>`; }).join("")+
   `<button class="btn gold unlock-mini" type="button" data-open-pw="road">Buka rencana lengkap</button>`; }
@@ -435,7 +441,7 @@ function openFull(){ SC=scores(S.ans); show("v-full"); initSync(); syncProgress(
 function renderLap(){
   const T=tasks(S.ans), G=gainsFor(S.ans), PJ=project(SC,S.ans), p=persona(SC), first=firstTask(T);
   const next=k=>{ const t=T.find(x=>x.p===k); return t?t.t:"Sudah baik. Tinggal dijaga."; };
-  $("lap-sum").innerHTML=`<div class="stat"><span>Sekarang → potensi</span><b class="num">${SC.praktik}% → ${PJ.praktik}%</b></div><div class="stat"><span>Level</span><b>${p[0]}</b></div><div class="stat"><span>Lencana</span><b class="num">${SC.badges}/8</b></div><div class="stat"><span>Keuntungan belum diambil</span><b class="num">${G.length}</b></div>`;
+  $("lap-sum").innerHTML=`<div class="stat"><span>Sekarang → potensi</span><b class="num">${SC.praktik}% → ${PJ.praktik}%</b></div><div class="stat"><span>Level</span><b>${p[0]}</b></div><div class="stat"><span>Badge</span><b class="num">${SC.badges}/8</b></div><div class="stat"><span>Keuntungan belum diambil</span><b class="num">${G.length}</b></div>`;
   $("lap-drv").innerHTML=driversHTML(SC,S.ans,6)||"<p class=\"small\">Semua pilar yang bisa kamu ubah sendiri sudah tinggi.</p>";
   $("lap-pillars").innerHTML=Object.keys(PILLARS).map(k=>`<div class="lp"><div class="lp-t"><b>${PILLARS[k]}</b><span class="num">${SC[k]}${PJ[k]>SC[k]?" → "+PJ[k]:""}</span></div><div class="bar"><i style="width:${SC[k]}%"></i><i class="pot" style="left:${SC[k]}%;width:${Math.max(0,PJ[k]-SC[k])}%"></i></div><p class="small muted">${next(k)}</p></div>`).join("");
   $("lap-badges").innerHTML=badgesHTML();
@@ -752,6 +758,13 @@ function demoCuts(){ const own=load(); const done=own&&own.ans&&Object.keys(own.
     p.insertAdjacentHTML("beforeend",`<div class="cut-cta"><p>${c[0].replace("{U}",U||"jutaan rupiah").replace("{N}",tasks(S.ans).length)}</p>${cta}</div>`); });
   $("demo-cta").outerHTML=cta.replace('class="btn gold"','class="btn gold" id="demo-cta"'); }
 
+/* ---------- Waitlist for upcoming products ---------- */
+document.querySelectorAll(".wl-btn").forEach(b=>b.addEventListener("click",()=>{ const f=b.nextElementSibling; f.hidden=false; b.hidden=true; f.querySelector("input").focus(); }));
+document.querySelectorAll(".wl-form").forEach(f=>f.addEventListener("submit",async e=>{ e.preventDefault(); const em=f.querySelector("input").value.trim(), msg=f.querySelector(".wl-msg");
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){ msg.textContent="Cek lagi alamat emailmu."; return; }
+  try{ const r=await fetch("/api/waitlist",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({email:em,product:f.dataset.p})}); if(!r.ok) throw 0;
+    f.innerHTML='<p class="small wl-ok">Terima kasih! Kami kabari lewat email saat produk ini siap.</p>'; track("waitlist_join",{product:f.dataset.p}); }
+  catch(_){ msg.textContent="Gagal mengirim. Coba lagi sebentar."; } }));
 /* ---------- Laporanku: email → magic link → reports ---------- */
 $("mn-close").addEventListener("click",()=>sheet("mine",false));
 $("mine").addEventListener("click",e=>{ if(e.target.id==="mine") sheet("mine",false); });

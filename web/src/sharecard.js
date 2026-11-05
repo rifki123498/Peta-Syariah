@@ -46,13 +46,13 @@ function draw(cv,o){
     let y=text(ctx,"Level "+o.persona,X,by+(st?92:74),`700 ${st?46:40}px ${F}`,c);
     if(o.showGuess) y=text(ctx,(o.pct>=o.guessV+10?"Tadinya kutebak cuma ":"Tadinya kutebak ")+o.guessLabel+".",X,y+(st?66:56),`500 ${st?38:32}px ${F}`,"#F1F5EC",W-2*X,st?50:42);
     if(st){ radar(ctx,o.pillars,W/2,y+330,180,c,30);
-      let cy=y+590, cx=X; cx+=chip(ctx,cx,cy,"Lencana ",o.badges+" dari 8",c)+16; if(cx+chipW(ctx,"Fokusku ",o.focus)>W-X){ cx=X; cy+=88; } chip(ctx,cx,cy,"Fokusku ",o.focus,"#F1F5EC");
+      let cy=y+590, cx=X; cx+=chip(ctx,cx,cy,"Badge ",o.badges+" dari 8",c)+16; if(cx+chipW(ctx,"Fokusku ",o.focus)>W-X){ cx=X; cy+=88; } chip(ctx,cx,cy,"Fokusku ",o.focus,"#F1F5EC");
       if(o.inklusi) text(ctx,"Termasuk 13,41% penduduk yang sudah memakai produk syariah (SNLIK 2025)",X,cy+140,`500 30px ${F}`,"#B9C7BD",W-2*X,42);
       text(ctx,"Berapa persen punyamu?",X,H-250,`800 54px ${F}`,"#D4EE3A");
       text(ctx,"Cek gratis, 3 menit  ·  #ShariaCompass",X,H-195,`500 34px ${F}`,"#F1F5EC");
     } else {
       radar(ctx,o.pillars,W-280,H-400,140,c,26);
-      let cy=y+60; chip(ctx,X,cy,"Lencana ",o.badges+" dari 8",c); chip(ctx,X,cy+90,"Fokusku ",o.focus,"#F1F5EC");
+      let cy=y+60; chip(ctx,X,cy,"Badge ",o.badges+" dari 8",c); chip(ctx,X,cy+90,"Fokusku ",o.focus,"#F1F5EC");
       text(ctx,"Berapa persen punyamu?",X,H-150,`800 48px ${F}`,"#D4EE3A");
       text(ctx,"Cek gratis, 3 menit  ·  #ShariaCompass",X,H-98,`500 30px ${F}`,"#F1F5EC");
     }

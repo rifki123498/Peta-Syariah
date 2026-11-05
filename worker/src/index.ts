@@ -42,7 +42,7 @@ const EVENT_NAMES = new Set([
   "lp_view", "quiz_start", "q_answer", "quiz_complete", "result_view", "share_save", "share_caption",
   "paywall_view", "checkout_start", "purchase_return", "consent", "wa_click", "feedback_click",
   "task_toggle", "ask_toggle", "catalog_filter", "scenario_tab", "owner_preview",
-  "tease_click", "tab_view", "sample_view", "restore", "reflection_view", "magic_request", "report_open",
+  "tease_click", "tab_view", "sample_view", "restore", "reflection_view", "magic_request", "report_open", "waitlist_join",
   "landing_view", "guess_selected", "quiz_started", "quiz_completed", "result_viewed", "locked_row_clicked", "contoh_viewed", "premium_dialog_opened",
   "share_downloaded", "share_caption_copied", "contoh_cta", "product_link_clicked", "progress_sync", "pdf_print",
 ]);
@@ -293,6 +293,15 @@ app.get("/api/progress/:id", async (c) => {
 });
 
 /* Laporanku: request a magic link by email (same answer whether or not the email bought, to avoid leaking customers). */
+app.post("/api/waitlist", async (c) => {
+  const b = (await c.req.json().catch(() => null)) as { email?: unknown; product?: unknown } | null;
+  const email = typeof b?.email === "string" ? b.email.trim().toLowerCase().slice(0, 120) : "";
+  const product = b?.product === "zakat" || b?.product === "kpr" ? b.product : null;
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !product) return c.json({ ok: false }, 400);
+  await c.env.DB.prepare("INSERT INTO waitlist (email,product,created_at) VALUES (?,?,?) ON CONFLICT(email,product) DO NOTHING").bind(email, product, Date.now()).run();
+  return c.json({ ok: true });
+});
+
 app.post("/api/magic", async (c) => {
   const b: any = await c.req.json().catch(() => ({}));
   const email = typeof b.email === "string" ? b.email.trim().toLowerCase() : "";
