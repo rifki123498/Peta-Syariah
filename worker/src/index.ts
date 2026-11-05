@@ -13,6 +13,8 @@ type Env = {
   XENDIT_SECRET_KEY?: string;
   XENDIT_CALLBACK_TOKEN?: string;
   ADMIN_TOKEN?: string;
+  RESEND_API_KEY?: string;
+  MAIL_FROM?: string;
 };
 
 const app = new Hono<{ Bindings: Env }>();
@@ -40,7 +42,7 @@ const EVENT_NAMES = new Set([
   "lp_view", "quiz_start", "q_answer", "quiz_complete", "result_view", "share_save", "share_caption",
   "paywall_view", "checkout_start", "purchase_return", "consent", "wa_click", "feedback_click",
   "task_toggle", "ask_toggle", "catalog_filter", "scenario_tab", "owner_preview",
-  "tease_click", "tab_view", "sample_view", "restore",
+  "tease_click", "tab_view", "sample_view", "restore", "reflection_view", "magic_request", "report_open",
   "landing_view", "guess_selected", "quiz_started", "quiz_completed", "result_viewed", "locked_row_clicked", "contoh_viewed", "premium_dialog_opened",
   "share_downloaded", "share_caption_copied", "contoh_cta", "product_link_clicked", "progress_sync", "pdf_print",
 ]);
@@ -76,14 +78,15 @@ async function sendCapi(env: Env, req: Request, eventName: string, eventId: stri
 /* Version of syarat.html + privasi.html the buyer agreed to. Bump when either page changes materially. */
 const TERMS_VERSION = "2026-11-05";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-function parseBuyer(v: any): { name: string | null; email: string | null; wa: string | null } | null {
+function parseBuyer(v: any): { name: string; email: string | null; wa: string | null } | null {
   /* One contact is required (email or WhatsApp) so access can be restored. Pressing pay = accepting Syarat & Privasi. */
   if (!v || typeof v !== "object" || v.consent !== true) return null;
   const email = typeof v.email === "string" ? v.email.trim().toLowerCase().slice(0, 120) : "";
   if (email && !EMAIL_RE.test(email)) return null;
   const wa = typeof v.wa === "string" && /^\+62\d{8,13}$/.test(v.wa) ? v.wa : null;
-  if (!email && !wa) return null;
-  return { name: null, email: email || null, wa };
+  const name = typeof v.name === "string" ? v.name.trim().slice(0, 80) : "";
+  if ((!email && !wa) || name.length < 2) return null;
+  return { name, email: email || null, wa };
 }
 
 /* ---------- DOKU Checkout (non-SNAP). Signature: HMACSHA256=base64(hmac(secret, "Client-Id:..\nRequest-Id:..\nRequest-Timestamp:..\nRequest-Target:..[\nDigest:base64(sha256(body))]")) ---------- */
@@ -107,7 +110,27 @@ async function markPaid(env: Env, req: Request, ctx: ExecutionContext, id: strin
   if (!row || row.status === "paid") return row;
   await env.DB.prepare("UPDATE orders SET status='paid', paid_at=? WHERE id=?").bind(now(), id).run();
   if (row.meta_consent === 1) ctx.waitUntil(sendCapi(env, req, "Purchase", "purchase-" + id, row.anon_id, "/", { value: row.price, currency: "IDR", order_id: id }));
+  ctx.waitUntil(sendReportMail(env, req, id));
   return { ...row, status: "paid" };
+}
+
+/* ---------- Email: report link after purchase + magic links for "Laporanku". Needs RESEND_API_KEY and MAIL_FROM (a verified domain). ---------- */
+const baseOf = (env: Env, req: Request) => env.PUBLIC_BASE_URL || new URL(req.url).origin;
+async function sendMail(env: Env, to: string, subject: string, html: string) {
+  if (!env.RESEND_API_KEY || !env.MAIL_FROM) return false;
+  const r = await fetch("https://api.resend.com/emails", { method: "POST", headers: { authorization: "Bearer " + env.RESEND_API_KEY, "content-type": "application/json" }, body: JSON.stringify({ from: env.MAIL_FROM, to: [to], subject, html }) }).catch(() => null);
+  return !!(r && r.ok);
+}
+async function newToken(env: Env, email: string) {
+  const t = [...crypto.getRandomValues(new Uint8Array(20))].map((x) => x.toString(16).padStart(2, "0")).join("");
+  await env.DB.prepare("INSERT INTO magic (token,email,expires_at) VALUES (?,?,?)").bind(t, email, now() + 7 * 864e5).run();
+  return t;
+}
+async function sendReportMail(env: Env, req: Request, id: string) {
+  const o: any = await env.DB.prepare("SELECT buyer_email,buyer_name FROM orders WHERE id=?").bind(id).first();
+  if (!o?.buyer_email) return;
+  const link = `${baseOf(env, req)}/?laporan=${await newToken(env, o.buyer_email)}`;
+  await sendMail(env, o.buyer_email, "Laporan Sharia Compass-mu sudah siap", `<p>Halo ${o.buyer_name || ""},</p><p>Terima kasih. Laporan Premium-mu siap dibuka dan diunduh sebagai PDF:</p><p><a href="${link}">Buka laporanku</a></p><p>Kode aksesmu: <b>${id}</b>. Simpan email ini; kamu bisa meminta link baru kapan saja di halaman Laporanku.</p><p>Sharia Compass oleh SIFA Ventures. Panduan edukasi, bukan fatwa.</p>`);
 }
 
 app.get("/api/config", (c) => c.json({ pixelId: c.env.META_PIXEL_ID || null, priceArms: arms(c.env), payments: hasDoku(c.env) || !!c.env.XENDIT_SECRET_KEY }));
@@ -141,6 +164,8 @@ app.post("/api/checkout", async (c) => {
   const buyer = parseBuyer(b.buyer);
   if (!buyer) return c.json({ error: "bad_buyer" }, 400);
   const t = now();
+  const ansRaw = b?.answers && typeof b.answers === "object" ? JSON.stringify({ ans: b.answers }).slice(0, 4000) : null;
+  if (ansRaw) await c.env.DB.prepare("INSERT INTO progress (order_id,data,updated_at) VALUES (?,?,?) ON CONFLICT(order_id) DO NOTHING").bind(id, ansRaw, t).run();
   const insert = (mode: string, status: string, providerRef: string | null = null, invoiceUrl: string | null = null) =>
     c.env.DB.prepare(
       "INSERT INTO orders (id,anon_id,price,arm,ref,mode,status,provider_ref,invoice_url,created_at,buyer_name,buyer_email,buyer_wa,consent_at,terms_version,meta_consent) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -265,6 +290,31 @@ app.get("/api/progress/:id", async (c) => {
   const row: any = await c.env.DB.prepare("SELECT o.status, p.data FROM orders o LEFT JOIN progress p ON p.order_id=o.id WHERE o.id=?").bind(id).first();
   if (!row || row.status !== "paid") return c.json({ error: "not_paid" }, 403);
   return c.json({ data: row.data ? JSON.parse(row.data) : null });
+});
+
+/* Laporanku: request a magic link by email (same answer whether or not the email bought, to avoid leaking customers). */
+app.post("/api/magic", async (c) => {
+  const b: any = await c.req.json().catch(() => ({}));
+  const email = typeof b.email === "string" ? b.email.trim().toLowerCase() : "";
+  if (!EMAIL_RE.test(email)) return c.json({ error: "bad_email" }, 400);
+  const has: any = await c.env.DB.prepare("SELECT 1 FROM orders WHERE buyer_email=? AND status='paid' LIMIT 1").bind(email).first();
+  let sent = false;
+  if (has) sent = await sendMail(c.env, email, "Link Laporanku · Sharia Compass", `<p>Ini link untuk membuka laporanmu (berlaku 7 hari):</p><p><a href="${baseOf(c.env, c.req.raw)}/?laporan=${await newToken(c.env, email)}">Buka Laporanku</a></p><p>Kalau kamu tidak meminta link ini, abaikan email ini.</p>`);
+  void sent;
+  return c.json({ ok: true, mail: !!(c.env.RESEND_API_KEY && c.env.MAIL_FROM) });
+});
+app.get("/api/reports", async (c) => {
+  const t = (c.req.query("t") || "").slice(0, 64);
+  const m: any = await c.env.DB.prepare("SELECT email,expires_at FROM magic WHERE token=?").bind(t).first();
+  if (!m || m.expires_at < now()) return c.json({ error: "expired" }, 403);
+  const rows = await c.env.DB.prepare("SELECT o.id,o.paid_at,o.buyer_name,p.data FROM orders o LEFT JOIN progress p ON p.order_id=o.id WHERE o.buyer_email=? AND o.status='paid' ORDER BY o.paid_at DESC").bind(m.email).all();
+  return c.json({ reports: (rows.results || []).map((r: any) => ({ id: r.id, paidAt: r.paid_at, name: r.buyer_name, data: r.data ? JSON.parse(r.data) : null })) });
+});
+/* Public counters for social proof; the page shows them only above a threshold. */
+app.get("/api/stats", async (c) => {
+  const q: any = await c.env.DB.prepare("SELECT COUNT(DISTINCT anon_id) AS n FROM events WHERE name IN ('quiz_completed','quiz_complete')").first();
+  const r: any = await c.env.DB.prepare("SELECT COUNT(*) AS n FROM orders WHERE status='paid'").first();
+  return c.json({ quizzes: q?.n || 0, reports: r?.n || 0 });
 });
 
 app.get("/api/order/:id", async (c) => {

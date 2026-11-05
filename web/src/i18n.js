@@ -13,6 +13,9 @@ export const isEN = LANG === "en";
 
 const rpJt = (s) => s.replace(/Rp([\d.,]+) jt/g, "Rp$1 million");
 const PATTERNS = [
+  [/^(.+) jadi kekuatanmu sejauh ini\. (.+) yang paling perlu perhatian\.$/, (m) => `${tr(m[1])} is your strength so far. ${tr(m[2])} needs the most attention.`],
+  [/^dan (\d+) keuntungan lain menunggumu di laporan\.$/, (m) => `and ${m[1]} more benefit${m[1] === "1" ? "" : "s"} waiting in the report.`],
+  [/^Buka Laporan Premium · (Rp[\d.]+)$/, (m) => `Open the Premium report · ${m[1]}`],
   [/^Pertanyaan (\d+)\/(\d+)$/, (m) => `Question ${m[1]}/${m[2]}`],
   [/^(\d+) dari (\d+)$/, (m) => `${m[1]} of ${m[2]}`],
   [/^Ada (\d+) keuntungan yang belum kamu ambil$/, (m) => `${m[1]} benefit${m[1] === "1" ? "" : "s"} you haven't claimed yet`],

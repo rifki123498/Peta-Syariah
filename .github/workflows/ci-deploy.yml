@@ -72,7 +72,8 @@ jobs:
             --var PRICE_ARMS:"${{ vars.PRICE_ARMS || '89000' }}" \
             --var META_PIXEL_ID:"${{ vars.META_PIXEL_ID }}" \
             --var PUBLIC_BASE_URL:"${{ vars.PUBLIC_BASE_URL }}" \
-            --var DOKU_ENV:"${{ vars.DOKU_ENV || 'sandbox' }}"
+            --var DOKU_ENV:"${{ vars.DOKU_ENV || 'sandbox' }}" \
+            --var MAIL_FROM:"${{ vars.MAIL_FROM }}"
       - if: steps.cf.outputs.skip != '1'
         name: Redirect old address
         run: npx wrangler deploy --config redirect/wrangler.toml
@@ -85,8 +86,9 @@ jobs:
           XENDIT_SECRET_KEY: ${{ secrets.XENDIT_SECRET_KEY }}
           XENDIT_CALLBACK_TOKEN: ${{ secrets.XENDIT_CALLBACK_TOKEN }}
           ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: |
-          for k in META_CAPI_TOKEN DOKU_CLIENT_ID DOKU_SECRET_KEY XENDIT_SECRET_KEY XENDIT_CALLBACK_TOKEN ADMIN_TOKEN; do
+          for k in META_CAPI_TOKEN DOKU_CLIENT_ID DOKU_SECRET_KEY XENDIT_SECRET_KEY XENDIT_CALLBACK_TOKEN ADMIN_TOKEN RESEND_API_KEY; do
             v="${!k}"
             if [ -n "$v" ]; then printf '%s' "$v" | npx wrangler secret put "$k"; fi
           done

@@ -22,6 +22,7 @@ DOKU_ENV = "sandbox"
 PRICE_ARMS = "89000"
 PUBLIC_BASE_URL = ""
 META_PIXEL_ID = ""
+MAIL_FROM = ""
 
 # Secrets (set with `wrangler secret put` or the GitHub Actions deploy job):
 # META_CAPI_TOKEN, XENDIT_SECRET_KEY, XENDIT_CALLBACK_TOKEN, ADMIN_TOKEN

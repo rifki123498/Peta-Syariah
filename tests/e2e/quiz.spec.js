@@ -5,6 +5,13 @@ const DINDA = ["rumah", "37", "keduanya", "konv", "3", "kk", "none", "bpjs"];
 async function answer(page, v) {
   const before = await page.locator("#q-count").textContent();
   await page.locator(`#q-opts button[data-v="${v}"]`).click();
+  if (v === "bpjs") await page.locator("#q-next").click();
+  await page.waitForFunction((b) => {
+    const r = document.querySelector("#q-refgo");
+    return (r && r.offsetParent !== null) || document.querySelector("#q-count").textContent !== b;
+  }, before);
+  const ref = page.locator("#q-refgo");
+  if (await ref.isVisible()) await ref.click();
   await expect(page.locator("#q-count")).not.toHaveText(before);
 }
 
@@ -25,7 +32,8 @@ async function runQuiz(page) {
 test("lander shows verified facts, consent bar and price arm", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#consent")).toBeVisible();
-  await expect(page.locator("#l-facts .fact")).toHaveCount(6);
+  await expect(page.locator(".trust")).toContainText("6 pilar");
+  await expect(page.locator(".guess")).toHaveCount(1);
   await expect(page.locator(".px").first()).toHaveText("Rp89.000");
   await expect(page.locator(".px-was").first()).toHaveText("Rp149.000");
   await expect(page.locator(".tag-promo").first()).toHaveText("Harga spesial · hemat 40%");
@@ -38,13 +46,10 @@ test("Dinda profile scores 54%, level Hijrah, 1 of 8 badges; first step free, pr
   await expect(page.locator("#r-card")).toContainText("Hijrah");
   await expect(page.locator("#r-bcount")).toHaveText("1 dari 8");
   await expect(page.locator("#r-first")).toContainText("Kenapa ini dulu");
-  await expect(page.locator("#r-ngain")).toHaveText("Ada 4 keuntungan yang belum kamu ambil");
-  await page.locator('.tease[data-tease="gains"] summary').click();
-  await expect(page.locator("#r-gains-prev .prev-amt")).toContainText("/ tahun");
-  await expect(page.locator("#r-gains-prev .math")).toContainText("Bukan angka pasti");
-  await expect(page.locator("#r-gains-prev .gains.blur > li")).toHaveCount(3);
-  await page.locator('.tease[data-tease="road"] summary').click();
-  await expect(page.locator("#r-road")).toContainText("Fase 1");
+  await expect(page.locator("#r-ngain")).toHaveText("4");
+  await expect(page.locator("#r-teaser")).toContainText("/ tahun");
+  await expect(page.locator("#r-teaser .math")).toContainText("Bukan angka pasti");
+  await expect(page.locator("#r-unlock")).toContainText("Buka Laporan Premium · Rp89.000");
   await expect(page.locator("#r-guess")).toContainText("lebih syariah");
   await expect(page.locator("#r-contoh")).toBeVisible();
   await expect(page.locator(".rfoot")).toContainText("Pulihkan akses");
@@ -54,17 +59,17 @@ test("Dinda profile scores 54%, level Hijrah, 1 of 8 badges; first step free, pr
   await expect(page.locator("body")).not.toContainText("Perlindungan");
 });
 
-const BUYER = { email: "dinda@example.com", consent: true };
+const BUYER = { name: "Dinda", email: "dinda@example.com", consent: true };
 
 test("paywall requires one contact (email or WhatsApp), validated and stored", async ({ page, request }) => {
   await runQuiz(page);
   await page.locator("#r-unlock").click();
-  await expect(page.locator("#pw-form input")).toHaveCount(1);
-  await page.locator("#pw-pay").click();
-  await expect(page.locator("#buy-err")).toContainText("email atau nomor WhatsApp");
+  await expect(page.locator("#pw-form input")).toHaveCount(2);
+  await expect(page.locator("#pw-teaser")).toContainText("/ tahun");
+  await expect(page.locator("#pw-pay")).toBeDisabled();
+  await page.fill("#b-name", "Dinda");
   await page.fill("#b-email", "dinda@contoh");
-  await page.locator("#pw-pay").click();
-  await expect(page.locator("#buy-err")).toContainText("email atau nomor WhatsApp");
+  await expect(page.locator("#pw-pay")).toBeDisabled();
   await page.fill("#b-email", "dinda.e2e@example.com");
   await page.locator("#pw-pay").click();
   await expect(page.locator("#pw-demo")).toBeVisible();
@@ -79,6 +84,7 @@ test("paywall requires one contact (email or WhatsApp), validated and stored", a
 test("a WhatsApp number is accepted as the contact", async ({ page }) => {
   await runQuiz(page);
   await page.locator("#r-unlock").click();
+  await page.fill("#b-name", "Dinda");
   await page.fill("#b-email", "0812-3456-7890");
   await page.locator("#pw-pay").click();
   await expect(page.locator("#pw-demo")).toBeVisible();
@@ -106,8 +112,7 @@ test("evidence persona: 50%, Hijrah, guess on the band edge, no partial badge, z
   await expect(page.locator('#r-badges details.badge:has-text("Tabungan syariah") .crit')).toContainText("bukan campuran");
   await expect(page.locator("#r-nat")).toContainText("bukan peringkat pribadimu");
   await expect(page.locator("#r-pnotes")).toContainText("BPJS");
-  await page.locator('.tease[data-tease="gains"] summary').click();
-  await expect(page.locator("#r-gains-prev .math")).toContainText("Rp5–10 juta");
+  await expect(page.locator("#r-teaser .math")).toContainText("Rp5–10 juta");
   await page.reload();
   await expect(page.locator("#v-result")).toBeVisible();
 });
@@ -137,7 +142,7 @@ test("restore access with an order number, no chat", async ({ page, request }) =
 });
 
 test("checkout API rejects a bad email and a price outside the arms", async ({ request }) => {
-  let r = await request.post("/api/checkout", { data: { anonId: "e2e", price: 89000, arm: 0, buyer: { email: "x@y", consent: true } } });
+  let r = await request.post("/api/checkout", { data: { anonId: "e2e", price: 89000, arm: 0, buyer: { name: "X", email: "x@y", consent: true } } });
   expect(r.status()).toBe(400);
   r = await request.post("/api/checkout", { data: { anonId: "e2e", price: 69000, arm: 0, buyer: BUYER } });
   expect((await r.json()).error).toBe("bad_price");
@@ -177,7 +182,7 @@ test("English mode translates lander, quiz and result", async ({ page }) => {
   await expect(page.locator("#r-bcount")).toHaveText("1 of 8");
   await expect(page.locator("#r-card")).toContainText("Hijrah");
   await page.locator("#r-unlock").click();
-  await expect(page.locator("#pw-sub")).toContainText("From 54% to about");
+  await expect(page.locator("#pw-pay")).toContainText("Open the Premium report");
 });
 
 test("paid order opens the Premium report, then the Keuntungan tab", async ({ page, request }) => {
@@ -229,11 +234,10 @@ test("sample report is the real Premium view for the example profile and leaves 
   await expect(page.locator("#kat-list .ex").first()).toContainText("bukan rekomendasi");
 });
 
-test("a locked row opens its own preview, whose button opens the paywall", async ({ page }) => {
+test("result has one report card; its button opens the one-screen paywall", async ({ page }) => {
   await runQuiz(page);
-  await page.locator('.tease[data-tease="tools"] summary').click();
-  await expect(page.locator("#r-tools")).toContainText("5 kalkulator");
-  await page.locator('#r-tools [data-open-pw]').click();
+  await page.locator("#r-unlock").click();
   await expect(page.locator("#paywall")).toBeVisible();
+  await expect(page.locator("#paywall")).toContainText("12 halaman");
   await expect(page.locator("#paywall")).toContainText("tanpa refund");
 });
