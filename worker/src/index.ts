@@ -145,7 +145,7 @@ app.post("/api/checkout", async (c) => {
   const base = c.env.PUBLIC_BASE_URL || new URL(c.req.url).origin;
 
   if (hasDoku(c.env)) {
-    const r = await dokuFetch(c.env, "POST", "/checkout/v1/payment", {
+    const full = {
       order: {
         amount: price, invoice_number: id, currency: "IDR", auto_redirect: true,
         callback_url: `${base}/?order=${id}`, callback_url_result: `${base}/?order=${id}`,
@@ -154,8 +154,19 @@ app.post("/api/checkout", async (c) => {
       payment: { payment_due_date: 60 },
       ...(buyer.email ? { customer: { id: id, email: buyer.email } } : {}),
       additional_info: { override_notification_url: `${base}/api/webhooks/doku` },
-    }).catch(() => null);
-    const txt = r ? await r.text().catch(() => "") : "network_error";
+    };
+    let r = await dokuFetch(c.env, "POST", "/checkout/v1/payment", full).catch(() => null);
+    let txt = r ? await r.text().catch(() => "") : "network_error";
+    /* If DOKU finds no usable method for the full request, retry with DOKU's minimal documented body
+       (some methods filter on customer/line_items). The error of the last attempt is kept. */
+    if (r && r.status === 400 && /ANOTHER PAYMENT METHOD/i.test(txt)) {
+      r = await dokuFetch(c.env, "POST", "/checkout/v1/payment", {
+        order: { amount: price, invoice_number: id, callback_url: `${base}/?order=${id}` },
+        payment: { payment_due_date: 60 },
+      }).catch(() => null);
+      txt = (r ? await r.text().catch(() => "") : "network_error");
+      if (!/payment/.test(txt) || (r && !r.ok)) txt = "minimal: " + txt;
+    }
     let j: any = null; try { j = JSON.parse(txt); } catch {}
     const url = j?.response?.payment?.url;
     if (!url) {
