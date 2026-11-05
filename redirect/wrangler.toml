@@ -1,0 +1,7 @@
+# Old address peta-syariah.<account>.workers.dev → permanent redirect to the shariacompass Worker.
+name = "peta-syariah"
+main = "index.js"
+compatibility_date = "2024-12-01"
+
+[triggers]
+crons = []

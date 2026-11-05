@@ -155,9 +155,15 @@ app.post("/api/checkout", async (c) => {
       ...(buyer.email ? { customer: { id: id, email: buyer.email } } : {}),
       additional_info: { override_notification_url: `${base}/api/webhooks/doku` },
     }).catch(() => null);
-    const j: any = r && r.ok ? await r.json().catch(() => null) : null;
+    const txt = r ? await r.text().catch(() => "") : "network_error";
+    let j: any = null; try { j = JSON.parse(txt); } catch {}
     const url = j?.response?.payment?.url;
-    if (!url) { await insert("doku", "failed"); return c.json({ mode: "waitlist", orderId: id, error: "payment_unavailable" }); }
+    if (!url) {
+      /* Keep DOKU's error (no secrets in it) on the order so failures can be diagnosed from D1. */
+      await insert("doku", "failed", `ERR ${r ? r.status : 0}: ${txt.slice(0, 400)}`);
+      console.log("doku_checkout_failed", id, r ? r.status : 0, txt.slice(0, 400));
+      return c.json({ mode: "waitlist", orderId: id, error: "payment_unavailable" });
+    }
     await insert("doku", "pending", j.response.payment.token_id || null, url);
     return c.json({ mode: "redirect", orderId: id, url });
   }
