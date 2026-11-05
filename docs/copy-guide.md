@@ -1,4 +1,4 @@
-# Copy guide — Peta Syariah voice
+# Copy guide — Sharia Compass voice
 
 Applies to every user-facing string. Checked against public website copy of BSI, BCA Syariah, Bank Muamalat, BTPN Syariah, Prudential Syariah, Pegadaian, BAZNAS, Dompet Dhuafa and Jago Syariah (Nov 2026).
 
@@ -26,7 +26,7 @@ Applies to every user-facing string. Checked against public website copy of BSI,
 - Consumer campaigns use "kamu"; service/legal use "Anda".
 - Religious meaning is carried by life goals (haji, umrah, rumah, pendidikan, pensiun) and aspirational words (berkah, hijrah, kebaikan), never pressure.
 - Invitations, not orders: "Yuk", "Mulai", "Wujudkan". Greeting "Assalamu'alaikum" on personal surfaces (report cover).
-- One owned hashtag: #PetaSyariahku.
+- One owned hashtag: #ShariaCompass.
 - Akad names usually sit in labels; our edge is explaining them plainly.
 
 ## Surfaces

@@ -35,7 +35,7 @@ function draw(cv,o){
   const W=1080,H=o.fmt==="feed"?1350:1920, st=o.fmt!=="feed"; cv.width=W; cv.height=H; const ctx=cv.getContext("2d");
   const S=PERSONA_STYLE[o.persona]||PERSONA_STYLE["Niat"], c=S.c, X=90, top=st?240:110;
   bg(ctx,W,H);
-  text(ctx,"PETA SYARIAH",X,top,`700 30px ${F}`,"#D4EE3A",0,0,"6px");
+  text(ctx,"SHARIA COMPASS",X,top,`700 30px ${F}`,"#D4EE3A",0,0,"6px");
   emblem(ctx,S.e,W-X-70,top-10,70,c);
   if(o.kind==="type"){
     text(ctx,"Keuanganku sudah",X,top+70,`500 42px ${F}`,"#F1F5EC");
@@ -49,12 +49,12 @@ function draw(cv,o){
       let cy=y+590, cx=X; cx+=chip(ctx,cx,cy,"Lencana ",o.badges+" dari 8",c)+16; if(cx+chipW(ctx,"Fokusku ",o.focus)>W-X){ cx=X; cy+=88; } chip(ctx,cx,cy,"Fokusku ",o.focus,"#F1F5EC");
       if(o.inklusi) text(ctx,"Termasuk 13,41% penduduk yang sudah memakai produk syariah (SNLIK 2025)",X,cy+140,`500 30px ${F}`,"#B9C7BD",W-2*X,42);
       text(ctx,"Berapa persen punyamu?",X,H-250,`800 54px ${F}`,"#D4EE3A");
-      text(ctx,"Cek gratis, 3 menit  ·  #PetaSyariahku",X,H-195,`500 34px ${F}`,"#F1F5EC");
+      text(ctx,"Cek gratis, 3 menit  ·  #ShariaCompass",X,H-195,`500 34px ${F}`,"#F1F5EC");
     } else {
       radar(ctx,o.pillars,W-280,H-400,140,c,26);
       let cy=y+60; chip(ctx,X,cy,"Lencana ",o.badges+" dari 8",c); chip(ctx,X,cy+90,"Fokusku ",o.focus,"#F1F5EC");
       text(ctx,"Berapa persen punyamu?",X,H-150,`800 48px ${F}`,"#D4EE3A");
-      text(ctx,"Cek gratis, 3 menit  ·  #PetaSyariahku",X,H-98,`500 30px ${F}`,"#F1F5EC");
+      text(ctx,"Cek gratis, 3 menit  ·  #ShariaCompass",X,H-98,`500 30px ${F}`,"#F1F5EC");
     }
   } else {
     text(ctx,"Rencana 90 hari syariahku",X,top+70,`500 42px ${F}`,"#F1F5EC");
@@ -75,7 +75,7 @@ function draw(cv,o){
       ry+=st?104:86; });
     if(o.showScores&&o.to!=null){ text(ctx,o.toLabel||"Skor praktik",X,ry+40,`600 32px ${F}`,"#B9C7BD"); text(ctx,`${o.from}% → ${o.to}%`,X,ry+(st?120:110),`500 ${st?84:70}px ${M}`,c); }
     text(ctx,"Pelan-pelan, satu per satu.",X,H-(st?300:150),`800 ${st?52:46}px ${F}`,"#D4EE3A");
-    text(ctx,"Mulai petamu  ·  #PetaSyariahku",X,H-(st?245:98),`500 34px ${F}`,"#F1F5EC");
+    text(ctx,"Mulai perjalananmu  ·  #ShariaCompass",X,H-(st?245:98),`500 34px ${F}`,"#F1F5EC");
   }
   return cv;
 }

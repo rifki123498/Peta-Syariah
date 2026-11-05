@@ -82,5 +82,5 @@ Do not use: "Uangmu masih riba?", "Bank konvensional haram", "Dosa besar", or an
 Promote with paid budget only the posts with the best retention (not likes), as the same post (Spark Ads / partnership ads), per `docs/test-plan.md`.
 
 ## Captions (template)
-"Ternyata keuanganku sudah [X]% syariah. Kamu berapa? Cek gratis, 3 menit, tanpa login. Link di bio. #PetaSyariahku
+"Ternyata keuanganku sudah [X]% syariah. Kamu berapa? Cek gratis, 3 menit, tanpa login. Link di bio. #ShariaCompass
 Panduan edukasi, bukan fatwa."

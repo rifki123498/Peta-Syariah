@@ -3,13 +3,18 @@
 Things only the owner can do. Each unblocks the next. Updated 4 Nov 2026.
 
 ## P0 — before any paid traffic (this week)
-1. **Check the brand name.** Search "Peta Syariah" at pdki-indonesia.dgip.go.id (merek) and on Instagram/TikTok. A quick web search found no app or brand with this name, but that is not a trademark check.
+1. **Check the brand name.** Search "Sharia Compass" at pdki-indonesia.dgip.go.id (merek) and on Instagram/TikTok. A quick web search found no app or brand with this name, but that is not a trademark check.
 2. **Buy the domain.** Check petasyariah.id and petasyariah.com at a registrar (Cloudflare Registrar for .com; a PANDI-accredited registrar for .id). Then in Cloudflare: Workers & Pages → peta-syariah → Settings → Domains & Routes → Add custom domain. Set the GitHub variable `PUBLIC_BASE_URL` to the new URL.
 3. ~~Set up the business entity.~~ Done: PT Perorangan created (4 Nov 2026).
 4. **Send Claude the NIB** (PT name, address, email and WhatsApp are filled in `web/syarat.html` and `web/privasi.html`; NIB is a TODO comment there). Terms (no refunds, optional email only) and UU PDP sections are already written in ID and EN. A lawyer review is still recommended before paid traffic.
 5. **Create a WhatsApp Business number** for support and put it in `.env.production` (`VITE_WAITLIST_WA`) instead of the personal number. Consider making the GitHub repo private.
 
-## P1 — to take payments (after P0 items 2–4)
+## P1 — to take payments with DOKU (preferred; Xendit code stays as a fallback)
+- Add GitHub secrets `DOKU_CLIENT_ID` and `DOKU_SECRET_KEY` (DOKU Back Office → API keys; sandbox first). GitHub variable `DOKU_ENV` = `sandbox`, later `production` with production keys.
+- Nothing to configure for notifications: each order sends `override_notification_url` = `<base>/api/webhooks/doku`. The app also checks DOKU's status API when the buyer returns, so a late notification still unlocks.
+- Make one sandbox purchase end to end, then switch to production.
+
+## P1 (old) — Xendit
 6. **Open a Xendit account** (business verification with NIB). Use test mode first. Add GitHub secrets `XENDIT_SECRET_KEY` and `XENDIT_CALLBACK_TOKEN`. In the Xendit dashboard set the invoice callback URL to `https://<domain>/api/webhooks/xendit`. Then make one test purchase end to end.
 7. **Add `ADMIN_TOKEN`** (any long random password) as a GitHub secret so the funnel can be read at `/api/admin/funnel` and buyers/waitlist at `/api/admin/orders`.
 

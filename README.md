@@ -1,4 +1,4 @@
-# Peta Syariah
+# Sharia Compass
 
 Web app Indonesia: berapa persen keuanganmu yang sudah syariah, lencana yang sudah kamu punya, dan keuntungan yang belum kamu ambil. Kuis gratis; peta lengkap berbayar sekali (Rp89.000, harga spesial dari Rp149.000).
 

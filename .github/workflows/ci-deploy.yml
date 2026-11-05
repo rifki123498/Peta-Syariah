@@ -71,16 +71,19 @@ jobs:
           npx wrangler deploy \
             --var PRICE_ARMS:"${{ vars.PRICE_ARMS || '89000' }}" \
             --var META_PIXEL_ID:"${{ vars.META_PIXEL_ID }}" \
-            --var PUBLIC_BASE_URL:"${{ vars.PUBLIC_BASE_URL }}"
+            --var PUBLIC_BASE_URL:"${{ vars.PUBLIC_BASE_URL }}" \
+            --var DOKU_ENV:"${{ vars.DOKU_ENV || 'sandbox' }}"
       - if: steps.cf.outputs.skip != '1'
         name: Sync secrets
         env:
           META_CAPI_TOKEN: ${{ secrets.META_CAPI_TOKEN }}
+          DOKU_CLIENT_ID: ${{ secrets.DOKU_CLIENT_ID }}
+          DOKU_SECRET_KEY: ${{ secrets.DOKU_SECRET_KEY }}
           XENDIT_SECRET_KEY: ${{ secrets.XENDIT_SECRET_KEY }}
           XENDIT_CALLBACK_TOKEN: ${{ secrets.XENDIT_CALLBACK_TOKEN }}
           ADMIN_TOKEN: ${{ secrets.ADMIN_TOKEN }}
         run: |
-          for k in META_CAPI_TOKEN XENDIT_SECRET_KEY XENDIT_CALLBACK_TOKEN ADMIN_TOKEN; do
+          for k in META_CAPI_TOKEN DOKU_CLIENT_ID DOKU_SECRET_KEY XENDIT_SECRET_KEY XENDIT_CALLBACK_TOKEN ADMIN_TOKEN; do
             v="${!k}"
             if [ -n "$v" ]; then printf '%s' "$v" | npx wrangler secret put "$k"; fi
           done

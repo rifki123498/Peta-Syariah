@@ -1,4 +1,4 @@
-# Peta Syariah — product and technical spec
+# Sharia Compass — product and technical spec
 
 Status: Phase 1 built (Nov 2026): Vite web app + Hono Worker + D1, events with Meta Pixel/CAPI, two-arm price test, Xendit invoice checkout with waitlist fallback, paid "Keuntungan" tab, share cards, CI/CD. Not yet validated with paying users. Owner decisions still open are listed at the end.
 
@@ -27,7 +27,7 @@ Exact questions, options and weights are in `STEPS` in the prototype. Order: goa
 Card (level, %, lencana count, radar, potential) · guess vs result · lencana grid · locked benefits · six-pillar glossary · share card · first step · SNLIK position · facts · Pro teaser · paywall.
 
 ### 3.5 Share cards (port `prototype/sharecard.js`)
-Story 1080×1920 and Feed 1080×1350 PNG, drawn on canvas. Free card: % syariah, level, "Tadinya kutebak …" (opt-in), radar, lencana count, focus pillar, "Berapa persen punyamu? #PetaSyariahku". Pro cards: day 1 / day 30 / day 90 progress. In production use the Web Share API with files on mobile (`navigator.share({files})`) so the image goes straight to Instagram, with download as fallback. Add `?ref=<shortcode>` to the shared link for attribution.
+Story 1080×1920 and Feed 1080×1350 PNG, drawn on canvas. Free card: % syariah, level, "Tadinya kutebak …" (opt-in), radar, lencana count, focus pillar, "Berapa persen punyamu? #ShariaCompass". Pro cards: day 1 / day 30 / day 90 progress. In production use the Web Share API with files on mobile (`navigator.share({files})`) so the image goes straight to Instagram, with download as fallback. Add `?ref=<shortcode>` to the shared link for attribution.
 
 ## 4. Pro report (port `prototype/laporan-pro.html`, make it generated)
 - Input: quiz answers + "Lengkapi data" form (6 fields): penghasilan bersih, pengeluaran rutin, dana darurat, deposito (amount + maturity date + purpose), investasi (amount), target rumah (price, DP %, months). Optional, each skippable.

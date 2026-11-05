@@ -87,7 +87,7 @@ export function initI18n() {
     });
   }
   if (!isEN) return;
-  document.title = "Peta Syariah: how much of your finances is already sharia?";
+  document.title = "Sharia Compass: how much of your finances is already sharia?";
   const md = document.querySelector('meta[name="description"]');
   if (md) md.setAttribute("content", "Find out what share of your finances is already sharia, the badges you already have, and the benefits you haven't claimed yet. Free, 3 minutes.");
   const full = document.getElementById("v-full");

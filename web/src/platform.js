@@ -102,7 +102,7 @@ export async function saveImage(canvas, filename) {
   const file = new File([blob], filename, { type: "image/png" });
   try {
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: "Peta Syariah" });
+      await navigator.share({ files: [file], title: "Sharia Compass" });
       return "shared";
     }
   } catch (e) {
